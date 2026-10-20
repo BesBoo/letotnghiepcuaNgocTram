@@ -3,27 +3,56 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { Guest } from '../lib/supabase';
 import config from '../invitation.config';
 
-function getSlugFromUrl(): string {
-  if (typeof window === 'undefined') return '';
+function getGuestParams(): {
+  slug: string;
+  directName?: string;
+  directGreeting?: string;
+} {
+  if (typeof window === 'undefined') return { slug: '' };
 
-  // 1. Check query parameters: ?to=tuan-anh, ?id=1, ?guest=1
   const searchParams = new URLSearchParams(window.location.search);
-  const paramSlug = searchParams.get('to') || searchParams.get('id') || searchParams.get('guest');
-  if (paramSlug) return decodeURIComponent(paramSlug).trim();
 
-  // 2. Check path: /tuan-anh, /1, /guest/1
+  // 1. Check query parameters: ?to=..., ?guest=..., ?id=..., ?gui=..., ?u=...
+  const paramSlug =
+    searchParams.get('to') ||
+    searchParams.get('guest') ||
+    searchParams.get('id') ||
+    searchParams.get('gui') ||
+    searchParams.get('u');
+
+  const directName = searchParams.get('name') || searchParams.get('ten') || undefined;
+  const directGreeting =
+    searchParams.get('greeting') || searchParams.get('xungho') || undefined;
+
+  if (paramSlug) {
+    return {
+      slug: decodeURIComponent(paramSlug).trim(),
+      directName: directName ? decodeURIComponent(directName).trim() : undefined,
+      directGreeting: directGreeting ? decodeURIComponent(directGreeting).trim() : undefined,
+    };
+  }
+
+  if (directName) {
+    return {
+      slug: decodeURIComponent(directName).trim(),
+      directName: decodeURIComponent(directName).trim(),
+      directGreeting: directGreeting ? decodeURIComponent(directGreeting).trim() : undefined,
+    };
+  }
+
+  // 2. Check path: /tuan-anh, /1, /gui/chi-lan
   const pathname = window.location.pathname.replace(/^\/+|\/+$/g, '');
-  if (!pathname) return '';
+  if (!pathname) return { slug: '' };
 
   const segments = pathname.split('/');
   const lastSegment = segments[segments.length - 1];
 
   // Avoid assets or files with extensions
   if (lastSegment && !lastSegment.includes('.')) {
-    return decodeURIComponent(lastSegment).trim();
+    return { slug: decodeURIComponent(lastSegment).trim() };
   }
 
-  return '';
+  return { slug: '' };
 }
 
 export function useGuest() {
@@ -39,25 +68,26 @@ export function useGuest() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const urlSlug = getSlugFromUrl();
+    const { slug: urlSlug, directName, directGreeting } = getGuestParams();
     setSlug(urlSlug);
 
-    if (!urlSlug) {
+    if (!urlSlug && !directName) {
       setLoading(false);
       return;
     }
 
-    if (!isSupabaseConfigured || !supabase) {
-      // If Supabase not yet configured, provide dynamic local guest from URL
-      // E.g. /nguyen-van-a => display formatted name
-      const formattedName = urlSlug
+    const fallbackName =
+      directName ||
+      urlSlug
         .replace(/[-_]/g, ' ')
         .replace(/\b\w/g, (c) => c.toUpperCase());
+    const fallbackGreeting = directGreeting || `Gửi bạn ${fallbackName},`;
 
+    if (!isSupabaseConfigured || !supabase) {
       setGuest({
         slug: urlSlug,
-        name: formattedName,
-        greeting: `Gửi bạn ${formattedName},`,
+        name: fallbackName,
+        greeting: fallbackGreeting,
         custom_message: config.invitationText[0],
         has_opened: false,
         rsvp_status: 'pending',
@@ -93,17 +123,29 @@ export function useGuest() {
           console.warn('Supabase fetch guest warning:', error.message);
         }
 
-        if (isMounted && data) {
-          setGuest({
-            id: data.id,
-            slug: data.slug || urlSlug,
-            name: data.name || config.senderName,
-            greeting: data.greeting || `Gửi bạn ${data.name || ''},`,
-            custom_message: data.custom_message || config.invitationText[0],
-            has_opened: data.has_opened || false,
-            rsvp_status: data.rsvp_status || 'pending',
-            rsvp_note: data.rsvp_note,
-          });
+        if (isMounted) {
+          if (data) {
+            setGuest({
+              id: data.id,
+              slug: data.slug || urlSlug,
+              name: data.name || directName || config.senderName,
+              greeting: data.greeting || directGreeting || `Gửi bạn ${data.name || ''},`,
+              custom_message: data.custom_message || config.invitationText[0],
+              has_opened: data.has_opened || false,
+              rsvp_status: data.rsvp_status || 'pending',
+              rsvp_note: data.rsvp_note,
+            });
+          } else {
+            // Not found in Supabase: use name from URL parameters directly
+            setGuest({
+              slug: urlSlug,
+              name: fallbackName,
+              greeting: fallbackGreeting,
+              custom_message: config.invitationText[0],
+              has_opened: false,
+              rsvp_status: 'pending',
+            });
+          }
         }
       } catch (err) {
         console.error('Error fetching guest data:', err);
