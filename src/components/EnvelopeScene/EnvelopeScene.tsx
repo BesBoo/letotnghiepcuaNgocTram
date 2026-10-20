@@ -339,19 +339,6 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
                   config.invitationText[0] ||
                   'Một chặng đường thanh xuân khép lại, mở ra những hành trình mới rực rỡ...'}
               </p>
-              {guest?.start_time && (
-                <p
-                  style={{
-                    marginTop: '8px',
-                    fontSize: '0.78rem',
-                    color: 'var(--pink-deep)',
-                    fontWeight: 600,
-                    letterSpacing: '0.02em',
-                  }}
-                >
-                  ⏰ {guest.start_time}{guest.end_time ? ` — ${guest.end_time}` : ''}
-                </p>
-              )}
             </div>
 
             <div className={styles.cardFooter}>
