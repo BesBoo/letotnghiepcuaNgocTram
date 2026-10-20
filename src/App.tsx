@@ -43,7 +43,7 @@ export default function App() {
         }}
       >
         {/* Scene 3: Our Memories */}
-        <MemoriesSection />
+        <MemoriesSection guest={guest} />
 
         {/* Scene 4: The Invitation */}
         <InvitationSection guest={guest} onSubmitRSVP={submitRSVP} />

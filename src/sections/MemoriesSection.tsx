@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import type { Guest } from '../lib/supabase';
 import config from '../invitation.config';
 import PhotoLightbox from '../components/PhotoLightbox/PhotoLightbox';
 
-export default function MemoriesSection() {
+interface MemoriesSectionProps {
+  guest?: Guest;
+}
+
+export default function MemoriesSection({ guest }: MemoriesSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
   const [lightbox, setLightbox] = useState<{ src: string; alt: string; caption: string } | null>(null);
@@ -91,6 +96,23 @@ export default function MemoriesSection() {
           >
             Our Little Memories
           </h2>
+
+          {/* Lời chào/gửi đích danh khách mời */}
+          <p
+            style={{
+              fontFamily: 'var(--font-script)',
+              fontSize: 'clamp(1.35rem, 3.5vw, 1.95rem)',
+              color: 'var(--pink-deep)',
+              marginBottom: 'var(--space-xs)',
+              letterSpacing: '0.01em',
+            }}
+          >
+            {guest?.greeting ||
+              (guest?.name && guest.name !== config.senderName
+                ? `Thân gửi ${guest.name},`
+                : 'Gửi bạn thân yêu,')}
+          </p>
+
           <p className="text-script">
             Thanh xuân có bạn, thật đẹp.
           </p>
