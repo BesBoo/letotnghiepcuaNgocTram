@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" fill="none">
+  <path d="M10 90 Q30 85 50 70 Q80 45 110 50 Q140 55 160 35 Q175 20 190 15" 
+    stroke="#F3A1B5" stroke-width="1" fill="none" stroke-linecap="round" stroke-dasharray="4 4"/>
+  <!-- Paper plane at end -->
+  <g transform="translate(185, 10) rotate(-15)">
+    <path d="M0 8 L20 0 L8 8 L12 16 Z" fill="#F3A1B5" opacity="0.8"/>
+    <path d="M0 8 L8 8 L12 16" stroke="#C96885" stroke-width="0.5" fill="none"/>
+  </g>
+</svg>

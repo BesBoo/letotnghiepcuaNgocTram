@@ -1,0 +1,256 @@
+import { useEffect, useRef, useState } from 'react';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+import config from '../invitation.config';
+import { ArrowUp } from 'lucide-react';
+
+export default function ClosingSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [pathDrawn, setPathDrawn] = useState(false);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (reducedMotion) { setIsVisible(true); setPathDrawn(true); return; }
+    if (!sectionRef.current) return;
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setIsVisible(true);
+          setTimeout(() => setPathDrawn(true), 600);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, [reducedMotion]);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <section
+      ref={sectionRef}
+      id="closing"
+      style={{
+        minHeight: '100vh',
+        padding: 'clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 3rem)',
+        background: 'linear-gradient(180deg, var(--pink-light) 0%, var(--pink-soft) 40%, #f7c5d4 100%)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+        textAlign: 'center',
+      }}
+    >
+      {/* Paper plane SVG animation */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '10%',
+          left: '10%',
+          width: 'min(80%, 500px)',
+          height: '200px',
+          pointerEvents: 'none',
+          opacity: isVisible ? 0.3 : 0,
+          transition: 'opacity 1s',
+        }}
+        aria-hidden="true"
+      >
+        <svg viewBox="0 0 500 200" fill="none" style={{ width: '100%', height: '100%' }}>
+          <path
+            d="M20 180 Q100 160 180 120 Q280 60 350 80 Q420 100 480 30"
+            stroke="var(--pink-deep)"
+            strokeWidth="1.5"
+            fill="none"
+            strokeDasharray="600"
+            strokeDashoffset={pathDrawn ? '0' : '600'}
+            strokeLinecap="round"
+            style={{
+              transition: 'stroke-dashoffset 3s ease-out',
+            }}
+          />
+          {/* Paper plane icon */}
+          <g
+            style={{
+              opacity: pathDrawn ? 1 : 0,
+              transition: 'opacity 0.5s 2.5s',
+            }}
+          >
+            <path
+              d="M475 25 L495 15 L483 25 L487 35 Z"
+              fill="var(--pink-deep)"
+              opacity="0.6"
+              transform="rotate(-30, 485, 25)"
+            />
+          </g>
+        </svg>
+      </div>
+
+      {/* Graduation caps floating */}
+      {[1, 2, 3].map((n) => (
+        <div
+          key={n}
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            bottom: `${15 + n * 12}%`,
+            right: `${10 + n * 15}%`,
+            fontSize: `${1.2 + n * 0.3}rem`,
+            opacity: isVisible ? 0.15 + n * 0.05 : 0,
+            transform: isVisible ? `translateY(0) rotate(${n * 8 - 12}deg)` : 'translateY(30px)',
+            transition: `all 0.8s var(--ease-out-expo) ${300 + n * 200}ms`,
+            pointerEvents: 'none',
+          }}
+        >
+          🎓
+        </div>
+      ))}
+
+      {/* Main content */}
+      <div style={{ position: 'relative', zIndex: 2, maxWidth: '600px' }}>
+        <h2
+          className="heading-display"
+          style={{
+            marginBottom: 'var(--space-lg)',
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(25px)',
+            transition: 'all 0.8s var(--ease-out-expo) 200ms',
+            color: 'var(--text-primary)',
+          }}
+        >
+          Until We Meet
+        </h2>
+
+        <p
+          className="text-script"
+          style={{
+            fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
+            marginBottom: 'var(--space-xl)',
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 0.8s var(--ease-out-expo) 500ms',
+          }}
+        >
+          Hẹn gặp bạn ở một cột mốc thật đặc biệt nhé!
+        </p>
+
+        <p
+          className="text-body"
+          style={{
+            marginBottom: 'var(--space-2xl)',
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
+            transition: 'all 0.8s var(--ease-out-expo) 800ms',
+            maxWidth: '480px',
+            margin: '0 auto var(--space-2xl)',
+          }}
+        >
+          {config.closingMessage}
+        </p>
+
+        {/* Sign off */}
+        <p
+          style={{
+            fontFamily: 'var(--font-script)',
+            fontSize: 'clamp(1.2rem, 3vw, 1.6rem)',
+            color: 'var(--pink-deep)',
+            marginBottom: 'var(--space-2xl)',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.8s 1.1s',
+          }}
+        >
+          {config.signOff}
+        </p>
+
+        <p
+          style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
+            fontWeight: 600,
+            color: 'var(--text-primary)',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.8s 1.3s',
+            marginBottom: 'var(--space-3xl)',
+          }}
+        >
+          — {config.senderName}
+        </p>
+
+        {/* Decorative heart divider */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: '12px', marginBottom: 'var(--space-2xl)',
+          opacity: isVisible ? 0.4 : 0,
+          transition: 'opacity 1s 1.5s',
+        }}>
+          <div style={{ width: '40px', height: '1px', background: 'var(--pink-deep)' }} />
+          <svg viewBox="0 0 20 18" width="14" height="12" fill="var(--pink-deep)">
+            <path d="M10 18C10 18 0 11 0 5.5C0 2.4 2.4 0 5.5 0C7.2 0 8.8.8 10 2C11.2.8 12.8 0 14.5 0C17.6 0 20 2.4 20 5.5C20 11 10 18 10 18Z" />
+          </svg>
+          <div style={{ width: '40px', height: '1px', background: 'var(--pink-deep)' }} />
+        </div>
+
+        {/* Scroll back to top */}
+        <button
+          onClick={scrollToTop}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '12px 28px',
+            fontFamily: 'var(--font-sans)',
+            fontSize: '0.9rem',
+            fontWeight: 500,
+            color: 'var(--pink-deep)',
+            background: 'rgba(255, 255, 255, 0.6)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid var(--pink-soft)',
+            borderRadius: 'var(--radius-xl)',
+            cursor: 'pointer',
+            transition: 'all 0.3s var(--ease-out-expo)',
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 8px 24px rgba(201, 104, 133, 0.2)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.6)';
+            e.currentTarget.style.transform = '';
+            e.currentTarget.style.boxShadow = '';
+          }}
+        >
+          <ArrowUp size={16} />
+          Mở lại lá thư
+        </button>
+      </div>
+
+      {/* Bottom skyline silhouette */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '80px',
+          opacity: 0.08,
+        }}
+      >
+        <svg viewBox="0 0 1200 80" preserveAspectRatio="none" style={{ width: '100%', height: '100%' }}>
+          <path
+            d="M0 80 L0 50 L80 48 L100 35 L120 48 L200 46 L220 30 L240 46 L350 44 L380 20 L400 25 L420 15 L440 25 L460 44 L600 42 L630 28 L650 42 L800 40 L830 22 L860 40 L950 38 L970 25 L1000 38 L1100 36 L1120 20 L1140 36 L1200 34 L1200 80 Z"
+            fill="var(--text-primary)"
+          />
+        </svg>
+      </div>
+    </section>
+  );
+}

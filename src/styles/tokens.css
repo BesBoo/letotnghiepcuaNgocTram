@@ -1,0 +1,60 @@
+/* ============================
+   DESIGN TOKENS
+   ============================ */
+
+:root {
+  /* Colors */
+  --pink-primary: #F3A1B5;
+  --pink-soft: #F9CAD5;
+  --pink-light: #FFF0F3;
+  --pink-deep: #C96885;
+  --cream: #FFF9F5;
+  --paper: #FFFCF8;
+  --rose-gold: #C9948B;
+  --text-primary: #573C45;
+  --text-secondary: #8D6974;
+  --white: #FFFFFF;
+
+  /* Shadows */
+  --shadow-soft: 0 4px 20px rgba(201, 104, 133, 0.10);
+  --shadow-medium: 0 8px 32px rgba(201, 104, 133, 0.15);
+  --shadow-elevated: 0 16px 48px rgba(201, 104, 133, 0.20);
+  --shadow-paper: 0 2px 8px rgba(87, 60, 69, 0.06);
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-script: 'Dancing Script', 'Pacifico', cursive;
+  --font-sans: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Transitions */
+  --ease-out-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-soft: cubic-bezier(0.45, 0, 0.55, 1);
+  --transition-fast: 200ms var(--ease-out-soft);
+  --transition-normal: 350ms var(--ease-out-soft);
+  --transition-slow: 600ms var(--ease-out-expo);
+
+  /* Z-index layers */
+  --z-background: 0;
+  --z-content: 10;
+  --z-floating: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+}
