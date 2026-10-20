@@ -134,6 +134,7 @@ export function useGuest() {
               has_opened: data.has_opened || false,
               rsvp_status: data.rsvp_status || 'pending',
               rsvp_note: data.rsvp_note,
+              url: data.url,
             });
           } else {
             // Not found in Supabase: use name from URL parameters directly

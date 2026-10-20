@@ -10,6 +10,7 @@ export interface Guest {
   opened_at?: string;
   rsvp_status?: 'attending' | 'declined' | 'pending';
   rsvp_note?: string;
+  url?: string;
 }
 
 const supabaseUrl =

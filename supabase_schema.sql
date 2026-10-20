@@ -15,10 +15,45 @@ CREATE TABLE IF NOT EXISTS guests (
     opened_at TIMESTAMP WITH TIME ZONE,               -- Thời điểm khách bấm mở thư
     rsvp_status VARCHAR(50) DEFAULT 'pending',        -- 'attending' (Sẽ tham gia) | 'declined' (Bận) | 'pending'
     rsvp_note TEXT,                                   -- Lời nhắn/chúc khách gửi lại khi bấm xác nhận
+    url TEXT,                                         -- Tự động sinh link mời: https://test-thiep-moi.vercel.app/?to=...
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 2. Kích hoạt Row Level Security (RLS) để bảo vệ bảng
+-- Thêm cột url nếu bảng guests đã tồn tại từ trước
+ALTER TABLE guests ADD COLUMN IF NOT EXISTS url TEXT;
+
+-- 2. Tạo hàm tự động cập nhật URL khi thêm hoặc sửa slug
+CREATE OR REPLACE FUNCTION auto_update_guest_url()
+RETURNS TRIGGER AS $$
+DECLARE
+    base_url TEXT := 'https://test-thiep-moi.vercel.app';
+BEGIN
+    -- Chỉ cập nhật URL khi:
+    -- 1. Thêm mới bản ghi (INSERT)
+    -- 2. Hoặc slug bị sửa đổi (ảnh hưởng đến URL)
+    -- 3. Hoặc ô url đang bị trống (NULL hoặc rỗng)
+    IF TG_OP = 'INSERT' OR NEW.slug IS DISTINCT FROM OLD.slug OR NEW.url IS NULL OR NEW.url = '' THEN
+        NEW.url := base_url || '/?to=' || NEW.slug;
+    END IF;
+
+    -- Nếu chỉ sửa name, greeting, rsvp... mà slug không đổi thì URL giữ nguyên
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Gán Trigger chạy tự động trước khi INSERT hoặc UPDATE
+DROP TRIGGER IF EXISTS trigger_auto_update_guest_url ON guests;
+CREATE TRIGGER trigger_auto_update_guest_url
+BEFORE INSERT OR UPDATE ON guests
+FOR EACH ROW
+EXECUTE FUNCTION auto_update_guest_url();
+
+-- Cập nhật URL ngay lập tức cho các khách mời hiện có trong database
+UPDATE guests
+SET url = 'https://test-thiep-moi.vercel.app/?to=' || slug
+WHERE url IS NULL OR url = '';
+
+-- 3. Kích hoạt Row Level Security (RLS) để bảo vệ bảng
 ALTER TABLE guests ENABLE ROW LEVEL SECURITY;
 
 -- 3. Tạo chính sách (Policy) cho phép đọc thông tin khách qua slug/id công khai
@@ -48,4 +83,5 @@ SET
     custom_message = EXCLUDED.custom_message;
 
 -- Kiểm tra lại danh sách
-SELECT id, slug, name, greeting, has_opened, rsvp_status FROM guests;
+SELECT id, slug, name, greeting, url, has_opened, rsvp_status FROM guests;
+
