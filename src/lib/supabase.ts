@@ -6,6 +6,8 @@ export interface Guest {
   name: string;
   greeting?: string;
   custom_message?: string;
+  start_time?: string;
+  end_time?: string;
   has_opened?: boolean;
   opened_at?: string;
   rsvp_status?: 'attending' | 'declined' | 'pending';

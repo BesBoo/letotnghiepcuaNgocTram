@@ -289,8 +289,13 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                   color: 'var(--text-secondary)',
                 }}
               >
-                {config.event.time}
-                {config.event.endTime && ` — ${config.event.endTime}`}
+                {guest?.start_time
+                  ? guest.end_time
+                    ? `${guest.start_time} — ${guest.end_time}`
+                    : guest.start_time
+                  : config.event.endTime
+                    ? `${config.event.time} — ${config.event.endTime}`
+                    : config.event.time}
               </span>
             </div>
 

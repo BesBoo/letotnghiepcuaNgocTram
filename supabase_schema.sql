@@ -16,11 +16,15 @@ CREATE TABLE IF NOT EXISTS guests (
     rsvp_status VARCHAR(50) DEFAULT 'pending',        -- 'attending' (Sẽ tham gia) | 'declined' (Bận) | 'pending'
     rsvp_note TEXT,                                   -- Lời nhắn/chúc khách gửi lại khi bấm xác nhận
     url TEXT,                                         -- Tự động sinh link mời: https://test-thiep-moi.vercel.app/?to=...
+    start_time VARCHAR(50),                           -- Giờ đón tiếp riêng cho khách: ví dụ '08:30' hoặc '08h30'
+    end_time VARCHAR(50),                             -- Giờ kết thúc riêng cho khách: ví dụ '10:30' hoặc '11h00'
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Thêm cột url nếu bảng guests đã tồn tại từ trước
+-- Thêm các cột nếu bảng guests đã tồn tại từ trước
 ALTER TABLE guests ADD COLUMN IF NOT EXISTS url TEXT;
+ALTER TABLE guests ADD COLUMN IF NOT EXISTS start_time VARCHAR(50);
+ALTER TABLE guests ADD COLUMN IF NOT EXISTS end_time VARCHAR(50);
 
 -- 2. Tạo hàm tự động cập nhật URL khi thêm hoặc sửa slug
 CREATE OR REPLACE FUNCTION auto_update_guest_url()
@@ -71,17 +75,19 @@ USING (true);
 -- ==========================================================
 -- 5. DỮ LIỆU MẪU (Thay đổi danh sách bạn bè của bạn tại đây)
 -- ==========================================================
-INSERT INTO guests (slug, name, greeting, custom_message)
+INSERT INTO guests (slug, name, greeting, custom_message, start_time, end_time)
 VALUES 
-    ('1', 'Nguyễn Văn Tuấn', 'Gửi anh Tuấn thân yêu,', 'Cảm ơn anh vì đã luôn đồng hành cùng em suốt những năm tháng đại học!'),
-    ('2', 'Trần Thị Lan', 'Gửi chị Lan yêu quý,', 'Rất mong được gặp chị trong ngày lễ tốt nghiệp đặc biệt này 💕'),
-    ('linh-dan', 'Khánh Linh', 'Gửi cô bạn thân Khánh Linh,', 'Thanh xuân này thật tuyệt vì có cậu bên cạnh!')
+    ('1', 'Nguyễn Văn Tuấn', 'Gửi anh Tuấn thân yêu,', 'Cảm ơn anh vì đã luôn đồng hành cùng em suốt những năm tháng đại học!', '08:00', '10:00'),
+    ('2', 'Trần Thị Lan', 'Gửi chị Lan yêu quý,', 'Rất mong được gặp chị trong ngày lễ tốt nghiệp đặc biệt này 💕', '09:30', '11:30'),
+    ('linh-dan', 'Khánh Linh', 'Gửi cô bạn thân Khánh Linh,', 'Thanh xuân này thật tuyệt vì có cậu bên cạnh!', '14:00', '16:30')
 ON CONFLICT (slug) DO UPDATE 
 SET 
     name = EXCLUDED.name,
     greeting = EXCLUDED.greeting,
-    custom_message = EXCLUDED.custom_message;
+    custom_message = EXCLUDED.custom_message,
+    start_time = EXCLUDED.start_time,
+    end_time = EXCLUDED.end_time;
 
 -- Kiểm tra lại danh sách
-SELECT id, slug, name, greeting, url, has_opened, rsvp_status FROM guests;
+SELECT id, slug, name, greeting, start_time, end_time, url, has_opened, rsvp_status FROM guests;
 

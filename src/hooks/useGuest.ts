@@ -7,6 +7,8 @@ function getGuestParams(): {
   slug: string;
   directName?: string;
   directGreeting?: string;
+  directStart?: string;
+  directEnd?: string;
 } {
   if (typeof window === 'undefined') return { slug: '' };
 
@@ -23,12 +25,18 @@ function getGuestParams(): {
   const directName = searchParams.get('name') || searchParams.get('ten') || undefined;
   const directGreeting =
     searchParams.get('greeting') || searchParams.get('xungho') || undefined;
+  const directStart =
+    searchParams.get('start') || searchParams.get('batdau') || searchParams.get('time') || undefined;
+  const directEnd =
+    searchParams.get('end') || searchParams.get('ketthuc') || undefined;
 
   if (paramSlug) {
     return {
       slug: decodeURIComponent(paramSlug).trim(),
       directName: directName ? decodeURIComponent(directName).trim() : undefined,
       directGreeting: directGreeting ? decodeURIComponent(directGreeting).trim() : undefined,
+      directStart: directStart ? decodeURIComponent(directStart).trim() : undefined,
+      directEnd: directEnd ? decodeURIComponent(directEnd).trim() : undefined,
     };
   }
 
@@ -37,6 +45,8 @@ function getGuestParams(): {
       slug: decodeURIComponent(directName).trim(),
       directName: decodeURIComponent(directName).trim(),
       directGreeting: directGreeting ? decodeURIComponent(directGreeting).trim() : undefined,
+      directStart: directStart ? decodeURIComponent(directStart).trim() : undefined,
+      directEnd: directEnd ? decodeURIComponent(directEnd).trim() : undefined,
     };
   }
 
@@ -68,7 +78,7 @@ export function useGuest() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { slug: urlSlug, directName, directGreeting } = getGuestParams();
+    const { slug: urlSlug, directName, directGreeting, directStart, directEnd } = getGuestParams();
     setSlug(urlSlug);
 
     if (!urlSlug && !directName) {
@@ -89,6 +99,8 @@ export function useGuest() {
         name: fallbackName,
         greeting: fallbackGreeting,
         custom_message: config.invitationText[0],
+        start_time: directStart,
+        end_time: directEnd,
         has_opened: false,
         rsvp_status: 'pending',
       });
@@ -131,18 +143,22 @@ export function useGuest() {
               name: data.name || directName || config.senderName,
               greeting: data.greeting || directGreeting || `Gửi bạn ${data.name || ''},`,
               custom_message: data.custom_message || config.invitationText[0],
+              start_time: data.start_time || directStart,
+              end_time: data.end_time || directEnd,
               has_opened: data.has_opened || false,
               rsvp_status: data.rsvp_status || 'pending',
               rsvp_note: data.rsvp_note,
               url: data.url,
             });
           } else {
-            // Not found in Supabase: use name from URL parameters directly
+            // Not found in Supabase: use name and time from URL parameters directly
             setGuest({
               slug: urlSlug,
               name: fallbackName,
               greeting: fallbackGreeting,
               custom_message: config.invitationText[0],
+              start_time: directStart,
+              end_time: directEnd,
               has_opened: false,
               rsvp_status: 'pending',
             });
