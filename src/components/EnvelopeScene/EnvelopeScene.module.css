@@ -78,7 +78,7 @@
   max-width: 48vw;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.32;
+  opacity: 0.2;
   filter: blur(0.3px);
   user-select: none;
 }
@@ -91,7 +91,7 @@
   max-width: 46vw;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.32;
+  opacity: 0.2;
   filter: blur(0.3px);
   user-select: none;
 }
@@ -108,13 +108,11 @@
     top: -2%;
     left: -8%;
     width: clamp(180px, 46vw, 280px);
-    opacity: 0.28;
   }
   .bgFlowerBottomRight {
     bottom: -3%;
     right: -8%;
     width: clamp(170px, 44vw, 260px);
-    opacity: 0.28;
   }
 }
 
