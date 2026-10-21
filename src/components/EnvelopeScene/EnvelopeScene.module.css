@@ -29,12 +29,10 @@
 .background {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse 85% 75% at 50% 48%,
-    #fff7f9 0%,
-    #fde9ee 45%,
-    #fbdde4 100%
-  );
+  background: radial-gradient(ellipse 85% 75% at 50% 48%,
+      #fff7f9 0%,
+      #fde9ee 45%,
+      #fbdde4 100%);
   z-index: 0;
 }
 
@@ -45,12 +43,10 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle,
-    rgba(243, 161, 181, 0.35) 0%,
-    rgba(249, 202, 213, 0.15) 50%,
-    transparent 72%
-  );
+  background: radial-gradient(circle,
+      rgba(243, 161, 181, 0.35) 0%,
+      rgba(249, 202, 213, 0.15) 50%,
+      transparent 72%);
   border-radius: 50%;
   z-index: 1;
   pointer-events: none;
@@ -58,13 +54,89 @@
 }
 
 @keyframes glowPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.7;
     transform: translate(-50%, -50%) scale(1);
   }
+
   50% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+/* =========================================================
+   AMBIENT DECORATIVE LILIES (Soft Dreamy Background Watermark)
+   ========================================================= */
+.bgFlowerTopLeft {
+  position: absolute;
+  top: -4%;
+  left: -3%;
+  width: clamp(260px, 34vw, 460px);
+  max-width: 48vw;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.38;
+  filter: blur(0.3px);
+  transform-origin: top left;
+  animation: flowerSwayLeft 9s ease-in-out infinite;
+  user-select: none;
+}
+
+.bgFlowerBottomRight {
+  position: absolute;
+  bottom: -5%;
+  right: -3%;
+  width: clamp(240px, 32vw, 440px);
+  max-width: 46vw;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.38;
+  filter: blur(0.3px);
+  transform-origin: bottom right;
+  animation: flowerSwayRight 10s ease-in-out infinite;
+  user-select: none;
+}
+
+.flowerImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+@keyframes flowerSwayLeft {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(10px, 12px) rotate(1.8deg);
+  }
+}
+
+@keyframes flowerSwayRight {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-10px, -12px) rotate(-1.8deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .bgFlowerTopLeft {
+    top: -2%;
+    left: -8%;
+    width: clamp(180px, 46vw, 280px);
+    opacity: 0.32;
+  }
+  .bgFlowerBottomRight {
+    bottom: -3%;
+    right: -8%;
+    width: clamp(170px, 44vw, 260px);
+    opacity: 0.32;
   }
 }
 
@@ -103,15 +175,20 @@
 }
 
 @keyframes envelopeFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0) rotateZ(0deg);
   }
+
   25% {
     transform: translateY(-6px) rotateZ(0.25deg);
   }
+
   50% {
     transform: translateY(-2px) rotateZ(-0.2deg);
   }
+
   75% {
     transform: translateY(-8px) rotateZ(0.2deg);
   }
@@ -136,12 +213,10 @@
   left: 6%;
   right: 6%;
   height: 24px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(180, 75, 105, 0.28) 0%,
-    rgba(201, 104, 133, 0.12) 50%,
-    transparent 75%
-  );
+  background: radial-gradient(ellipse at center,
+      rgba(180, 75, 105, 0.28) 0%,
+      rgba(201, 104, 133, 0.12) 50%,
+      transparent 75%);
   border-radius: 50%;
   z-index: 0;
   filter: blur(4px);
@@ -326,8 +401,17 @@
 }
 
 @keyframes pulseCardHint {
-  0%, 100% { opacity: 0.85; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.03); }
+
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
 }
 
 /* ============================
@@ -497,8 +581,15 @@
 }
 
 @keyframes pulseHint {
-  0%, 100% { opacity: 0.75; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* ============================
@@ -519,18 +610,48 @@
   height: 100%;
 }
 
-.decorPetal:nth-child(1) { top: 12%; left: 8%; animation-delay: 0.2s; }
-.decorPetal:nth-child(2) { top: 22%; right: 10%; animation-delay: 0.4s; }
-.decorPetal:nth-child(3) { bottom: 18%; left: 12%; animation-delay: 0.6s; }
-.decorPetal:nth-child(4) { bottom: 26%; right: 7%; animation-delay: 0.3s; }
-.decorPetal:nth-child(5) { top: 8%; left: 42%; animation-delay: 0.7s; }
-.decorPetal:nth-child(6) { bottom: 14%; right: 32%; animation-delay: 0.5s; }
+.decorPetal:nth-child(1) {
+  top: 12%;
+  left: 8%;
+  animation-delay: 0.2s;
+}
+
+.decorPetal:nth-child(2) {
+  top: 22%;
+  right: 10%;
+  animation-delay: 0.4s;
+}
+
+.decorPetal:nth-child(3) {
+  bottom: 18%;
+  left: 12%;
+  animation-delay: 0.6s;
+}
+
+.decorPetal:nth-child(4) {
+  bottom: 26%;
+  right: 7%;
+  animation-delay: 0.3s;
+}
+
+.decorPetal:nth-child(5) {
+  top: 8%;
+  left: 42%;
+  animation-delay: 0.7s;
+}
+
+.decorPetal:nth-child(6) {
+  bottom: 14%;
+  right: 32%;
+  animation-delay: 0.5s;
+}
 
 @keyframes petalAppear {
   from {
     opacity: 0;
     transform: translateY(16px) scale(0.6);
   }
+
   to {
     opacity: 0.65;
     transform: translateY(0) rotate(var(--petal-rotation, 15deg)) scale(1);
@@ -544,10 +665,12 @@
   .envelopeContainer {
     --env-w: min(330px, 88vw);
   }
+
   .textContent {
     margin-top: 20px;
     padding: 0 var(--space-md);
   }
+
   .decorPetal {
     width: 18px;
     height: 18px;
