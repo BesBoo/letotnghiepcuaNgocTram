@@ -68,27 +68,31 @@
 }
 
 /* =========================================================
-   DECORATIVE LILIES (Subtle, Fixed Watermark Tucked Under Envelope)
+   AMBIENT DECORATIVE LILIES (Soft Dreamy Background Watermark)
    ========================================================= */
 .bgFlowerTopLeft {
   position: absolute;
-  top: -75px;
-  left: -100px;
-  width: clamp(230px, 48vw, 330px);
-  z-index: 1;
+  top: -4%;
+  left: -3%;
+  width: clamp(260px, 34vw, 460px);
+  max-width: 48vw;
+  z-index: 2;
   pointer-events: none;
-  opacity: 0.22;
+  opacity: 0.32;
+  filter: blur(0.3px);
   user-select: none;
 }
 
 .bgFlowerBottomRight {
   position: absolute;
-  bottom: -65px;
-  right: -85px;
-  width: clamp(220px, 46vw, 320px);
-  z-index: 1;
+  bottom: -5%;
+  right: -3%;
+  width: clamp(240px, 32vw, 440px);
+  max-width: 46vw;
+  z-index: 2;
   pointer-events: none;
-  opacity: 0.25;
+  opacity: 0.32;
+  filter: blur(0.3px);
   user-select: none;
 }
 
@@ -101,16 +105,16 @@
 
 @media (max-width: 768px) {
   .bgFlowerTopLeft {
-    top: -50px;
-    left: -40px;
-    width: clamp(160px, 45vw, 220px);
-    opacity: 0.20;
+    top: -2%;
+    left: -8%;
+    width: clamp(180px, 46vw, 280px);
+    opacity: 0.28;
   }
   .bgFlowerBottomRight {
-    bottom: -45px;
-    right: -35px;
-    width: clamp(150px, 43vw, 210px);
-    opacity: 0.22;
+    bottom: -3%;
+    right: -8%;
+    width: clamp(170px, 44vw, 260px);
+    opacity: 0.28;
   }
 }
 
