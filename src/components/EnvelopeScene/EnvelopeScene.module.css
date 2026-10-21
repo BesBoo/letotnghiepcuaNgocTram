@@ -68,35 +68,27 @@
 }
 
 /* =========================================================
-   AMBIENT DECORATIVE LILIES (Soft Dreamy Background Watermark)
+   DECORATIVE LILIES (Subtle, Fixed Watermark Tucked Under Envelope)
    ========================================================= */
 .bgFlowerTopLeft {
   position: absolute;
-  top: -4%;
-  left: -3%;
-  width: clamp(260px, 34vw, 460px);
-  max-width: 48vw;
-  z-index: 2;
+  top: -75px;
+  left: -100px;
+  width: clamp(230px, 48vw, 330px);
+  z-index: 1;
   pointer-events: none;
-  opacity: 0.38;
-  filter: blur(0.3px);
-  transform-origin: top left;
-  animation: flowerSwayLeft 9s ease-in-out infinite;
+  opacity: 0.22;
   user-select: none;
 }
 
 .bgFlowerBottomRight {
   position: absolute;
-  bottom: -5%;
-  right: -3%;
-  width: clamp(240px, 32vw, 440px);
-  max-width: 46vw;
-  z-index: 2;
+  bottom: -65px;
+  right: -85px;
+  width: clamp(220px, 46vw, 320px);
+  z-index: 1;
   pointer-events: none;
-  opacity: 0.38;
-  filter: blur(0.3px);
-  transform-origin: bottom right;
-  animation: flowerSwayRight 10s ease-in-out infinite;
+  opacity: 0.25;
   user-select: none;
 }
 
@@ -107,36 +99,18 @@
   pointer-events: none;
 }
 
-@keyframes flowerSwayLeft {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate(10px, 12px) rotate(1.8deg);
-  }
-}
-
-@keyframes flowerSwayRight {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate(-10px, -12px) rotate(-1.8deg);
-  }
-}
-
 @media (max-width: 768px) {
   .bgFlowerTopLeft {
-    top: -2%;
-    left: -8%;
-    width: clamp(180px, 46vw, 280px);
-    opacity: 0.32;
+    top: -50px;
+    left: -40px;
+    width: clamp(160px, 45vw, 220px);
+    opacity: 0.20;
   }
   .bgFlowerBottomRight {
-    bottom: -3%;
-    right: -8%;
-    width: clamp(170px, 44vw, 260px);
-    opacity: 0.32;
+    bottom: -45px;
+    right: -35px;
+    width: clamp(150px, 43vw, 210px);
+    opacity: 0.22;
   }
 }
 
