@@ -442,14 +442,14 @@
 }
 
 .topGraduation {
-  font-family: var(--font-pinyon), 'Pinyon Script', cursive;
-  font-size: clamp(3.2rem, 8vw, 5rem);
+  font-family: var(--font-monsieur), 'Monsieur La Doulaise', cursive;
+  font-size: clamp(3.6rem, 9.5vw, 5.6rem);
   color: #B87565;
-  line-height: 1.18;
+  line-height: 1.15;
   font-weight: 400;
-  letter-spacing: 0.04em;
-  padding: 4px 14px;
-  text-shadow: 0 2px 18px rgba(184, 117, 101, 0.15);
+  letter-spacing: 0.03em;
+  padding: 6px 18px;
+  text-shadow: 0 2px 20px rgba(184, 117, 101, 0.16);
 }
 
 .topInvitations {
