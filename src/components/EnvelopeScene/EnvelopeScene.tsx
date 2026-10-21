@@ -34,6 +34,7 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
   const sealRef = useRef<HTMLDivElement>(null);
   const burstRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
+  const topHeaderRef = useRef<HTMLDivElement>(null);
   const autoProceedTimer = useRef<number | null>(null);
 
   const isOpeningRef = useRef(false);
@@ -98,6 +99,7 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
     }
 
     if (reducedMotion) {
+      if (topHeaderRef.current) topHeaderRef.current.style.opacity = '0';
       if (sealRef.current) sealRef.current.style.opacity = '0';
       if (flapRef.current) {
         flapRef.current.style.transform = 'translateZ(-2px) rotateX(-180deg)';
@@ -122,13 +124,25 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
       },
     });
 
-    // Step 1: Text hints fade out
+    // Step 1: Text hints & top title fade out
     if (hintRef.current) {
       tl.to(
         hintRef.current,
         {
           opacity: 0,
           y: 12,
+          duration: 0.3,
+          ease: 'power2.out',
+        },
+        0
+      );
+    }
+    if (topHeaderRef.current) {
+      tl.to(
+        topHeaderRef.current,
+        {
+          opacity: 0,
+          y: -12,
           duration: 0.3,
           ease: 'power2.out',
         },
@@ -280,6 +294,12 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
           />
         </div>
       ))}
+
+      {/* Top title above the envelope */}
+      <div ref={topHeaderRef} className={styles.topHeader}>
+        <div className={styles.topGraduation}>Graduation</div>
+        <div className={styles.topInvitations}>INVITATIONS</div>
+      </div>
 
       {/* Main interactive envelope container */}
       <div

@@ -430,6 +430,37 @@
 }
 
 /* ============================
+   TOP HEADER (Above Envelope)
+   ============================ */
+.topHeader {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  margin-bottom: clamp(12px, 2.8vh, 26px);
+  user-select: none;
+  pointer-events: none;
+}
+
+.topGraduation {
+  font-family: var(--font-script);
+  font-size: clamp(2.2rem, 5.5vw, 3.4rem);
+  color: #B87565;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.topInvitations {
+  font-family: var(--font-serif);
+  font-size: clamp(0.78rem, 2.2vw, 0.95rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #B87565;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* ============================
    7. TEXT CONTENT & HINTS
    ============================ */
 .textContent {
