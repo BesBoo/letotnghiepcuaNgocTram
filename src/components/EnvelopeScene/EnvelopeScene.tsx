@@ -124,25 +124,13 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
       },
     });
 
-    // Step 1: Text hints & top title fade out
+    // Step 1: Text hints beneath envelope fade out (keep topHeader visible)
     if (hintRef.current) {
       tl.to(
         hintRef.current,
         {
           opacity: 0,
           y: 12,
-          duration: 0.3,
-          ease: 'power2.out',
-        },
-        0
-      );
-    }
-    if (topHeaderRef.current) {
-      tl.to(
-        topHeaderRef.current,
-        {
-          opacity: 0,
-          y: -12,
           duration: 0.3,
           ease: 'power2.out',
         },
@@ -280,6 +268,15 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
       <div className={styles.background} />
       <div className={styles.backgroundGlow} />
 
+      {/* Large background blossom flower (layered behind title and envelope) */}
+      <div className={styles.bgBlossomBottomCenter} aria-hidden="true">
+        <img
+          src="/assets/flowers/Dew-Kissed%20Blush%20Blossom.png"
+          alt=""
+          className={styles.flowerImg}
+        />
+      </div>
+
       {/* Decorative ambient petals */}
       {[15, -20, 30, -10, 45, -35].map((rotation, i) => (
         <div
@@ -311,15 +308,6 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
         tabIndex={0}
         aria-label={opened ? 'Chạm để xem chi tiết lời mời' : 'Chạm vào phong bì để mở thư'}
       >
-        {/* Background flower blossom centered underneath the envelope */}
-        <div className={styles.bgBlossomBottomCenter} aria-hidden="true">
-          <img
-            src="/assets/flowers/Dew-Kissed%20Blush%20Blossom.png"
-            alt=""
-            className={styles.flowerImg}
-          />
-        </div>
-
         {/* Soft shadow on the desk/surface below */}
         <div className={styles.envelopeShadow} />
 
