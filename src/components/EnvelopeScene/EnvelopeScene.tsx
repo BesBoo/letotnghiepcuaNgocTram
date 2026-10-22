@@ -458,36 +458,6 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
                   <circle cx="2" cy="30" r="1" fill="url(#champagneGoldFoil)" />
                   <circle cx="30" cy="2" r="1" fill="url(#champagneGoldFoil)" />
                 </g>
-
-                {/* Symmetrical Classical Graduation Laurel Branch */}
-                <g id="laurelBranch">
-                  {/* Curved stem */}
-                  <path
-                    d="M 54,75 C 72,110 73,165 54,200"
-                    fill="none"
-                    stroke="url(#champagneGoldFoil)"
-                    strokeWidth="0.9"
-                  />
-                  {/* Pair 1 */}
-                  <path d="M 58,92 C 51,87 47,91 52,96 C 55,97 58,94 58,92 Z" fill="url(#champagneGoldFoil)" opacity="0.8" />
-                  <path d="M 62,94 C 69,89 74,92 70,98 C 67,99 63,96 62,94 Z" fill="url(#champagneGoldFoil)" opacity="0.8" />
-                  {/* Pair 2 */}
-                  <path d="M 65,114 C 56,110 53,114 59,119 C 62,120 65,117 65,114 Z" fill="url(#champagneGoldFoil)" opacity="0.8" />
-                  <path d="M 68,116 C 76,111 80,116 75,121 C 72,122 68,119 68,116 Z" fill="url(#champagneGoldFoil)" opacity="0.8" />
-                  {/* Pair 3 (Center swell) */}
-                  <path d="M 67,137 C 58,135 55,140 61,144 C 64,145 67,141 67,137 Z" fill="url(#champagneGoldFoil)" opacity="0.85" />
-                  <path d="M 69,139 C 78,137 81,142 76,146 C 73,147 69,143 69,139 Z" fill="url(#champagneGoldFoil)" opacity="0.85" />
-                  {/* Pair 4 */}
-                  <path d="M 65,160 C 56,161 54,166 60,169 C 63,169 65,164 65,160 Z" fill="url(#champagneGoldFoil)" opacity="0.8" />
-                  <path d="M 67,162 C 76,163 79,169 73,171 C 70,171 67,166 67,162 Z" fill="url(#champagneGoldFoil)" opacity="0.8" />
-                  {/* Pair 5 */}
-                  <path d="M 59,181 C 52,184 49,189 54,192 C 57,192 59,186 59,181 Z" fill="url(#champagneGoldFoil)" opacity="0.8" />
-                  <path d="M 61,183 C 69,186 73,191 67,194 C 64,193 61,188 61,183 Z" fill="url(#champagneGoldFoil)" opacity="0.8" />
-                  {/* Base berries */}
-                  <circle cx="53" cy="202" r="1.4" fill="url(#champagneGoldFoil)" />
-                  <circle cx="57" cy="205" r="1.1" fill="url(#champagneGoldFoil)" />
-                  <circle cx="50" cy="206" r="1.1" fill="url(#champagneGoldFoil)" />
-                </g>
               </defs>
 
               {/* Perimeter Understated Double-Line Golden Border */}
@@ -527,10 +497,6 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
               {/* Right folding flap */}
               <path d="M 440 0 L 220 145 L 440 275 Z" fill="url(#frontRightGrad)" />
               <line x1="440" y1="0" x2="220" y2="145" stroke="url(#champagneGoldFoil)" strokeWidth="0.75" strokeOpacity="0.45" />
-
-              {/* Graduation Laurel Wreaths on Side Flaps */}
-              <use href="#laurelBranch" opacity="0.85" />
-              <use href="#laurelBranch" transform="translate(440, 0) scale(-1, 1)" opacity="0.85" />
 
               {/* Bottom flap: overlaps side flaps with realistic rounded corners */}
               <path
