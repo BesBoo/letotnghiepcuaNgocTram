@@ -115,7 +115,8 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
       }
       if (hintRef.current) hintRef.current.style.opacity = '0';
       setCanProceed(true);
-      autoProceedTimer.current = window.setTimeout(handleProceed, 1200);
+      // Wait 10 seconds so user can read card comfortably, or click to proceed sooner
+      autoProceedTimer.current = window.setTimeout(handleProceed, 10000);
       return;
     }
 
@@ -123,8 +124,8 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
     const tl = gsap.timeline({
       onComplete: () => {
         setCanProceed(true);
-        // Automatically proceed after 3.6 seconds of reading, or user can click earlier
-        autoProceedTimer.current = window.setTimeout(handleProceed, 3600);
+        // Automatically proceed after 10 seconds of reading, or user can click anytime to proceed sooner
+        autoProceedTimer.current = window.setTimeout(handleProceed, 10000);
       },
     });
 
