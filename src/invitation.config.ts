@@ -38,6 +38,12 @@ export interface InvitationConfig {
     note?: string;
   };
 
+  // === ĐỊA ĐIỂM GỬI XE ===
+  parking?: {
+    name: string;
+    address: string;
+  }[];
+
   // === ẢNH KỶ NIỆM ===
   memories: Memory[];
 
@@ -76,12 +82,19 @@ const config: InvitationConfig = {
     date: "[Ngày tháng năm]",
     time: "[Giờ bắt đầu]",
     endTime: "[Giờ kết thúc]",
-    venue: "[Tên địa điểm]",
-    address: "[Địa chỉ chi tiết]",
+    venue: "Đại học mở TPHCM",
+    address: "97 Võ Văn Tần, Xuân Hòa, Hồ Chí Minh 700000, Vietnam",
     dressCode: "Smart casual – Hồng pastel nếu bạn muốn 💕",
-    mapLink: "", // Paste Google Maps link here
+    mapLink: "https://www.google.com/maps/search/?api=1&query=HCMC+Open+University+-+Campus+1,+97+V%C3%B5+V%C4%83n+T%E1%BA%A7n,+Xu%C3%A2n+H%C3%B2a,+H%E1%BB%93+Ch%C3%AD+Minh",
     note: "Mình sẽ rất vui nếu được gặp bạn!",
   },
+
+  // === ĐỊA ĐIỂM GỬI XE ===
+  parking: [
+    { name: "Tòa nhà Báo Người Lao động", address: "số 123 Võ Văn Tần" },
+    { name: "Du Lịch Hoà Bình", address: "số 60 Võ Văn Tần" },
+    { name: "Công viên Tao Đàn", address: "Cách trường khoảng vài phút đi bộ" },
+  ],
 
   // === ẢNH KỶ NIỆM (Section: Our Memories) ===
   // Thay thế bằng ảnh thật của bạn

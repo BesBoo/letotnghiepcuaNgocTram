@@ -42,16 +42,16 @@ export default function App() {
           visibility: envelopeOpened ? 'visible' : 'hidden',
         }}
       >
-        {/* Scene 3: Our Memories */}
-        <MemoriesSection guest={guest} />
-
-        {/* Scene 4: The Invitation */}
+        {/* 1. Thiệp mời tốt nghiệp */}
         <InvitationSection guest={guest} onSubmitRSVP={submitRSVP} />
 
-        {/* Scene 5: Little Moments Gallery */}
+        {/* 2. MEMORIES */}
+        <MemoriesSection guest={guest} />
+
+        {/* 3. A Few Moments to Keep */}
         <GallerySection />
 
-        {/* Scene 6: Until We Meet */}
+        {/* 4. UNTIL WE MEET */}
         <ClosingSection />
       </main>
     </>

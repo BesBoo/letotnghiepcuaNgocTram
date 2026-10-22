@@ -94,7 +94,7 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
             className="heading-display"
             style={{ marginBottom: 'var(--space-md)' }}
           >
-            Our Little Memories
+            MEMORIES
           </h2>
 
           {/* Lời chào/gửi đích danh khách mời */}
@@ -115,10 +115,6 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
 
           <p className="text-script">
             Thanh xuân có bạn, thật đẹp.
-          </p>
-          <p className="text-body" style={{ marginTop: 'var(--space-lg)' }}>
-            Có những ngày tháng trôi qua thật nhẹ, nhưng khi nhìn lại, mới thấy đó là những khoảnh khắc đẹp nhất.
-            Cảm ơn vì đã cùng nhau tạo nên những kỷ niệm không bao giờ phai.
           </p>
 
           {/* Decorative heart line */}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import config from '../invitation.config';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, MapPin, ExternalLink, Car } from 'lucide-react';
 
 export default function ClosingSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -175,11 +175,171 @@ export default function ClosingSection() {
             color: 'var(--text-primary)',
             opacity: isVisible ? 1 : 0,
             transition: 'opacity 0.8s 1.3s',
-            marginBottom: 'var(--space-3xl)',
+            marginBottom: 'var(--space-2xl)',
           }}
         >
           — {config.senderName}
         </p>
+
+        {/* Map & Parking Information Card */}
+        <div
+          style={{
+            margin: '0 auto var(--space-2xl)',
+            padding: 'clamp(1.2rem, 3.5vw, 1.8rem)',
+            background: 'rgba(255, 255, 255, 0.88)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: 'var(--radius-lg)',
+            boxShadow: '0 8px 30px rgba(201, 104, 133, 0.16)',
+            border: '1px solid rgba(255, 255, 255, 0.95)',
+            textAlign: 'left',
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
+            transition: 'all 0.8s var(--ease-out-expo) 1.2s',
+          }}
+        >
+          {/* Section Header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+            <MapPin size={20} color="var(--pink-deep)" />
+            <h3
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: '1.15rem',
+                fontWeight: 600,
+                color: 'var(--text-primary)',
+                margin: 0,
+              }}
+            >
+              Địa điểm & Bản đồ
+            </h3>
+          </div>
+
+          <p style={{ margin: '0 0 4px', fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>
+            {config.event.venue}
+          </p>
+          <p style={{ margin: '0 0 14px', color: 'var(--text-secondary)', fontSize: '0.88rem' }}>
+            {config.event.address}
+          </p>
+
+          {/* Interactive Google Map iframe */}
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              height: '240px',
+              borderRadius: 'var(--radius-md)',
+              overflow: 'hidden',
+              boxShadow: 'inset 0 0 0 1px rgba(0, 0, 0, 0.08)',
+              marginBottom: '14px',
+            }}
+          >
+            <iframe
+              src="https://maps.google.com/maps?q=HCMC+Open+University+-+Campus+1,+97+V%C3%B5+V%C4%83n+T%E1%BA%A7n,+Xu%C3%A2n+H%C3%B2a,+H%E1%BB%93+Ch%C3%AD+Minh&t=&z=17&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Bản đồ HCMC Open University - Campus 1"
+            />
+          </div>
+
+          {/* Direct link button */}
+          <div style={{ textAlign: 'center', marginBottom: 'var(--space-lg)' }}>
+            <a
+              href={config.event.mapLink || "https://www.google.com/maps/search/?api=1&query=HCMC+Open+University+-+Campus+1,+97+V%C3%B5+V%C4%83n+T%E1%BA%A7n"}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 18px',
+                fontSize: '0.85rem',
+                fontWeight: 500,
+                color: 'var(--white)',
+                background: 'var(--pink-deep)',
+                borderRadius: 'var(--radius-xl)',
+                textDecoration: 'none',
+                boxShadow: '0 4px 12px rgba(201, 104, 133, 0.3)',
+                transition: 'all 0.2s',
+              }}
+            >
+              <ExternalLink size={14} />
+              Mở chỉ đường trên Google Maps
+            </a>
+          </div>
+
+          {/* Parking Information */}
+          <div
+            style={{
+              borderTop: '1px dashed rgba(201, 104, 133, 0.3)',
+              paddingTop: '14px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <Car size={18} color="var(--pink-deep)" />
+              <h4
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  color: 'var(--text-primary)',
+                  margin: 0,
+                }}
+              >
+                Những địa điểm có thể gửi xe:
+              </h4>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div
+                style={{
+                  padding: '9px 12px',
+                  background: 'rgba(255, 240, 244, 0.75)',
+                  borderRadius: 'var(--radius-sm)',
+                  borderLeft: '3px solid var(--pink-deep)',
+                }}
+              >
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
+                  • Tòa nhà Báo Người Lao động
+                </span>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginLeft: '6px' }}>
+                  (số 123 Võ Văn Tần)
+                </span>
+              </div>
+
+              <div
+                style={{
+                  padding: '9px 12px',
+                  background: 'rgba(255, 240, 244, 0.75)',
+                  borderRadius: 'var(--radius-sm)',
+                  borderLeft: '3px solid var(--pink-deep)',
+                }}
+              >
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
+                  • Du Lịch Hoà Bình
+                </span>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginLeft: '6px' }}>
+                  (số 60 Võ Văn Tần)
+                </span>
+              </div>
+
+              <div
+                style={{
+                  padding: '9px 12px',
+                  background: 'rgba(255, 240, 244, 0.75)',
+                  borderRadius: 'var(--radius-sm)',
+                  borderLeft: '3px solid var(--pink-deep)',
+                }}
+              >
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
+                  • Công viên Tao Đàn.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Decorative heart divider */}
         <div style={{
