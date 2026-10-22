@@ -280,22 +280,6 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
       <div className={styles.background} />
       <div className={styles.backgroundGlow} />
 
-      {/* Ambient background artistic lily flowers */}
-      <div className={styles.bgFlowerTopLeft} aria-hidden="true">
-        <img
-          src="/assets/flowers/Ornate%20Pink%20Lily%20Floral%20Flourish.png"
-          alt=""
-          className={styles.flowerImg}
-        />
-      </div>
-      <div className={styles.bgFlowerBottomRight} aria-hidden="true">
-        <img
-          src="/assets/flowers/Watercolor%20Pink%20Lily%20Bouquet.png"
-          alt=""
-          className={styles.flowerImg}
-        />
-      </div>
-
       {/* Decorative ambient petals */}
       {[15, -20, 30, -10, 45, -35].map((rotation, i) => (
         <div
@@ -327,6 +311,15 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
         tabIndex={0}
         aria-label={opened ? 'Chạm để xem chi tiết lời mời' : 'Chạm vào phong bì để mở thư'}
       >
+        {/* Background flower blossom centered underneath the envelope */}
+        <div className={styles.bgBlossomBottomCenter} aria-hidden="true">
+          <img
+            src="/assets/flowers/Dew-Kissed%20Blush%20Blossom.png"
+            alt=""
+            className={styles.flowerImg}
+          />
+        </div>
+
         {/* Soft shadow on the desk/surface below */}
         <div className={styles.envelopeShadow} />
 
