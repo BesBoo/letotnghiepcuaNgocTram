@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import type { Guest } from '../lib/supabase';
 import config from '../invitation.config';
-import { MapPin, Clock, Calendar, Copy, Check, ExternalLink, Heart, Send } from 'lucide-react';
+import { MapPin, Clock, Calendar, Copy, Check, ExternalLink, Heart, Send, Phone } from 'lucide-react';
 
 interface InvitationSectionProps {
   guest?: Guest;
@@ -403,8 +403,38 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
               )}
             </div>
 
-            {/* Dress Code */}
-            {config.event.dressCode && (
+            {/* Contact Phone or Dress Code */}
+            {config.event.contactPhone ? (
+              <div
+                style={{
+                  marginTop: 'var(--space-lg)',
+                  padding: 'var(--space-md)',
+                  background: 'rgba(255,255,255,0.6)',
+                  borderRadius: 'var(--radius-sm)',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.85rem',
+                  color: 'var(--text-secondary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                }}
+              >
+                <Phone size={15} color="var(--pink-deep)" />
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>SDT liên hệ: </span>
+                <a
+                  href={`tel:${config.event.contactPhone.replace(/\s+/g, '')}`}
+                  style={{
+                    color: 'var(--pink-deep)',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    letterSpacing: '0.5px',
+                  }}
+                >
+                  {config.event.contactPhone}
+                </a>
+              </div>
+            ) : config.event.dressCode ? (
               <div
                 style={{
                   marginTop: 'var(--space-lg)',
@@ -419,7 +449,7 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                 <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Dress code: </span>
                 {config.event.dressCode}
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* Note */}

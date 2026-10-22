@@ -33,6 +33,7 @@ export interface InvitationConfig {
     endTime?: string;
     venue: string;
     address: string;
+    contactPhone?: string;
     dressCode?: string;
     mapLink?: string;
     note?: string;
@@ -84,7 +85,7 @@ const config: InvitationConfig = {
     endTime: "[Giờ kết thúc]",
     venue: "Đại học mở TPHCM",
     address: "97 Võ Văn Tần, Xuân Hòa, Hồ Chí Minh 700000, Vietnam",
-    dressCode: "Smart casual – Hồng pastel nếu bạn muốn 💕",
+    contactPhone: "0901638309",
     mapLink: "https://www.google.com/maps/search/?api=1&query=HCMC+Open+University+-+Campus+1,+97+V%C3%B5+V%C4%83n+T%E1%BA%A7n,+Xu%C3%A2n+H%C3%B2a,+H%E1%BB%93+Ch%C3%AD+Minh",
     note: "Mình sẽ rất vui nếu được gặp bạn!",
   },
