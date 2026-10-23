@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS guests (
     opened_at TIMESTAMP WITH TIME ZONE,               -- Thời điểm khách bấm mở thư
     rsvp_status VARCHAR(50) DEFAULT 'pending',        -- 'attending' (Sẽ tham gia) | 'declined' (Bận) | 'pending'
     rsvp_note TEXT,                                   -- Lời nhắn/chúc khách gửi lại khi bấm xác nhận
-    url TEXT,                                         -- Tự động sinh link mời: https://test-thiep-moi.vercel.app/?to=...
+    url TEXT,                                         -- Tự động sinh link mời: https://letotnghiepcua-ngoc-tram.vercel.app/?to=...
     start_time VARCHAR(50),                           -- Giờ đón tiếp riêng cho khách: ví dụ '08:30' hoặc '08h30'
     end_time VARCHAR(50),                             -- Giờ kết thúc riêng cho khách: ví dụ '10:30' hoặc '11h00'
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -30,7 +30,7 @@ ALTER TABLE guests ADD COLUMN IF NOT EXISTS end_time VARCHAR(50);
 CREATE OR REPLACE FUNCTION auto_update_guest_url()
 RETURNS TRIGGER AS $$
 DECLARE
-    base_url TEXT := 'https://test-thiep-moi.vercel.app';
+    base_url TEXT := 'https://letotnghiepcua-ngoc-tram.vercel.app';
 BEGIN
     -- Chỉ cập nhật URL khi:
     -- 1. Thêm mới bản ghi (INSERT)
@@ -54,7 +54,7 @@ EXECUTE FUNCTION auto_update_guest_url();
 
 -- Cập nhật URL ngay lập tức cho các khách mời hiện có trong database
 UPDATE guests
-SET url = 'https://test-thiep-moi.vercel.app/?to=' || slug
+SET url = 'https://letotnghiepcua-ngoc-tram.vercel.app/?to=' || slug
 WHERE url IS NULL OR url = '';
 
 -- 3. Kích hoạt Row Level Security (RLS) để bảo vệ bảng

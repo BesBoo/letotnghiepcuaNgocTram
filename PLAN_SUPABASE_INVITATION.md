@@ -126,7 +126,7 @@ Vì đây là Single Page Application (SPA), nếu người dùng truy cập tr�
      - `VITE_SUPABASE_URL`
      - `VITE_SUPABASE_ANON_KEY`
 4. **Bấm "Deploy":**
-   - Vercel sẽ tự động build trong khoảng 30 - 60 giây và cấp cho bạn tên miền miễn phí dạng `https://thiep-tot-nghiep.vercel.app/`.
+   - Vercel sẽ tự động build trong khoảng 30 - 60 giây và cấp cho bạn tên miền miễn phí dạng `https://letotnghiepcua-ngoc-tram.vercel.app/`.
    - Bạn có thể gắn tên miền riêng (Custom Domain) tùy ý hoàn toàn miễn phí.
 
 ---
@@ -143,8 +143,8 @@ INSERT INTO guests (slug, name, greeting) VALUES
 ```
 
 Sau đó, bạn có thể copy link tương ứng để gửi qua tin nhắn Zalo / Messenger:
-- `https://thiep-tot-nghiep.vercel.app/1` -> Anh Tuấn nhận được thiệp riêng cho mình.
-- `https://thiep-tot-nghiep.vercel.app/linh-dan` -> Khánh Linh nhận được thiệp riêng của Linh.
+- `https://letotnghiepcua-ngoc-tram.vercel.app/?to=1` -> Anh Tuấn nhận được thiệp riêng cho mình.
+- `https://letotnghiepcua-ngoc-tram.vercel.app/?to=linh-dan` -> Khánh Linh nhận được thiệp riêng của Linh.
 - Bạn mở bảng `guests` trên Supabase là sẽ thấy ngay ai đã mở thiệp và ai đã bấm xác nhận tham gia!
 
 ---
