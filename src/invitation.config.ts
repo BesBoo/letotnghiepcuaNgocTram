@@ -12,6 +12,7 @@ export interface Memory {
   caption: string;
   alt: string;
   rotation?: number; // degrees
+  aspectRatio?: string;
 }
 
 export interface InvitationConfig {
@@ -65,7 +66,7 @@ export interface InvitationConfig {
 
 const config: InvitationConfig = {
   // === THÔNG TIN NGƯỜI GỬI ===
-  senderName: "[Tên của bạn]",
+  senderName: "Ngọc Trâm",
   senderGreeting: "Gửi bạn thân yêu",
 
   // === TIÊU ĐỀ ===
@@ -98,35 +99,31 @@ const config: InvitationConfig = {
   ],
 
   // === ẢNH KỶ NIỆM (Section: Our Memories) ===
-  // Thay thế bằng ảnh thật của bạn
+  // Hiển thị 3 tấm ảnh kỷ niệm
   memories: [
     {
       id: "mem-1",
-      src: "/assets/memories/memory-01.webp",
-      caption: "Ngày đầu tiên bước vào giảng đường ✨",
-      alt: "Kỷ niệm ngày nhập học",
-      rotation: -3,
+      src: "https://agvvlhblinnizpwxduab.supabase.co/storage/v1/object/public/memories/memory-01.png",
+      caption: "Ngày đầu tiên bước vào giảng đường ",
+      alt: "Kỷ niệm lễ tốt nghiệp",
+      rotation: -2,
+      aspectRatio: "1086/1448",
     },
     {
       id: "mem-2",
-      src: "/assets/memories/memory-02.webp",
-      caption: "Những buổi chiều cùng nhau ôn bài ☕",
-      alt: "Kỷ niệm cùng bạn bè học bài",
-      rotation: 2,
+      src: "https://agvvlhblinnizpwxduab.supabase.co/storage/v1/object/public/memories/memory-02.png",
+      caption: "Những buổi chiều cùng nhau ôn bài ",
+      alt: "Khoảnh khắc tốt nghiệp rực rỡ",
+      rotation: 1.5,
+      aspectRatio: "885/1777",
     },
     {
       id: "mem-3",
-      src: "/assets/memories/memory-03.webp",
-      caption: "Chuyến đi chơi nhớ mãi không quên 🌸",
-      alt: "Kỷ niệm chuyến đi chơi cùng bạn bè",
-      rotation: -2,
-    },
-    {
-      id: "mem-4",
-      src: "/assets/memories/memory-04.webp",
-      caption: "Những nụ cười không bao giờ phai 💛",
-      alt: "Kỷ niệm cùng bạn bè",
-      rotation: 3,
+      src: "https://agvvlhblinnizpwxduab.supabase.co/storage/v1/object/public/memories/memory-03.png",
+      caption: "Chuyến đi chơi nhớ mãi không quên ",
+      alt: "Kỷ niệm thanh xuân",
+      rotation: -1.5,
+      aspectRatio: "1037/1517",
     },
   ],
 
@@ -134,35 +131,40 @@ const config: InvitationConfig = {
   galleryPhotos: [
     {
       id: "gal-1",
-      src: "/assets/memories/moment-01.webp",
+      src: "https://agvvlhblinnizpwxduab.supabase.co/storage/v1/object/public/memories/moment-01.png",
       caption: "Một khoảnh khắc nhỏ, nhưng thật ấm áp",
       alt: "Khoảnh khắc đáng nhớ",
+      aspectRatio: "1086/1448",
     },
     {
       id: "gal-2",
-      src: "/assets/memories/moment-02.webp",
+      src: "https://agvvlhblinnizpwxduab.supabase.co/storage/v1/object/public/memories/moment-02.png",
       caption: "Thanh xuân là khi có bạn bên cạnh",
       alt: "Khoảnh khắc cùng bạn bè",
+      aspectRatio: "1086/1448",
     },
     {
       id: "gal-3",
-      src: "/assets/memories/moment-03.webp",
+      src: "https://agvvlhblinnizpwxduab.supabase.co/storage/v1/object/public/memories/moment-03.jpg",
       caption: "Cảm ơn vì những ngày tháng đó",
-      alt: "Khoảnh khắc đáng nhớ",
+      alt: "Kỷ niệm dải sash tốt nghiệp",
+      aspectRatio: "2560/1920",
     },
     {
       id: "gal-4",
-      src: "/assets/memories/moment-04.webp",
+      src: "https://agvvlhblinnizpwxduab.supabase.co/storage/v1/object/public/memories/moment-04.jpg",
       caption: "Mãi là bạn nhé!",
-      alt: "Khoảnh khắc cùng bạn bè",
-      rotation: -2,
+      alt: "Khoảnh khắc đáng nhớ",
+      rotation: -1.5,
+      aspectRatio: "1920/2560",
     },
     {
       id: "gal-5",
-      src: "/assets/memories/moment-05.webp",
+      src: "https://agvvlhblinnizpwxduab.supabase.co/storage/v1/object/public/memories/moment-05.png",
       caption: "Những ngày tháng rực rỡ nhất",
       alt: "Khoảnh khắc vui vẻ",
-      rotation: 1,
+      rotation: 1.5,
+      aspectRatio: "1086/1448",
     },
   ],
 

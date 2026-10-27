@@ -134,10 +134,12 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: 'clamp(1.5rem, 3vw, 2.5rem)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: 'clamp(1.5rem, 3.5vw, 2.5rem)',
             maxWidth: '1000px',
             margin: '0 auto',
+            alignItems: 'start',
+            position: 'relative',
           }}
         >
           {config.memories.map((memory, index) => {
@@ -153,6 +155,7 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
                     : `translateY(50px) rotate(${(memory.rotation || 0) + 5}deg)`,
                   transition: `opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo)`,
                   cursor: 'pointer',
+                  position: 'relative',
                 }}
                 onClick={() =>
                   setLightbox({ src: memory.src, alt: memory.alt, caption: memory.caption })
@@ -172,7 +175,7 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
                   className="polaroid-hover"
                   style={{
                     background: 'white',
-                    padding: '12px 12px 40px',
+                    padding: '12px 12px 36px',
                     borderRadius: '2px',
                     boxShadow: '0 4px 16px rgba(201, 104, 133, 0.12), 0 1px 3px rgba(0,0,0,0.04)',
                     transition: 'transform 0.3s var(--ease-out-expo), box-shadow 0.3s',
@@ -186,11 +189,11 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
                     e.currentTarget.style.boxShadow = '';
                   }}
                 >
-                  {/* Photo */}
+                  {/* Photo container with responsive natural aspect ratio */}
                   <div
                     style={{
                       width: '100%',
-                      aspectRatio: '4/3',
+                      aspectRatio: memory.aspectRatio || '3/4',
                       background: 'linear-gradient(135deg, var(--pink-light) 0%, var(--pink-soft) 100%)',
                       borderRadius: '1px',
                       overflow: 'hidden',
@@ -205,20 +208,13 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
+                        objectPosition: 'center top',
                       }}
                       onError={(e) => {
                         // Hide broken image, show gradient placeholder
                         (e.target as HTMLImageElement).style.display = 'none';
                       }}
                     />
-                    {/* Placeholder overlay for missing images */}
-                    <div style={{
-                      position: 'absolute', inset: 0,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '2rem', opacity: 0.3, pointerEvents: 'none',
-                    }}>
-                      📷
-                    </div>
                   </div>
 
                   {/* Caption */}
@@ -251,6 +247,46 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
                     zIndex: 2,
                   }}
                 />
+
+                {/* Sticker "Mlem mlem!" - attached to first photo card */}
+                {index === 0 && (
+                  <img
+                    src="/assets/memories/sticker_4.png"
+                    alt=""
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      top: '-30px',
+                      left: '-25px',
+                      width: 'clamp(100px, 16vw, 140px)',
+                      height: 'auto',
+                      transform: 'rotate(-14deg)',
+                      zIndex: 10,
+                      pointerEvents: 'none',
+                      filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
+                    }}
+                  />
+                )}
+
+                {/* Sticker "Thả tim" - attached to last photo card */}
+                {index === config.memories.length - 1 && (
+                  <img
+                    src="/assets/memories/sticker_2.png"
+                    alt=""
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      bottom: '-25px',
+                      right: '-20px',
+                      width: 'clamp(100px, 16vw, 140px)',
+                      height: 'auto',
+                      transform: 'rotate(10deg)',
+                      zIndex: 10,
+                      pointerEvents: 'none',
+                      filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
+                    }}
+                  />
+                )}
               </div>
             );
           })}

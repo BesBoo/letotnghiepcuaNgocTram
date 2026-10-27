@@ -108,7 +108,6 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? 'scale(1)' : 'scale(0.96)',
           transition: `opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo)`,
-          overflow: 'hidden',
         }}
       >
         {/* Floral border background */}
@@ -122,6 +121,8 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
             backgroundPosition: 'center',
             opacity: 0.12,
             pointerEvents: 'none',
+            overflow: 'hidden',
+            borderRadius: 'var(--radius-lg)',
           }}
         />
 
@@ -619,6 +620,46 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
             </div>
           </div>
         </div>
+
+        {/* Sticker "Thả tim" - top left of invitation card */}
+        <img
+          src="/assets/memories/sticker_2.png"
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: '-30px',
+            left: '-25px',
+            width: 'clamp(105px, 17vw, 145px)',
+            height: 'auto',
+            transform: 'rotate(-12deg)',
+            zIndex: 10,
+            pointerEvents: 'none',
+            filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s var(--ease-out-expo) 1.2s, transform 0.6s var(--ease-out-expo) 1.2s',
+          }}
+        />
+
+        {/* Sticker "Yêu quá!" - bottom right of invitation card */}
+        <img
+          src="/assets/memories/sticker_1.png"
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            bottom: '-25px',
+            right: '-20px',
+            width: 'clamp(115px, 18vw, 155px)',
+            height: 'auto',
+            transform: 'rotate(10deg)',
+            zIndex: 10,
+            pointerEvents: 'none',
+            filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
+            opacity: isVisible ? 1 : 0,
+            transition: 'opacity 0.6s var(--ease-out-expo) 1.5s, transform 0.6s var(--ease-out-expo) 1.5s',
+          }}
+        />
       </div>
     </section>
   );

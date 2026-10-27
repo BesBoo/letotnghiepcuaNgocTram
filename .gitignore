@@ -34,3 +34,8 @@ Thumbs.db
 .gemini/
 .system_generated/
 .tempmediaStorage/
+
+# Personal Photos (hosted on Supabase Storage - keep private from Git)
+public/assets/memories/memory-*
+public/assets/memories/moment-*
+

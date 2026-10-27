@@ -184,7 +184,7 @@ export default function ClosingSection() {
         {/* Map & Parking Information Card */}
         <div
           style={{
-            margin: '0 auto var(--space-2xl)',
+            margin: '0 auto calc(var(--space-2xl) + 20px)',
             padding: 'clamp(1.2rem, 3.5vw, 1.8rem)',
             background: 'rgba(255, 255, 255, 0.88)',
             backdropFilter: 'blur(12px)',
@@ -192,6 +192,7 @@ export default function ClosingSection() {
             boxShadow: '0 8px 30px rgba(201, 104, 133, 0.16)',
             border: '1px solid rgba(255, 255, 255, 0.95)',
             textAlign: 'left',
+            position: 'relative',
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
             transition: 'all 0.8s var(--ease-out-expo) 1.2s',
@@ -339,6 +340,26 @@ export default function ClosingSection() {
               </div>
             </div>
           </div>
+
+          {/* Sticker "Cảm ơn!" - bottom right of map & parking card */}
+          <img
+            src="/assets/memories/sticker_3.png"
+            alt="Cảm ơn!"
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              bottom: '-30px',
+              right: '-20px',
+              width: 'clamp(115px, 18vw, 155px)',
+              height: 'auto',
+              transform: 'rotate(8deg)',
+              zIndex: 10,
+              pointerEvents: 'none',
+              filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
+              opacity: isVisible ? 1 : 0,
+              transition: 'opacity 0.6s var(--ease-out-expo) 1.4s, transform 0.6s var(--ease-out-expo) 1.4s',
+            }}
+          />
         </div>
 
         {/* Decorative heart divider */}

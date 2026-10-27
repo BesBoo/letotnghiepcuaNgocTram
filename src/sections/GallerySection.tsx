@@ -47,15 +47,12 @@ export default function GallerySection() {
     return () => observers.forEach((o) => o.disconnect());
   }, [reducedMotion]);
 
-  // Layout assignments: first photo larger, rest varied
+  // Layout assignments
   const getPhotoStyle = (index: number): React.CSSProperties => {
-    const isLarge = index === 0;
-    const rotations = [0, -2, 1.5, -1, 2, -1.5];
+    const rotations = [0, -1.5, 1, -1, 1.5];
     const rotation = config.galleryPhotos[index]?.rotation || rotations[index % rotations.length];
 
     return {
-      gridColumn: isLarge ? 'span 2' : 'span 1',
-      gridRow: isLarge ? 'span 2' : 'span 1',
       transform: visibleItems.has(index)
         ? `rotate(${rotation}deg)`
         : `translateY(40px) rotate(${rotation + 3}deg)`,
@@ -96,14 +93,16 @@ export default function GallerySection() {
           </p>
         </div>
 
-        {/* Asymmetric gallery grid */}
+        {/* Gallery grid with responsive columns */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            gap: 'clamp(1rem, 2.5vw, 2rem)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: 'clamp(1.2rem, 3vw, 2.2rem)',
             maxWidth: '1000px',
             margin: '0 auto',
+            alignItems: 'start',
+            position: 'relative',
           }}
         >
           {config.galleryPhotos.map((photo, index) => (
@@ -148,7 +147,7 @@ export default function GallerySection() {
                 <div
                   style={{
                     width: '100%',
-                    aspectRatio: index === 0 ? '3/4' : index % 3 === 0 ? '1/1' : '4/3',
+                    aspectRatio: photo.aspectRatio || '3/4',
                     background: 'linear-gradient(135deg, var(--pink-light) 0%, var(--pink-soft) 100%)',
                     position: 'relative',
                     overflow: 'hidden',
@@ -162,19 +161,13 @@ export default function GallerySection() {
                       width: '100%',
                       height: '100%',
                       objectFit: 'cover',
+                      objectPosition: 'center top',
                       transition: 'transform 0.5s var(--ease-out-expo)',
                     }}
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
                     }}
                   />
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '2rem', opacity: 0.2, pointerEvents: 'none',
-                  }}>
-                    🌸
-                  </div>
                 </div>
 
                 {/* Caption below image */}
@@ -191,6 +184,26 @@ export default function GallerySection() {
                   </p>
                 </div>
               </div>
+
+              {/* Sticker "Yêu quá!" - attached to featured photo */}
+              {index === 0 && (
+                <img
+                  src="/assets/memories/sticker_1.png"
+                  alt=""
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute',
+                    bottom: '-25px',
+                    right: '-20px',
+                    width: 'clamp(100px, 16vw, 140px)',
+                    height: 'auto',
+                    transform: 'rotate(8deg)',
+                    zIndex: 10,
+                    pointerEvents: 'none',
+                    filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
+                  }}
+                />
+              )}
             </div>
           ))}
         </div>
