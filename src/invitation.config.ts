@@ -81,7 +81,7 @@ const config: InvitationConfig = {
 
   // === THÔNG TIN SỰ KIỆN ===
   event: {
-    date: "[Ngày tháng năm]",
+    date: "07/11/2026",
     time: "[Giờ bắt đầu]",
     endTime: "[Giờ kết thúc]",
     venue: "Đại học mở TPHCM",
