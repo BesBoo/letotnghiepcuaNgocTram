@@ -7,6 +7,8 @@ import MemoriesSection from './sections/MemoriesSection';
 import InvitationSection from './sections/InvitationSection';
 import GallerySection from './sections/GallerySection';
 import ClosingSection from './sections/ClosingSection';
+import MusicPlayer from './components/MusicPlayer/MusicPlayer';
+import config from './invitation.config';
 
 export default function App() {
   const { guest, markOpened, submitRSVP } = useGuest();
@@ -20,6 +22,14 @@ export default function App() {
 
   return (
     <>
+      {/* Background Music Player */}
+      {config.music?.enabled && (
+        <MusicPlayer
+          src={config.music.src}
+          volume={config.music.volume ?? 0.6}
+        />
+      )}
+
       {/* Reading Progress Bar - only visible after envelope opens */}
       {envelopeOpened && <ReadingProgress />}
 

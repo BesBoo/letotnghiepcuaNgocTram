@@ -1,0 +1,107 @@
+.musicButton {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 9999;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(201, 104, 133, 0.45);
+  color: var(--pink-deep, #C96885);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(201, 104, 133, 0.22), 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s var(--ease-out-expo), box-shadow 0.25s, border-color 0.25s;
+  outline: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.musicButton:hover {
+  transform: scale(1.08);
+  border-color: var(--pink-deep, #C96885);
+  box-shadow: 0 6px 20px rgba(201, 104, 133, 0.35);
+}
+
+.musicButton:active {
+  transform: scale(0.94);
+}
+
+/* Vinyl Disc Outer Groove */
+.discCenter {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.isPlaying {
+  animation: rotateDisc 6s linear infinite;
+}
+
+.isPaused {
+  opacity: 0.75;
+}
+
+@keyframes rotateDisc {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sound wave bars indicator */
+.waveIndicator {
+  position: absolute;
+  bottom: -4px;
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 8px;
+}
+
+.waveBar {
+  width: 2px;
+  height: 100%;
+  background-color: var(--pink-deep, #C96885);
+  border-radius: 1px;
+  animation: waveMotion 1.2s ease-in-out infinite alternate;
+}
+
+.waveBar:nth-child(2) {
+  animation-delay: 0.2s;
+  height: 60%;
+}
+
+.waveBar:nth-child(3) {
+  animation-delay: 0.4s;
+  height: 80%;
+}
+
+@keyframes waveMotion {
+  0% {
+    transform: scaleY(0.3);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+/* Responsive adjustment for small phones */
+@media (max-width: 480px) {
+  .musicButton {
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+  }
+}

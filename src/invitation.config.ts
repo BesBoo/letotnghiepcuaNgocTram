@@ -62,6 +62,13 @@ export interface InvitationConfig {
     contactMethod?: string; // e.g., "Nhắn tin cho mình qua Zalo nhé!"
     link?: string;
   };
+
+  // === NHẠC NỀN ===
+  music?: {
+    enabled: boolean;
+    src: string;
+    volume?: number;
+  };
 }
 
 const config: InvitationConfig = {
@@ -186,6 +193,13 @@ const config: InvitationConfig = {
     enabled: true,
     contactMethod: "Nhắn tin cho mình qua Zalo để xác nhận nhé!",
     link: "", // Optional: link to Google Form, etc.
+  },
+
+  // === NHẠC NỀN ===
+  music: {
+    enabled: true,
+    src: "/music.mp3", // Đặt file nhạc music.mp3 vào thư mục public/
+    volume: 0.6,
   },
 };
 
