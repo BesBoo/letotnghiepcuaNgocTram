@@ -137,69 +137,114 @@ export default async function handler(req: any, res: any) {
       }
     }
 
-    // 2. Send Email via Resend
-    const resendApiKey = process.env.RESEND_API_KEY;
+    // 2. Send Emails via Dual Resend API Keys (Simultaneous dispatch to 2 mailboxes)
+    const apiKey1 = process.env.RESEND_API_KEY_1 || process.env.RESEND_API_KEY;
+    const apiKey2 = process.env.RESEND_API_KEY_2;
     const emailFrom = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 
-    if (resendApiKey) {
-      let resendRes = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${resendApiKey}`,
-        },
-        body: JSON.stringify({
-          from: `Thiệp Tốt Nghiệp <${emailFrom}>`,
-          to: RECIPIENTS,
-          subject,
-          html: emailHtml,
-        }),
-      });
+    const sendTasks: Promise<{ recipient: string; ok: boolean; id?: string; error?: string }>[] = [];
 
-      // If in Resend free test mode without verified domain, Resend restricts to account owner
-      if (!resendRes.ok) {
-        const errData = await resendRes.json().catch(() => ({}));
-        if (typeof errData?.message === 'string' && errData.message.includes('You can only send testing emails to your own email address')) {
-          console.log('Resend test mode detected: Sending to primary verified email tranduyduc9679@gmail.com');
-          resendRes = await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${resendApiKey}`,
-            },
-            body: JSON.stringify({
-              from: `Thiệp Tốt Nghiệp <${emailFrom}>`,
-              to: ['tranduyduc9679@gmail.com'],
-              subject,
-              html: emailHtml,
-            }),
-          });
-        }
+    // Task 1: Send to tranduyduc9679@gmail.com via Key 1
+    if (apiKey1) {
+      sendTasks.push(
+        (async () => {
+          try {
+            const res = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${apiKey1}`,
+              },
+              body: JSON.stringify({
+                from: `Thiệp Tốt Nghiệp <${emailFrom}>`,
+                to: ['tranduyduc9679@gmail.com'],
+                subject,
+                html: emailHtml,
+              }),
+            });
+            const data = await res.json().catch(() => ({}));
+            return {
+              recipient: 'tranduyduc9679@gmail.com',
+              ok: res.ok,
+              id: data?.id,
+              error: !res.ok ? (data?.message || res.statusText) : undefined,
+            };
+          } catch (err: any) {
+            return {
+              recipient: 'tranduyduc9679@gmail.com',
+              ok: false,
+              error: err?.message || 'Lỗi kết nối',
+            };
+          }
+        })()
+      );
+    }
 
-        if (!resendRes.ok) {
-          const finalErr = await resendRes.json().catch(() => ({}));
-          console.error('Resend error:', finalErr);
-          return res.status(500).json({
-            success: false,
-            error: `Lỗi gửi email qua Resend: ${finalErr.message || resendRes.statusText}`,
-          });
-        }
-      }
+    // Task 2: Send to truongtram2k4@gmail.com via Key 2
+    if (apiKey2) {
+      sendTasks.push(
+        (async () => {
+          try {
+            const res = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${apiKey2}`,
+              },
+              body: JSON.stringify({
+                from: `Thiệp Tốt Nghiệp <${emailFrom}>`,
+                to: ['truongtram2k4@gmail.com'],
+                subject,
+                html: emailHtml,
+              }),
+            });
+            const data = await res.json().catch(() => ({}));
+            return {
+              recipient: 'truongtram2k4@gmail.com',
+              ok: res.ok,
+              id: data?.id,
+              error: !res.ok ? (data?.message || res.statusText) : undefined,
+            };
+          } catch (err: any) {
+            return {
+              recipient: 'truongtram2k4@gmail.com',
+              ok: false,
+              error: err?.message || 'Lỗi kết nối',
+            };
+          }
+        })()
+      );
+    }
 
-      const resendData = await resendRes.json();
-      return res.status(200).json({
-        success: true,
-        message: 'Thông tin đã được gửi thành công!',
-        id: resendData.id,
+    if (sendTasks.length === 0) {
+      return res.status(500).json({
+        success: false,
+        error: 'Chưa cấu hình API key của Resend trên server.',
+        missingEnv: 'RESEND_API_KEY_1 / RESEND_API_KEY_2',
       });
     }
 
-    // If RESEND_API_KEY is not configured
+    // Run both tasks concurrently
+    const results = await Promise.all(sendTasks);
+    const successful = results.filter((r) => r.ok);
+    const failed = results.filter((r) => !r.ok);
+
+    if (successful.length > 0) {
+      return res.status(200).json({
+        success: true,
+        message: 'Thông tin đã được gửi thành công!',
+        recipientsSent: successful.map((s) => s.recipient),
+        details: results,
+      });
+    }
+
+    // Both failed
     return res.status(500).json({
       success: false,
-      error: 'Hệ thống email chưa được cấu hình biến môi trường RESEND_API_KEY trên server.',
-      missingEnv: 'RESEND_API_KEY',
+      error: `Lỗi gửi email: ${failed.map((f) => `${f.recipient}: ${f.error}`).join('; ')}`,
+      details: results,
     });
+
   } catch (error: any) {
     console.error('Server error in /api/rsvp:', error);
     return res.status(500).json({

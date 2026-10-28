@@ -60,6 +60,12 @@ export default defineConfig(({ mode }) => {
   if (env.RESEND_API_KEY) {
     process.env.RESEND_API_KEY = env.RESEND_API_KEY;
   }
+  if (env.RESEND_API_KEY_1) {
+    process.env.RESEND_API_KEY_1 = env.RESEND_API_KEY_1;
+  }
+  if (env.RESEND_API_KEY_2) {
+    process.env.RESEND_API_KEY_2 = env.RESEND_API_KEY_2;
+  }
   if (env.VITE_SUPABASE_URL) {
     process.env.VITE_SUPABASE_URL = env.VITE_SUPABASE_URL;
   }
