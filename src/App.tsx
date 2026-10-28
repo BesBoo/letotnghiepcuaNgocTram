@@ -27,6 +27,7 @@ export default function App() {
         <MusicPlayer
           src={config.music.src}
           volume={config.music.volume ?? 0.6}
+          envelopeOpened={envelopeOpened}
         />
       )}
 

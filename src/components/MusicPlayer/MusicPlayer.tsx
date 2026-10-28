@@ -6,16 +6,18 @@ interface MusicPlayerProps {
   src?: string;
   volume?: number;
   autoPlayOnInteract?: boolean;
+  envelopeOpened?: boolean;
 }
 
 export default function MusicPlayer({
   src = '/music.mp3',
   volume = 0.6,
   autoPlayOnInteract = true,
+  envelopeOpened = false,
 }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [hasInteracted, setHasInteracted] = useState<boolean>(false);
+  const hasInteractedRef = useRef<boolean>(false);
 
   const startAudio = useCallback(() => {
     if (!audioRef.current) return;
@@ -30,37 +32,47 @@ export default function MusicPlayer({
         })
         .catch((err) => {
           // Autoplay policy prevented immediate playback or audio file not found
-          console.log('Chờ tương tác người dùng để phát nhạc nền hoặc chưa có file /music.mp3:', err.message);
+          console.log('Chờ tương tác người dùng để phát nhạc nền:', err.message);
           setIsPlaying(false);
         });
     }
   }, [volume]);
 
-  // Attempt initial play & listen for first user interaction (touch/click)
+  // When envelopeOpened changes to true, ensure audio starts playing
   useEffect(() => {
-    // 1. Try playing right away
+    if (envelopeOpened) {
+      startAudio();
+    }
+  }, [envelopeOpened, startAudio]);
+
+  // Attempt initial play & listen for first user interaction with CAPTURE phase
+  useEffect(() => {
+    // 1. Try playing right away on page load
     startAudio();
 
     if (!autoPlayOnInteract) return;
 
-    // 2. Fallback: Listen for first user gesture anywhere on screen
+    // 2. Fallback: Listen for first user gesture anywhere on screen (capture phase intercepts before stopPropagation)
     const handleFirstGesture = () => {
-      if (!hasInteracted) {
-        setHasInteracted(true);
+      if (!hasInteractedRef.current) {
+        hasInteractedRef.current = true;
         startAudio();
       }
     };
 
-    window.addEventListener('click', handleFirstGesture, { once: true });
-    window.addEventListener('touchstart', handleFirstGesture, { once: true });
-    window.addEventListener('keydown', handleFirstGesture, { once: true });
+    const options = { capture: true, once: true };
+    window.addEventListener('pointerdown', handleFirstGesture, options);
+    window.addEventListener('touchstart', handleFirstGesture, options);
+    window.addEventListener('click', handleFirstGesture, options);
+    window.addEventListener('keydown', handleFirstGesture, options);
 
     return () => {
-      window.removeEventListener('click', handleFirstGesture);
-      window.removeEventListener('touchstart', handleFirstGesture);
-      window.removeEventListener('keydown', handleFirstGesture);
+      window.removeEventListener('pointerdown', handleFirstGesture, true);
+      window.removeEventListener('touchstart', handleFirstGesture, true);
+      window.removeEventListener('click', handleFirstGesture, true);
+      window.removeEventListener('keydown', handleFirstGesture, true);
     };
-  }, [autoPlayOnInteract, hasInteracted, startAudio]);
+  }, [autoPlayOnInteract, startAudio]);
 
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
