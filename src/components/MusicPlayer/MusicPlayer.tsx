@@ -16,11 +16,13 @@ export default function MusicPlayer({
   envelopeOpened = false,
 }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  // Default to active (true) so the UI immediately indicates music is enabled
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [userMuted, setUserMuted] = useState<boolean>(false);
   const hasInteractedRef = useRef<boolean>(false);
 
-  const startAudio = useCallback(() => {
-    if (!audioRef.current) return;
+  const playAudio = useCallback(() => {
+    if (!audioRef.current || userMuted) return;
     const audio = audioRef.current;
     audio.volume = Math.min(Math.max(volume, 0), 1);
 
@@ -31,57 +33,62 @@ export default function MusicPlayer({
           setIsPlaying(true);
         })
         .catch((err) => {
-          // Autoplay policy prevented immediate playback or audio file not found
-          console.log('Chờ tương tác người dùng để phát nhạc nền:', err.message);
-          setIsPlaying(false);
+          // Autoplay policy prevented immediate unprompted sound before user interaction.
+          // Keep UI in music-ready mode, don't show muted icon unless user explicitly muted.
+          console.log('Chờ tương tác đầu tiên của người dùng để phát nhạc:', err.message);
         });
     }
-  }, [volume]);
+  }, [userMuted, volume]);
 
-  // When envelopeOpened changes to true, ensure audio starts playing
+  // Attempt autoplay immediately on mount
   useEffect(() => {
-    if (envelopeOpened) {
-      startAudio();
+    playAudio();
+  }, [playAudio]);
+
+  // Trigger when envelopeOpened transitions to true
+  useEffect(() => {
+    if (envelopeOpened && !userMuted) {
+      playAudio();
     }
-  }, [envelopeOpened, startAudio]);
+  }, [envelopeOpened, userMuted, playAudio]);
 
-  // Attempt initial play & listen for first user interaction with CAPTURE phase
+  // Listen to ANY early micro-interaction (touch, click, pointer, key, scroll) to unlock audio immediately
   useEffect(() => {
-    // 1. Try playing right away on page load
-    startAudio();
+    if (!autoPlayOnInteract || userMuted) return;
 
-    if (!autoPlayOnInteract) return;
-
-    // 2. Fallback: Listen for first user gesture anywhere on screen (capture phase intercepts before stopPropagation)
     const handleFirstGesture = () => {
       if (!hasInteractedRef.current) {
         hasInteractedRef.current = true;
-        startAudio();
+        playAudio();
       }
     };
 
-    const options = { capture: true, once: true };
-    window.addEventListener('pointerdown', handleFirstGesture, options);
-    window.addEventListener('touchstart', handleFirstGesture, options);
-    window.addEventListener('click', handleFirstGesture, options);
-    window.addEventListener('keydown', handleFirstGesture, options);
+    const options = { capture: true, passive: true };
+    const events = ['pointerdown', 'touchstart', 'touchend', 'mousedown', 'click', 'keydown', 'wheel', 'scroll'];
+
+    events.forEach((evt) => {
+      window.addEventListener(evt, handleFirstGesture, options);
+    });
 
     return () => {
-      window.removeEventListener('pointerdown', handleFirstGesture, true);
-      window.removeEventListener('touchstart', handleFirstGesture, true);
-      window.removeEventListener('click', handleFirstGesture, true);
-      window.removeEventListener('keydown', handleFirstGesture, true);
+      events.forEach((evt) => {
+        window.removeEventListener(evt, handleFirstGesture, true);
+      });
     };
-  }, [autoPlayOnInteract, startAudio]);
+  }, [autoPlayOnInteract, userMuted, playAudio]);
 
+  // Handle user toggling music manually
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!audioRef.current) return;
 
-    if (isPlaying) {
+    if (isPlaying && !userMuted) {
       audioRef.current.pause();
       setIsPlaying(false);
+      setUserMuted(true);
     } else {
+      setUserMuted(false);
+      audioRef.current.volume = Math.min(Math.max(volume, 0), 1);
       audioRef.current
         .play()
         .then(() => setIsPlaying(true))
@@ -89,32 +96,41 @@ export default function MusicPlayer({
     }
   };
 
+  // Determine active visual state: active if playing and not muted by user
+  const isVisuallyActive = isPlaying && !userMuted;
+
   return (
     <>
       <audio
         ref={audioRef}
         src={src}
+        autoPlay
         loop
         preload="auto"
+        playsInline
         onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
+        onPause={() => {
+          if (userMuted) {
+            setIsPlaying(false);
+          }
+        }}
       />
 
       <button
         type="button"
-        className={`${styles.musicButton} ${isPlaying ? styles.isPlaying : styles.isPaused}`}
+        className={`${styles.musicButton} ${isVisuallyActive ? styles.isPlaying : styles.isPaused}`}
         onClick={togglePlay}
-        title={isPlaying ? 'Tạm dừng nhạc nền' : 'Bật nhạc nền'}
-        aria-label={isPlaying ? 'Tạm dừng nhạc nền' : 'Bật nhạc nền'}
+        title={isVisuallyActive ? 'Tạm dừng nhạc nền' : 'Bật nhạc nền'}
+        aria-label={isVisuallyActive ? 'Tạm dừng nhạc nền' : 'Bật nhạc nền'}
       >
         <div className={styles.discCenter}>
-          {isPlaying ? (
+          {isVisuallyActive ? (
             <Music size={20} strokeWidth={2.2} />
           ) : (
             <VolumeX size={20} strokeWidth={2.2} />
           )}
 
-          {isPlaying && (
+          {isVisuallyActive && (
             <div className={styles.waveIndicator}>
               <span className={styles.waveBar} />
               <span className={styles.waveBar} />
