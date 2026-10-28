@@ -378,7 +378,14 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
 
             <div className={styles.cardFooter}>
               <span className={styles.cardTapHint}>
-                {canProceed ? 'Chạm để mở toàn bộ thiệp mời ♡' : 'Graduation Celebration ✨'}
+                {canProceed ? (
+                  <>
+                    <span className={styles.proceedTextDesktop}>Chạm để mở toàn bộ thiệp mời ♡</span>
+                    <span className={styles.proceedTextMobile}>Mở thiệp mời ♡</span>
+                  </>
+                ) : (
+                  'Graduation Celebration ✨'
+                )}
               </span>
             </div>
           </div>
@@ -795,16 +802,36 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
         </div>
       </div>
 
-      {/* Opening hint & title beneath the envelope */}
-      <div ref={hintRef} className={styles.textContent}>
-        <div className={styles.surpriseText}>A Little Surprise For You</div>
-        <div className={styles.subtitleText}>
-          {guest?.name && guest.name !== config.senderName
-            ? `Dành riêng cho ${guest.name} 💕`
-            : 'Bạn có một lời mời đặc biệt.'}
+      {/* Opening hint & title beneath the envelope (before card slides up) */}
+      {!canProceed && (
+        <div ref={hintRef} className={styles.textContent}>
+          <div className={styles.surpriseText}>A Little Surprise For You</div>
+          <div className={styles.subtitleText}>
+            {guest?.name && guest.name !== config.senderName
+              ? `Dành riêng cho ${guest.name} 💕`
+              : 'Bạn có một lời mời đặc biệt.'}
+          </div>
+          <div className={styles.hintText}>Mở thiệp đi nè ♡</div>
         </div>
-        <div className={styles.hintText}>Mở thiệp đi nè ♡</div>
-      </div>
+      )}
+
+      {/* Post-open Dedicated CTA Button - Guaranteed 100% visible & accessible on all screens */}
+      {canProceed && (
+        <div className={styles.proceedCtaContainer}>
+          <button
+            type="button"
+            className={styles.proceedButton}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleProceed();
+            }}
+            aria-label="Khám phá toàn bộ thiệp mời"
+          >
+            <span className={styles.proceedTextDesktop}>Chạm để mở toàn bộ thiệp mời ♡</span>
+            <span className={styles.proceedTextMobile}>Khám phá thiệp mời ✨</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

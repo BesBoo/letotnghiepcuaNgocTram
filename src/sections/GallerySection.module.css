@@ -1,0 +1,399 @@
+/* =========================================================
+   GALLERY SECTION - 3D SCRAPBOOK / LAYERED POLAROID CAROUSEL
+   ========================================================= */
+
+.gallerySection {
+  padding: clamp(3rem, 7vw, 6rem) clamp(0.5rem, 3vw, 2.5rem);
+  background: linear-gradient(180deg, var(--cream) 0%, var(--pink-light) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.galleryTitle {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto clamp(2rem, 5vw, 3.5rem);
+  transition: all 0.8s var(--ease-out-expo);
+}
+
+/* 3D Carousel Stage */
+.carouselStage {
+  position: relative;
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  outline: none;
+  user-select: none;
+  --card-w: clamp(300px, 32vw, 380px);
+  --card-h: calc(var(--card-w) * 1.34);
+  --offset-x: clamp(190px, 24vw, 260px);
+  --rot-deg: 11deg;
+  height: calc(var(--card-h) + 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3D Track */
+.carouselTrack {
+  position: relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Polaroid Photo Card Base */
+.polaroidCard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--card-w);
+  height: var(--card-h);
+  background: #FFFDF9;
+  border-radius: 4px;
+  padding: 10px 10px clamp(28px, 4vw, 42px) 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow: 0 10px 28px rgba(35, 15, 20, 0.14), 0 2px 6px rgba(0, 0, 0, 0.04);
+  transform-style: preserve-3d;
+  transition:
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.65s ease,
+    box-shadow 0.65s ease;
+  will-change: transform, opacity;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Washi paper tape at top */
+.washiTape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: clamp(38px, 6vw, 52px);
+  height: clamp(12px, 2vw, 17px);
+  background: rgba(249, 202, 213, 0.72);
+  border-radius: 1px;
+  z-index: 15;
+  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Photo Picture Box */
+.photoBox {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  background: linear-gradient(135deg, var(--pink-light) 0%, var(--pink-soft) 100%);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.photoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+/* Polaroid Chin / Caption */
+.polaroidChin {
+  margin-top: clamp(8px, 1.5vw, 12px);
+  text-align: center;
+  position: relative;
+}
+
+.polaroidCaption {
+  font-family: var(--font-script);
+  font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+  color: var(--text-primary);
+  line-height: 1.35;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.polaroidChinTag {
+  font-family: var(--font-sans);
+  font-size: clamp(0.68rem, 1.4vw, 0.78rem);
+  letter-spacing: 0.08em;
+  color: var(--rose-gold);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* =========================================================
+   3D ROLES & TRANSFORMATIONS
+   ========================================================= */
+
+/* Center Active Photo */
+.cardActive {
+  transform: translate3d(0, 0, 45px) rotate(0deg) scale(1);
+  z-index: 10;
+  opacity: 1;
+  filter: brightness(1);
+  box-shadow:
+    0 20px 48px rgba(35, 15, 20, 0.22),
+    0 4px 12px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.cardActive:hover {
+  transform: translate3d(0, -6px, 55px) rotate(0.5deg) scale(1.02);
+  box-shadow: 0 24px 54px rgba(35, 15, 20, 0.28);
+}
+
+/* Previous Photo (Left Layer) */
+.cardPrev {
+  transform: translate3d(calc(-1 * var(--offset-x)), 0, -20px) rotate(calc(-1 * var(--rot-deg))) scale(0.78);
+  z-index: 5;
+  opacity: 0.85;
+  filter: brightness(0.92);
+  box-shadow: 0 10px 24px rgba(35, 15, 20, 0.16);
+}
+
+.cardPrev:hover {
+  opacity: 0.96;
+  filter: brightness(0.98);
+  transform: translate3d(calc(-1 * var(--offset-x)), -4px, -10px) rotate(calc(-1 * var(--rot-deg))) scale(0.81);
+}
+
+/* Next Photo (Right Layer) */
+.cardNext {
+  transform: translate3d(var(--offset-x), 0, -20px) rotate(var(--rot-deg)) scale(0.78);
+  z-index: 5;
+  opacity: 0.85;
+  filter: brightness(0.92);
+  box-shadow: 0 10px 24px rgba(35, 15, 20, 0.16);
+}
+
+.cardNext:hover {
+  opacity: 0.96;
+  filter: brightness(0.98);
+  transform: translate3d(var(--offset-x), -4px, -10px) rotate(var(--rot-deg)) scale(0.81);
+}
+
+/* Off-screen queue cards */
+.cardHiddenLeft {
+  transform: translate3d(calc(-1.6 * var(--offset-x)), 0, -60px) rotate(-18deg) scale(0.6);
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cardHiddenRight {
+  transform: translate3d(calc(1.6 * var(--offset-x)), 0, -60px) rotate(18deg) scale(0.6);
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Cute Sticker on Center Photo */
+.stickerDecor {
+  position: absolute;
+  bottom: -18px;
+  right: -16px;
+  width: clamp(75px, 14vw, 115px);
+  height: auto;
+  transform: rotate(8deg);
+  z-index: 25;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 12px rgba(201, 104, 133, 0.3));
+}
+
+/* Classical Mini Ribbon Bow on active photo */
+.miniBowDecor {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0.85;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+/* =========================================================
+   CONTROLS & NAVIGATION
+   ========================================================= */
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid var(--pink-soft);
+  color: var(--pink-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 30;
+  box-shadow: 0 4px 16px rgba(201, 104, 133, 0.22);
+  transition: all 0.25s var(--ease-out-expo);
+  outline: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navButton:hover {
+  background: var(--pink-deep);
+  color: #FFFFFF;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(201, 104, 133, 0.35);
+}
+
+.navButton:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.navButton:focus-visible {
+  outline: 2px solid var(--pink-deep);
+  outline-offset: 3px;
+}
+
+.navPrev {
+  left: clamp(10px, 3vw, 40px);
+}
+
+.navNext {
+  right: clamp(10px, 3vw, 40px);
+}
+
+/* Footer Controls: Counter & Dots */
+.footerControls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: clamp(16px, 3vw, 28px);
+}
+
+.counterBadge {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--pink-deep);
+  background: rgba(255, 255, 255, 0.8);
+  padding: 4px 14px;
+  border-radius: 9999px;
+  border: 1px solid rgba(243, 161, 181, 0.4);
+  box-shadow: 0 2px 8px rgba(201, 104, 133, 0.1);
+}
+
+.dotsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dotButton {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(201, 104, 133, 0.28);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  outline: none;
+}
+
+.dotButton:hover {
+  background: rgba(201, 104, 133, 0.65);
+  transform: scale(1.2);
+}
+
+.dotActive {
+  width: 22px;
+  border-radius: 10px;
+  background: var(--pink-deep);
+}
+
+.tapNotice {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: var(--rose-gold);
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   ========================================================= */
+@media (max-width: 1024px) {
+  .carouselStage {
+    --card-w: clamp(260px, 34vw, 320px);
+    --offset-x: clamp(140px, 20vw, 190px);
+    --rot-deg: 9deg;
+  }
+
+  .navPrev {
+    left: 8px;
+  }
+
+  .navNext {
+    right: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .carouselStage {
+    --card-w: clamp(205px, 58vw, 260px);
+    --offset-x: clamp(65px, 20vw, 85px);
+    --rot-deg: 7.5deg;
+    height: calc(var(--card-h) + 20px);
+  }
+
+  .navButton {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.94);
+  }
+
+  .navPrev {
+    left: 4px;
+  }
+
+  .navNext {
+    right: 4px;
+  }
+
+  .polaroidCard {
+    padding: 8px 8px 24px 8px;
+  }
+
+  .polaroidCaption {
+    font-size: 0.92rem;
+  }
+
+  .polaroidChinTag {
+    font-size: 0.64rem;
+  }
+
+  .stickerDecor {
+    bottom: -12px;
+    right: -8px;
+    width: 65px;
+  }
+}

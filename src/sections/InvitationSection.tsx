@@ -2,7 +2,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import type { Guest } from '../lib/supabase';
 import config from '../invitation.config';
-import { MapPin, Clock, Calendar, Copy, Check, ExternalLink, Heart, Send, Phone } from 'lucide-react';
+import { MapPin, Clock, Calendar, Copy, Check, ExternalLink, Send, Phone, AlertCircle } from 'lucide-react';
+import styles from './InvitationSection.module.css';
 
 interface InvitationSectionProps {
   guest?: Guest;
@@ -13,18 +14,13 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [rsvpState, setRsvpState] = useState<'attending' | 'declined' | 'pending'>(
-    guest?.rsvp_status || 'pending'
-  );
-  const [rsvpNote, setRsvpNote] = useState(guest?.rsvp_note || '');
-  const [noteSubmitted, setNoteSubmitted] = useState(false);
+  const [rsvpChoice, setRsvpChoice] = useState<'9:00–11:00' | '11:00–13:00' | 'Mình bận rồi' | null>(null);
+  const [message, setMessage] = useState(guest?.rsvp_note || '');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const reducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    if (guest?.rsvp_status) {
-      setRsvpState(guest.rsvp_status);
-    }
-  }, [guest?.rsvp_status]);
 
   useEffect(() => {
     if (reducedMotion) {
@@ -63,18 +59,53 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
     }
   }, []);
 
-  const handleSelectRSVP = (status: 'attending' | 'declined') => {
-    setRsvpState(status);
-    if (onSubmitRSVP) {
-      onSubmitRSVP(status, rsvpNote);
-    }
+  const handleSelectChoice = (choice: '9:00–11:00' | '11:00–13:00' | 'Mình bận rồi') => {
+    setRsvpChoice(choice);
+    setValidationError(null);
+    setErrorMessage(null);
   };
 
-  const handleSendNote = () => {
-    if (onSubmitRSVP && rsvpState !== 'pending') {
-      onSubmitRSVP(rsvpState, rsvpNote);
-      setNoteSubmitted(true);
-      setTimeout(() => setNoteSubmitted(false), 3000);
+  const handleSubmitRSVP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!rsvpChoice) {
+      setValidationError('Vui lòng chọn 1 trong 3 phương án trước khi gửi xác nhận.');
+      return;
+    }
+    setValidationError(null);
+    setErrorMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/rsvp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          choice: rsvpChoice,
+          message: message.trim(),
+          guestName: guest?.name || config.senderName,
+          slug: guest?.slug || '',
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok && data.success) {
+        setSubmitSuccess(true);
+        if (onSubmitRSVP) {
+          const status = rsvpChoice === 'Mình bận rồi' ? 'declined' : 'attending';
+          onSubmitRSVP(status, `${rsvpChoice}${message.trim() ? `: ${message.trim()}` : ''}`);
+        }
+      } else {
+        setErrorMessage(
+          data.error || 'Có lỗi xảy ra khi gửi xác nhận. Vui lòng thử lại sau.'
+        );
+      }
+    } catch {
+      setErrorMessage(
+        'Không thể kết nối đến máy chủ. Vui lòng kiểm tra mạng hoặc thử lại sau.'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -469,7 +500,7 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
             </p>
           )}
 
-          {/* Interactive RSVP Area (Connected to Supabase) */}
+          {/* Interactive RSVP Area (Email dispatch to 2 mailboxes) */}
           <div
             style={{
               marginTop: 'var(--space-2xl)',
@@ -478,144 +509,122 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
               transition: `all 0.6s var(--ease-out-expo) ${transitionDelay(6)}`,
             }}
           >
-            <div
-              style={{
-                maxWidth: '460px',
-                margin: '0 auto',
-                padding: 'var(--space-lg)',
-                background: 'rgba(255, 240, 243, 0.5)',
-                borderRadius: 'var(--radius-lg)',
-                border: '1px solid rgba(243, 161, 181, 0.35)',
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '1.05rem',
-                  fontWeight: 600,
-                  color: 'var(--pink-deep)',
-                  marginBottom: 'var(--space-md)',
-                }}
-              >
-                Bạn sẽ đến chung vui chứ? 💕
+            <div className={styles.rsvpContainer}>
+              <h3 className={styles.rsvpTitle}>Bạn sẽ đến chung vui chứ? 💕</h3>
+              <p className={styles.rsvpSubtitle}>
+                Hãy chọn khung giờ bạn ghé để chúng mình chuẩn bị đón tiếp thật chu đáo nhé!
               </p>
 
-              {/* Attendance Choice Buttons */}
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '12px',
-                  justifyContent: 'center',
-                  marginBottom: 'var(--space-md)',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <button
-                  onClick={() => handleSelectRSVP('attending')}
-                  style={{
-                    padding: '10px 20px',
-                    borderRadius: 'var(--radius-xl)',
-                    fontSize: '0.9rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.25s',
-                    background:
-                      rsvpState === 'attending'
-                        ? 'linear-gradient(135deg, var(--pink-deep), var(--rose-gold))'
-                        : 'var(--white)',
-                    color: rsvpState === 'attending' ? 'var(--white)' : 'var(--text-primary)',
-                    border: '1px solid var(--pink-soft)',
-                    boxShadow:
-                      rsvpState === 'attending'
-                        ? '0 4px 14px rgba(201, 104, 133, 0.35)'
-                        : 'none',
-                  }}
-                >
-                  <Heart size={14} style={{ display: 'inline', marginRight: '6px' }} />
-                  Mình sẽ đến nhé!
-                </button>
-
-                <button
-                  onClick={() => handleSelectRSVP('declined')}
-                  style={{
-                    padding: '10px 20px',
-                    borderRadius: 'var(--radius-xl)',
-                    fontSize: '0.9rem',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    transition: 'all 0.25s',
-                    background:
-                      rsvpState === 'declined' ? 'var(--text-secondary)' : 'var(--white)',
-                    color: rsvpState === 'declined' ? 'var(--white)' : 'var(--text-secondary)',
-                    border: '1px solid rgba(141, 105, 116, 0.3)',
-                  }}
-                >
-                  Tiếc quá, mình bận mất rồi
-                </button>
-              </div>
-
-              {/* Status feedback & optional wishes note */}
-              {rsvpState !== 'pending' && (
-                <div style={{ marginTop: 'var(--space-md)' }}>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-sans)',
-                      fontSize: '0.85rem',
-                      color:
-                        rsvpState === 'attending' ? 'var(--pink-deep)' : 'var(--text-secondary)',
-                      marginBottom: 'var(--space-sm)',
-                      fontWeight: 500,
-                    }}
-                  >
-                    {rsvpState === 'attending'
-                      ? '✨ Tuyệt vời! Hẹn gặp bạn ở buổi lễ tốt nghiệp nhé!'
-                      : 'Cảm ơn bạn! Dù bận nhưng mình rất vui vì bạn đã xem thiệp 💕'}
+              {submitSuccess ? (
+                <div className={styles.successCard}>
+                  <div className={styles.successTitle}>
+                    <Check size={20} />
+                    Đã gửi phản hồi thành công!
+                  </div>
+                  <p className={styles.successDesc}>
+                    {rsvpChoice === 'Mình bận rồi'
+                      ? 'Cảm ơn bạn đã phản hồi! Dù bận nhưng mình rất vui và trân quý tình cảm của bạn 💕'
+                      : `Tuyệt vời! Chúng mình đã ghi nhận khung giờ ${rsvpChoice}. Hẹn gặp bạn ở buổi lễ tốt nghiệp nhé ✨`}
                   </p>
-
-                  <div
-                    style={{
-                      display: 'flex',
-                      gap: '8px',
-                      maxWidth: '360px',
-                      margin: '0 auto',
-                    }}
+                  <button
+                    type="button"
+                    className={styles.changeChoiceBtn}
+                    onClick={() => setSubmitSuccess(false)}
                   >
-                    <input
-                      type="text"
-                      placeholder="Gửi vài lời chúc đến mình..."
-                      value={rsvpNote}
-                      onChange={(e) => setRsvpNote(e.target.value)}
-                      style={{
-                        flex: 1,
-                        padding: '8px 14px',
-                        borderRadius: 'var(--radius-md)',
-                        border: '1px solid var(--pink-soft)',
-                        fontSize: '0.85rem',
-                        outline: 'none',
-                        background: 'var(--white)',
-                        color: 'var(--text-primary)',
-                      }}
-                    />
+                    Thay đổi lựa chọn
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmitRSVP}>
+                  {/* 3 Choice Buttons */}
+                  <div className={styles.choicesGrid} role="radiogroup" aria-label="Khung giờ tham dự">
                     <button
-                      onClick={handleSendNote}
-                      style={{
-                        padding: '8px 14px',
-                        background: 'var(--pink-deep)',
-                        color: 'var(--white)',
-                        borderRadius: 'var(--radius-md)',
-                        border: 'none',
-                        cursor: 'pointer',
-                        fontSize: '0.85rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                      }}
+                      type="button"
+                      role="radio"
+                      aria-checked={rsvpChoice === '9:00–11:00'}
+                      className={`${styles.choiceButton} ${
+                        rsvpChoice === '9:00–11:00' ? styles.choiceActive : ''
+                      }`}
+                      onClick={() => handleSelectChoice('9:00–11:00')}
                     >
-                      {noteSubmitted ? <Check size={14} /> : <Send size={14} />}
-                      {noteSubmitted ? 'Đã gửi' : 'Gửi'}
+                      9:00–11:00
+                    </button>
+
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={rsvpChoice === '11:00–13:00'}
+                      className={`${styles.choiceButton} ${
+                        rsvpChoice === '11:00–13:00' ? styles.choiceActive : ''
+                      }`}
+                      onClick={() => handleSelectChoice('11:00–13:00')}
+                    >
+                      11:00–13:00
+                    </button>
+
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={rsvpChoice === 'Mình bận rồi'}
+                      className={`${styles.choiceButton} ${
+                        rsvpChoice === 'Mình bận rồi' ? styles.choiceActiveDeclined : ''
+                      }`}
+                      onClick={() => handleSelectChoice('Mình bận rồi')}
+                    >
+                      Mình bận rồi
                     </button>
                   </div>
-                </div>
+
+                  {/* Message Field */}
+                  <div className={styles.messageWrapper}>
+                    <textarea
+                      className={styles.textareaField}
+                      placeholder="Để lại lời nhắn cho chúng mình nhé..."
+                      value={message}
+                      maxLength={500}
+                      onChange={(e) => setMessage(e.target.value)}
+                      aria-label="Lời nhắn cho người gửi"
+                    />
+                    <div className={styles.counterRow}>
+                      <span className={styles.counterText}>{message.length} / 500</span>
+                    </div>
+                  </div>
+
+                  {/* Validation Error Notice */}
+                  {validationError && (
+                    <div className={styles.inlineError} role="alert">
+                      <AlertCircle size={16} />
+                      <span>{validationError}</span>
+                    </div>
+                  )}
+
+                  {/* Backend Error Notice */}
+                  {errorMessage && (
+                    <div className={styles.inlineError} role="alert">
+                      <AlertCircle size={16} />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    className={styles.submitButton}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className={styles.spinner} />
+                        <span>Đang gửi xác nhận...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send size={16} />
+                        <span>Gửi xác nhận</span>
+                      </>
+                    )}
+                  </button>
+                </form>
               )}
             </div>
           </div>

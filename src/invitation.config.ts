@@ -99,7 +99,7 @@ const config: InvitationConfig = {
   ],
 
   // === ẢNH KỶ NIỆM (Section: Our Memories) ===
-  // Hiển thị 3 tấm ảnh kỷ niệm
+  // Hiển thị 4 tấm ảnh kỷ niệm (3 ảnh bên trái và 1 ảnh lớn bên phải)
   memories: [
     {
       id: "mem-1",
@@ -124,6 +124,14 @@ const config: InvitationConfig = {
       alt: "Kỷ niệm thanh xuân",
       rotation: -1.5,
       aspectRatio: "1037/1517",
+    },
+    {
+      id: "mem-4",
+      src: "https://agvvlhblinnizpwxduab.supabase.co/storage/v1/object/public/memories/moment-01.png",
+      caption: "Nụ cười rạng rỡ của thanh xuân ",
+      alt: "Khoảnh khắc thanh xuân đáng nhớ",
+      rotation: 1,
+      aspectRatio: "1086/1448",
     },
   ],
 

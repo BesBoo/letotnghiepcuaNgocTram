@@ -1,211 +1,318 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import config from '../invitation.config';
 import PhotoLightbox from '../components/PhotoLightbox/PhotoLightbox';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import styles from './GallerySection.module.css';
 
 export default function GallerySection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
   const [titleVisible, setTitleVisible] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string; caption: string } | null>(null);
+  const isAnimatingRef = useRef(false);
   const reducedMotion = useReducedMotion();
 
+  const photos = config.galleryPhotos || [];
+  const total = photos.length;
+
+  // Touch tracking for mobile swipe
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const lockAnimation = useCallback(() => {
+    isAnimatingRef.current = true;
+    setTimeout(() => {
+      isAnimatingRef.current = false;
+    }, 550);
+  }, []);
+
+  const nextSlide = useCallback(() => {
+    if (total <= 1 || isAnimatingRef.current) return;
+    lockAnimation();
+    setActiveIndex((prev) => (prev + 1) % total);
+  }, [total, lockAnimation]);
+
+  const prevSlide = useCallback(() => {
+    if (total <= 1 || isAnimatingRef.current) return;
+    lockAnimation();
+    setActiveIndex((prev) => (prev - 1 + total) % total);
+  }, [total, lockAnimation]);
+
+  const goToSlide = useCallback(
+    (index: number) => {
+      if (index === activeIndex || isAnimatingRef.current) return;
+      lockAnimation();
+      setActiveIndex(index);
+    },
+    [activeIndex, lockAnimation]
+  );
+
+  // Preload adjacent images
+  useEffect(() => {
+    if (total <= 1) return;
+    const nextIdx = (activeIndex + 1) % total;
+    const prevIdx = (activeIndex - 1 + total) % total;
+    if (photos[nextIdx]?.src) {
+      const imgNext = new Image();
+      imgNext.src = photos[nextIdx].src;
+    }
+    if (photos[prevIdx]?.src) {
+      const imgPrev = new Image();
+      imgPrev.src = photos[prevIdx].src;
+    }
+  }, [activeIndex, photos, total]);
+
+  // Keyboard navigation
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        nextSlide();
+      }
+    },
+    [prevSlide, nextSlide]
+  );
+
+  // Touch swipe events
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const deltaX = touchStartX.current - e.changedTouches[0].clientX;
+    const deltaY = touchStartY.current - e.changedTouches[0].clientY;
+
+    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX > 0) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
+  // Title observer
   useEffect(() => {
     if (reducedMotion) {
       setTitleVisible(true);
-      setVisibleItems(new Set(config.galleryPhotos.map((_, i) => i)));
       return;
     }
 
-    // Title observer
-    const titleEl = sectionRef.current?.querySelector('.gallery-title');
+    const titleEl = sectionRef.current?.querySelector(`.${styles.galleryTitle}`);
     if (titleEl) {
       const titleObs = new IntersectionObserver(
-        ([e]) => { if (e.isIntersecting) { setTitleVisible(true); titleObs.disconnect(); } },
+        ([e]) => {
+          if (e.isIntersecting) {
+            setTitleVisible(true);
+            titleObs.disconnect();
+          }
+        },
         { threshold: 0.3 }
       );
       titleObs.observe(titleEl);
     }
-
-    // Photo observers
-    const photos = sectionRef.current?.querySelectorAll('.gallery-photo');
-    const observers: IntersectionObserver[] = [];
-    photos?.forEach((photo, index) => {
-      const obs = new IntersectionObserver(
-        ([e]) => {
-          if (e.isIntersecting) {
-            setTimeout(() => setVisibleItems((prev) => new Set(prev).add(index)), index * 120);
-            obs.unobserve(e.target);
-          }
-        },
-        { threshold: 0.1 }
-      );
-      obs.observe(photo);
-      observers.push(obs);
-    });
-
-    return () => observers.forEach((o) => o.disconnect());
   }, [reducedMotion]);
 
-  // Layout assignments
-  const getPhotoStyle = (index: number): React.CSSProperties => {
-    const rotations = [0, -1.5, 1, -1, 1.5];
-    const rotation = config.galleryPhotos[index]?.rotation || rotations[index % rotations.length];
+  if (total === 0) return null;
 
-    return {
-      transform: visibleItems.has(index)
-        ? `rotate(${rotation}deg)`
-        : `translateY(40px) rotate(${rotation + 3}deg)`,
-      opacity: visibleItems.has(index) ? 1 : 0,
-      transition: 'all 0.7s var(--ease-out-expo)',
-    };
+  /**
+   * Calculate 3D Scrapbook role for each card:
+   * diff === 0 -> Center Active
+   * diff === -1 -> Left Polaroid
+   * diff === 1 -> Right Polaroid
+   * diff < -1 -> Hidden Offscreen Left
+   * diff > 1 -> Hidden Offscreen Right
+   */
+  const getCardStyleClass = (index: number) => {
+    let diff = (index - activeIndex) % total;
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+
+    if (diff === 0) return styles.cardActive;
+    if (diff === -1) return styles.cardPrev;
+    if (diff === 1) return styles.cardNext;
+    if (diff < -1) return styles.cardHiddenLeft;
+    return styles.cardHiddenRight;
   };
 
   return (
     <>
-      <section
-        ref={sectionRef}
-        id="gallery"
-        style={{
-          padding: 'clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 3rem)',
-          background: 'linear-gradient(180deg, var(--cream) 0%, var(--pink-light) 100%)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
+      <section ref={sectionRef} id="gallery" className={styles.gallerySection}>
         {/* Title */}
         <div
-          className="gallery-title"
+          className={styles.galleryTitle}
           style={{
-            textAlign: 'center',
-            maxWidth: '600px',
-            margin: '0 auto var(--space-3xl)',
             opacity: titleVisible ? 1 : 0,
             transform: titleVisible ? 'translateY(0)' : 'translateY(25px)',
-            transition: 'all 0.8s var(--ease-out-expo)',
           }}
         >
           <h2 className="heading-display" style={{ marginBottom: 'var(--space-md)' }}>
             A Few Moments to Keep
           </h2>
-          <p className="text-script">
-            Cảm ơn vì đã là một phần trong thanh xuân của nhau.
-          </p>
+          <p className="text-script">Cảm ơn vì đã là một phần trong thanh xuân của nhau.</p>
         </div>
 
-        {/* Gallery grid with responsive columns */}
+        {/* 3D Scrapbook Carousel Stage */}
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
-            gap: 'clamp(1.2rem, 3vw, 2.2rem)',
-            maxWidth: '1000px',
-            margin: '0 auto',
-            alignItems: 'start',
-            position: 'relative',
-          }}
+          className={styles.carouselStage}
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          aria-label="Album ảnh scrapbook 3D, bấm vào ảnh hoặc dùng phím mũi tên để lật ảnh"
         >
-          {config.galleryPhotos.map((photo, index) => (
-            <div
-              key={photo.id}
-              className="gallery-photo"
-              style={{
-                ...getPhotoStyle(index),
-                cursor: 'pointer',
-                position: 'relative',
-              }}
-              onClick={() =>
-                setLightbox({ src: photo.src, alt: photo.alt, caption: photo.caption })
-              }
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setLightbox({ src: photo.src, alt: photo.alt, caption: photo.caption });
-                }
-              }}
-              aria-label={`Xem ảnh: ${photo.caption}`}
-            >
-              <div
-                style={{
-                  background: 'white',
-                  borderRadius: '4px',
-                  overflow: 'hidden',
-                  boxShadow: '0 4px 20px rgba(201, 104, 133, 0.12)',
-                  transition: 'transform 0.3s var(--ease-out-expo), box-shadow 0.3s',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
-                  e.currentTarget.style.boxShadow = '0 16px 40px rgba(201, 104, 133, 0.2)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = '';
-                  e.currentTarget.style.boxShadow = '';
-                }}
-              >
+          {/* Previous Arrow Button */}
+          <button
+            type="button"
+            className={`${styles.navButton} ${styles.navPrev}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              prevSlide();
+            }}
+            aria-label="Lật ảnh trước"
+          >
+            <ChevronLeft size={22} />
+          </button>
+
+          {/* 3D Track with Layered Polaroid Cards */}
+          <div className={styles.carouselTrack}>
+            {photos.map((photo, index) => {
+              let diff = (index - activeIndex) % total;
+              if (diff > total / 2) diff -= total;
+              if (diff < -total / 2) diff += total;
+              const isActive = diff === 0;
+              const isPrev = diff === -1;
+              const isNext = diff === 1;
+
+              return (
                 <div
-                  style={{
-                    width: '100%',
-                    aspectRatio: photo.aspectRatio || '3/4',
-                    background: 'linear-gradient(135deg, var(--pink-light) 0%, var(--pink-soft) 100%)',
-                    position: 'relative',
-                    overflow: 'hidden',
+                  key={photo.id}
+                  className={`${styles.polaroidCard} ${getCardStyleClass(index)}`}
+                  onClick={() => {
+                    if (isActive) {
+                      setLightbox({
+                        src: photo.src,
+                        alt: photo.alt,
+                        caption: photo.caption,
+                      });
+                    } else if (isPrev) {
+                      prevSlide();
+                    } else if (isNext) {
+                      nextSlide();
+                    }
+                  }}
+                  role="button"
+                  tabIndex={isActive ? 0 : -1}
+                  aria-label={
+                    isActive
+                      ? `Ảnh đang xem: ${photo.caption}. Bấm để phóng to.`
+                      : `Chuyển đến ảnh: ${photo.caption}`
+                  }
+                  onKeyDown={(e) => {
+                    if (isActive && (e.key === 'Enter' || e.key === ' ')) {
+                      e.preventDefault();
+                      setLightbox({
+                        src: photo.src,
+                        alt: photo.alt,
+                        caption: photo.caption,
+                      });
+                    }
                   }}
                 >
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    loading="lazy"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'center top',
-                      transition: 'transform 0.5s var(--ease-out-expo)',
-                    }}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
-                </div>
+                  {/* Washi Paper Tape at Top */}
+                  <div className={styles.washiTape} aria-hidden="true" />
 
-                {/* Caption below image */}
-                <div style={{
-                  padding: '10px 14px 14px',
-                }}>
-                  <p style={{
-                    fontFamily: 'var(--font-script)',
-                    fontSize: '0.9rem',
-                    color: 'var(--text-secondary)',
-                    lineHeight: 1.4,
-                  }}>
-                    {photo.caption}
-                  </p>
-                </div>
-              </div>
+                  {/* Photo Picture Box */}
+                  <div className={styles.photoBox}>
+                    <img
+                      src={photo.src}
+                      alt={photo.alt}
+                      className={styles.photoImg}
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
 
-              {/* Sticker "Yêu quá!" - attached to featured photo */}
-              {index === 0 && (
-                <img
-                  src="/assets/memories/sticker_1.png"
-                  alt=""
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    bottom: '-25px',
-                    right: '-20px',
-                    width: 'clamp(100px, 16vw, 140px)',
-                    height: 'auto',
-                    transform: 'rotate(8deg)',
-                    zIndex: 10,
-                    pointerEvents: 'none',
-                    filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
-                  }}
-                />
-              )}
-            </div>
-          ))}
+                    {/* Mini classic ribbon bow decoration on active photo */}
+                    {isActive && (
+                      <svg
+                        className={styles.miniBowDecor}
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M12 12C10 7 4 7 4 11C4 14 10 13 12 12ZM12 12C14 7 20 7 20 11C20 14 14 13 12 12Z"
+                          fill="#D4AF37"
+                        />
+                        <circle cx="12" cy="12" r="2.2" fill="#B38728" />
+                        <path d="M11 13L9 20M13 13L15 20" stroke="#D4AF37" strokeWidth="1.2" strokeLinecap="round" />
+                      </svg>
+                    )}
+                  </div>
+
+                  {/* Polaroid Chin / Caption */}
+                  <div className={styles.polaroidChin}>
+                    <p className={styles.polaroidCaption}>{photo.caption}</p>
+                    <span className={styles.polaroidChinTag}>A memory to keep ♡</span>
+                  </div>
+
+                  {/* Sticker "Yêu quá!" on Active Photo */}
+                  {isActive && (
+                    <img
+                      src="/assets/memories/sticker_1.png"
+                      alt=""
+                      aria-hidden="true"
+                      className={styles.stickerDecor}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Next Arrow Button */}
+          <button
+            type="button"
+            className={`${styles.navButton} ${styles.navNext}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              nextSlide();
+            }}
+            aria-label="Lật ảnh kế tiếp"
+          >
+            <ChevronRight size={22} />
+          </button>
+        </div>
+
+        {/* Footer Controls: Dots & Tap Hint */}
+        <div className={styles.footerControls}>
+          <div className={styles.dotsContainer} role="tablist" aria-label="Danh sách ảnh scrapbook">
+            {photos.map((photo, idx) => (
+              <button
+                key={photo.id}
+                type="button"
+                className={`${styles.dotButton} ${idx === activeIndex ? styles.dotActive : ''}`}
+                onClick={() => goToSlide(idx)}
+                role="tab"
+                aria-selected={idx === activeIndex}
+                aria-label={`Chuyển đến ảnh ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          <span className={styles.tapNotice}>Chạm vào ảnh để phóng to toàn màn hình ✨</span>
         </div>
 
         {/* Decorative doodle hearts */}
@@ -213,11 +320,12 @@ export default function GallerySection() {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            bottom: '10%',
-            left: '5%',
+            bottom: '8%',
+            left: '4%',
             width: '40px',
             height: '40px',
             opacity: 0.15,
+            pointerEvents: 'none',
           }}
         >
           <img src="/assets/decorations/doodle-heart.svg" alt="" />
@@ -226,18 +334,20 @@ export default function GallerySection() {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            top: '15%',
-            right: '8%',
-            width: '30px',
-            height: '30px',
+            top: '12%',
+            right: '6%',
+            width: '32px',
+            height: '32px',
             opacity: 0.1,
             transform: 'rotate(15deg)',
+            pointerEvents: 'none',
           }}
         >
           <img src="/assets/decorations/doodle-heart.svg" alt="" />
         </div>
       </section>
 
+      {/* Lightbox Modal */}
       {lightbox && (
         <PhotoLightbox
           src={lightbox.src}

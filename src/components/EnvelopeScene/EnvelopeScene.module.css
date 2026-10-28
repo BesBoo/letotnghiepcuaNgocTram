@@ -657,15 +657,146 @@
 }
 
 /* ============================
+   POST-OPEN DEDICATED CTA BUTTON
+   Visible & accessible on all screens after envelope is opened
+   ============================ */
+.proceedCtaContainer {
+  position: relative;
+  z-index: 50;
+  margin-top: clamp(16px, 3.5vh, 28px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: ctaEntrance 0.5s var(--ease-out-expo) forwards;
+  padding: 0 16px;
+}
+
+@keyframes ctaEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.proceedButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #E27396 0%, #C96885 50%, #B35472 100%);
+  color: #FFFFFF;
+  font-family: var(--font-serif);
+  font-size: clamp(0.92rem, 2.3vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 24px rgba(201, 104, 133, 0.42), 0 2px 6px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.25s var(--ease-out-expo), box-shadow 0.25s, background 0.25s;
+  animation: pulseCtaGlow 2.5s ease-in-out infinite;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes pulseCtaGlow {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(201, 104, 133, 0.42), 0 2px 6px rgba(0, 0, 0, 0.08);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 12px 30px rgba(201, 104, 133, 0.62), 0 0 16px rgba(243, 161, 181, 0.55);
+    transform: scale(1.03);
+  }
+}
+
+.proceedButton:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 14px 34px rgba(201, 104, 133, 0.58);
+  background: linear-gradient(135deg, #EA80A0 0%, #D4718E 50%, #BD5E7C 100%);
+}
+
+.proceedButton:active {
+  transform: scale(0.96);
+}
+
+.proceedButton:focus-visible {
+  outline: 2px solid #B88628;
+  outline-offset: 4px;
+}
+
+.proceedTextDesktop {
+  display: inline;
+}
+
+.proceedTextMobile {
+  display: none;
+}
+
+/* ============================
    RESPONSIVE DESIGN
    ============================ */
+@media (max-width: 600px) {
+  .proceedTextDesktop {
+    display: none;
+  }
+
+  .proceedTextMobile {
+    display: inline;
+  }
+
+  .proceedButton {
+    min-height: 46px;
+    padding: 11px 22px;
+    font-size: 0.95rem;
+  }
+}
+
 @media (max-width: 480px) {
+  .topGraduation {
+    font-size: clamp(3.2rem, 11vw, 4.4rem);
+    line-height: 1.0;
+    padding: 2px 8px;
+  }
+
+  .topInvitations {
+    font-size: clamp(0.82rem, 2.5vw, 1.05rem);
+    letter-spacing: 0.24em;
+    margin-top: 2px;
+  }
+
+  .topHeader {
+    margin-bottom: clamp(6px, 1.5vh, 14px);
+  }
+
   .envelopeContainer {
-    --env-w: min(330px, 88vw);
+    --env-w: min(320px, 88vw);
+  }
+
+  .invitationCard {
+    height: 78%;
+    padding: 8px 10px;
+  }
+
+  .cardTitle {
+    font-size: clamp(0.86rem, 2.6vw, 1.05rem);
+  }
+
+  .cardMessage {
+    font-size: 0.72rem;
+    -webkit-line-clamp: 2;
   }
 
   .textContent {
-    margin-top: 20px;
+    margin-top: 14px;
     padding: 0 var(--space-md);
   }
 

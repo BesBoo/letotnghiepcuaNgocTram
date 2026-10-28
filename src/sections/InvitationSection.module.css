@@ -1,0 +1,282 @@
+/* ============================
+   INVITATION SECTION - RSVP FORM STYLES
+   ============================ */
+
+.rsvpContainer {
+  margin-top: var(--space-2xl);
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: clamp(1.2rem, 3.5vw, 2rem);
+  background: rgba(255, 240, 243, 0.65);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(243, 161, 181, 0.45);
+  box-shadow: 0 8px 30px rgba(201, 104, 133, 0.08);
+}
+
+.rsvpTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+  font-weight: 600;
+  color: var(--pink-deep);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.rsvpSubtitle {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+/* 3 Choice Buttons */
+.choicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: var(--space-md);
+}
+
+.choiceButton {
+  min-height: 46px;
+  padding: 10px 8px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #FFFFFF;
+  color: var(--text-primary);
+  border: 1.5px solid var(--pink-soft);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s var(--ease-out-expo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  outline: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.choiceButton:hover {
+  border-color: var(--pink-primary);
+  background: #FFF9FA;
+  transform: translateY(-1px);
+}
+
+.choiceButton:focus-visible {
+  outline: 2px solid var(--pink-deep);
+  outline-offset: 2px;
+}
+
+/* Active State for 9:00-11:00 & 11:00-13:00 */
+.choiceActive {
+  background: linear-gradient(135deg, var(--pink-deep) 0%, var(--rose-gold) 100%) !important;
+  color: #FFFFFF !important;
+  border-color: var(--pink-deep) !important;
+  box-shadow: 0 4px 14px rgba(201, 104, 133, 0.35) !important;
+  transform: scale(1.02);
+}
+
+/* Active State for "Mình bận rồi" */
+.choiceActiveDeclined {
+  background: linear-gradient(135deg, #8C6D75 0%, #6E5259 100%) !important;
+  color: #FFFFFF !important;
+  border-color: #6E5259 !important;
+  box-shadow: 0 4px 14px rgba(110, 82, 89, 0.3) !important;
+  transform: scale(1.02);
+}
+
+/* Message Field */
+.messageWrapper {
+  margin-bottom: var(--space-md);
+  position: relative;
+  text-align: left;
+}
+
+.textareaField {
+  width: 100%;
+  min-height: 90px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--pink-soft);
+  background: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.textareaField:focus {
+  border-color: var(--pink-deep);
+  box-shadow: 0 0 0 3px rgba(201, 104, 133, 0.15);
+}
+
+.textareaField::placeholder {
+  color: #A38A91;
+  font-style: italic;
+}
+
+.counterRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.counterText {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: #8C6D75;
+}
+
+/* Validation & Error Messages */
+.inlineError {
+  background: #FFF1F0;
+  border: 1px solid #FFA39E;
+  color: #CF1322;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.84rem;
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+}
+
+/* Submit Button */
+.submitButton {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, var(--pink-deep) 0%, var(--rose-gold) 100%);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(201, 104, 133, 0.35);
+  transition: all 0.25s var(--ease-out-expo);
+  outline: none;
+  touch-action: manipulation;
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(201, 104, 133, 0.45);
+}
+
+.submitButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.submitButton:focus-visible {
+  outline: 2px solid var(--pink-deep);
+  outline-offset: 3px;
+}
+
+/* Success Card */
+.successCard {
+  background: #F6FFED;
+  border: 1px solid #B7EB8F;
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.successTitle {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #389E0D;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.successDesc {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: #274916;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.changeChoiceBtn {
+  background: transparent;
+  border: 1px solid #52C41A;
+  color: #389E0D;
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.changeChoiceBtn:hover {
+  background: #EAF8DE;
+}
+
+/* Spinner */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #FFFFFF;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 520px) {
+  .choicesGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .choiceButton {
+    min-height: 44px;
+    font-size: 0.92rem;
+  }
+
+  .rsvpContainer {
+    padding: 16px 14px;
+  }
+}

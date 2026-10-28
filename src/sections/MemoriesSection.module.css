@@ -1,0 +1,231 @@
+/* ============================
+   MEMORIES SECTION - COLLAGE ALBUM GRID
+   Fixed layout: 3 photos on the left, 1 featured tall photo on the right
+   Preserved on ALL device screen sizes (desktop, tablet, mobile)
+   ============================ */
+
+.memoriesSection {
+  padding: clamp(2.5rem, 6vw, 5rem) clamp(0.8rem, 4vw, 2.5rem);
+  background: linear-gradient(180deg, var(--cream) 0%, var(--pink-light) 50%, var(--cream) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.decorBlossom {
+  position: absolute;
+  top: 5%;
+  right: -2%;
+  width: 140px;
+  height: 140px;
+  opacity: 0.15;
+  transform: rotate(25deg);
+  pointer-events: none;
+}
+
+.titleContainer {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto clamp(1.5rem, 4vw, 2.8rem);
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+
+/* Outer Scrapbook Album Wrapper */
+.collageWrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+  padding: clamp(8px, 2vw, 20px);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(243, 161, 181, 0.4);
+  box-shadow: 0 12px 36px rgba(201, 104, 133, 0.12), 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* Asymmetric Collage Grid (Left: 42%, Right: 58%) - Preserved on ALL Viewports */
+.collageGrid {
+  display: grid;
+  grid-template-columns: 42% 58%;
+  gap: clamp(6px, 1.6vw, 16px);
+  align-items: stretch;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.4vw, 14px);
+  height: 100%;
+  justify-content: space-between;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Photo Album Card */
+.cardItem {
+  position: relative;
+  background: #FFFFFF;
+  border-radius: clamp(4px, 1vw, 8px);
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(201, 104, 133, 0.1), 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: clamp(1.5px, 0.3vw, 2.5px) solid #FFFFFF;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s;
+}
+
+.cardItem:hover {
+  transform: translateY(-3px) scale(1.015);
+  box-shadow: 0 10px 26px rgba(201, 104, 133, 0.22);
+}
+
+.cardItem:focus-visible {
+  outline: 2px solid var(--pink-deep);
+  outline-offset: 3px;
+}
+
+/* Left Column Cards (3 photos stacked) */
+.leftCard {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.leftCard .imageContainer {
+  flex: 1;
+  min-height: 0;
+  aspect-ratio: 4 / 3;
+}
+
+/* Featured Right Column Card (1 tall photo spanning full height) */
+.featuredCard {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.featuredCard .imageContainer {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--pink-light) 0%, var(--pink-soft) 100%);
+}
+
+.imageCover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+
+.cardItem:hover .imageCover {
+  transform: scale(1.035);
+}
+
+/* Caption bar */
+.captionBar {
+  padding: clamp(4px, 1vw, 8px) clamp(6px, 1.2vw, 12px);
+  background: #FFFFFF;
+  text-align: center;
+  border-top: 1px solid rgba(243, 161, 181, 0.2);
+}
+
+.captionText {
+  font-family: var(--font-script);
+  font-size: clamp(0.72rem, 1.6vw, 0.98rem);
+  color: var(--text-secondary);
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* Washi tape decoration on left cards */
+.washiTape {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: clamp(28px, 6vw, 42px);
+  height: clamp(10px, 2vw, 14px);
+  background: rgba(249, 202, 213, 0.65);
+  border-radius: 1px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Stickers */
+.stickerTopLeft {
+  position: absolute;
+  top: clamp(-20px, -3vw, -12px);
+  left: clamp(-16px, -2.5vw, -8px);
+  width: clamp(70px, 14vw, 125px);
+  height: auto;
+  transform: rotate(-14deg);
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(201, 104, 133, 0.28));
+}
+
+.stickerBottomRight {
+  position: absolute;
+  bottom: clamp(-18px, -2.8vw, -10px);
+  right: clamp(-14px, -2.2vw, -6px);
+  width: clamp(70px, 14vw, 125px);
+  height: auto;
+  transform: rotate(10deg);
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 14px rgba(201, 104, 133, 0.28));
+}
+
+/* ============================
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   Keeps 3 photos on left, 1 photo on right at all times
+   ============================ */
+@media (max-width: 600px) {
+  .collageWrapper {
+    padding: 6px;
+    border-radius: var(--radius-md);
+  }
+
+  .collageGrid {
+    gap: 6px;
+  }
+
+  .leftColumn {
+    gap: 6px;
+  }
+
+  .captionBar {
+    padding: 3px 4px 4px;
+  }
+
+  .captionText {
+    font-size: clamp(0.58rem, 2.2vw, 0.72rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .leftCard .imageContainer {
+    aspect-ratio: 16 / 11;
+  }
+
+  .featuredCard .captionText {
+    white-space: normal;
+  }
+}

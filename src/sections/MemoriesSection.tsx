@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import type { Guest } from '../lib/supabase';
-import config from '../invitation.config';
+import config, { type Memory } from '../invitation.config';
 import PhotoLightbox from '../components/PhotoLightbox/PhotoLightbox';
+import styles from './MemoriesSection.module.css';
 
 interface MemoriesSectionProps {
   guest?: Guest;
@@ -10,94 +11,150 @@ interface MemoriesSectionProps {
 
 export default function MemoriesSection({ guest }: MemoriesSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
+  const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
+  const [titleVisible, setTitleVisible] = useState(false);
   const [lightbox, setLightbox] = useState<{ src: string; alt: string; caption: string } | null>(null);
   const reducedMotion = useReducedMotion();
 
+  // Partition memories into Left column (stacked smaller photos) and Right column (featured tall photo)
+  const { leftPhotos, featuredPhoto } = useMemo(() => {
+    const list = config.memories || [];
+    if (list.length === 0) {
+      return { leftPhotos: [], featuredPhoto: null };
+    }
+    if (list.length === 1) {
+      return { leftPhotos: [], featuredPhoto: list[0] };
+    }
+    if (list.length === 2) {
+      return { leftPhotos: [list[0]], featuredPhoto: list[1] };
+    }
+    // 3 or more photos: photo at index 1 is the tall featured image (memory-02.png)
+    // Left column contains photo 0 and photo 2+
+    const featured = list[1];
+    const left = [list[0], ...list.slice(2)];
+    return { leftPhotos: left, featuredPhoto: featured };
+  }, []);
+
   useEffect(() => {
     if (reducedMotion) {
-      setVisibleItems(new Set(config.memories.map((_, i) => i)));
+      setTitleVisible(true);
+      setVisibleItems(new Set(config.memories.map((m) => m.id)));
       return;
     }
 
-    const observers: IntersectionObserver[] = [];
-    const cards = sectionRef.current?.querySelectorAll('.memory-card');
-    if (!cards) return;
+    // Title observer
+    const titleEl = sectionRef.current?.querySelector(`.${styles.titleContainer}`);
+    if (titleEl) {
+      const titleObs = new IntersectionObserver(
+        ([e]) => {
+          if (e.isIntersecting) {
+            setTitleVisible(true);
+            titleObs.disconnect();
+          }
+        },
+        { threshold: 0.25 }
+      );
+      titleObs.observe(titleEl);
+    }
 
-    cards.forEach((card, index) => {
-      const observer = new IntersectionObserver(
+    // Card items observer
+    const cardEls = sectionRef.current?.querySelectorAll(`.${styles.cardItem}`);
+    const observers: IntersectionObserver[] = [];
+
+    cardEls?.forEach((card) => {
+      const cardId = card.getAttribute('data-id');
+      if (!cardId) return;
+
+      const obs = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setTimeout(() => {
-              setVisibleItems((prev) => new Set(prev).add(index));
-            }, index * 150);
-            observer.unobserve(entry.target);
+            setVisibleItems((prev) => new Set(prev).add(cardId));
+            obs.unobserve(entry.target);
           }
         },
         { threshold: 0.15 }
       );
-      observer.observe(card);
-      observers.push(observer);
+      obs.observe(card);
+      observers.push(obs);
     });
 
     return () => observers.forEach((o) => o.disconnect());
   }, [reducedMotion]);
 
-  // Section title observer
-  const [titleVisible, setTitleVisible] = useState(false);
-  const titleRef = useRef<HTMLDivElement>(null);
+  const renderCard = (memory: Memory, isFeatured: boolean) => {
+    const isVisible = visibleItems.has(memory.id);
 
-  useEffect(() => {
-    if (reducedMotion) { setTitleVisible(true); return; }
-    if (!titleRef.current) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setTitleVisible(true); obs.disconnect(); } },
-      { threshold: 0.3 }
+    return (
+      <div
+        key={memory.id}
+        data-id={memory.id}
+        className={`${styles.cardItem} ${isFeatured ? styles.featuredCard : styles.leftCard}`}
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(36px)',
+          transition: 'opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo)',
+        }}
+        onClick={() =>
+          setLightbox({ src: memory.src, alt: memory.alt, caption: memory.caption })
+        }
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setLightbox({ src: memory.src, alt: memory.alt, caption: memory.caption });
+          }
+        }}
+        aria-label={`Xem ảnh: ${memory.caption}`}
+      >
+        {/* Washi tape on left cards for scrapbooking aesthetic */}
+        {!isFeatured && <div className={styles.washiTape} aria-hidden="true" />}
+
+        {/* Image Container */}
+        <div className={styles.imageContainer}>
+          <img
+            src={memory.src}
+            alt={memory.alt}
+            loading="lazy"
+            className={styles.imageCover}
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+          />
+        </div>
+
+        {/* Caption */}
+        <div className={styles.captionBar}>
+          <p className={styles.captionText}>{memory.caption}</p>
+        </div>
+      </div>
     );
-    obs.observe(titleRef.current);
-    return () => obs.disconnect();
-  }, [reducedMotion]);
+  };
 
   return (
     <>
-      <section
-        ref={sectionRef}
-        id="memories"
-        style={{
-          padding: 'clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 3rem)',
-          background: 'linear-gradient(180deg, var(--cream) 0%, var(--pink-light) 50%, var(--cream) 100%)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Decorative blossoms */}
-        <div style={{
-          position: 'absolute', top: '5%', right: '-2%', width: '150px', height: '150px',
-          opacity: 0.15, transform: 'rotate(25deg)', pointerEvents: 'none',
-        }} aria-hidden="true">
-          <img src="/assets/flowers/sakura-blossoms.jpg" alt="" style={{ width: '100%', borderRadius: '50%' }} />
+      <section ref={sectionRef} id="memories" className={styles.memoriesSection}>
+        {/* Decorative sakura blossoms */}
+        <div className={styles.decorBlossom} aria-hidden="true">
+          <img
+            src="/assets/flowers/sakura-blossoms.jpg"
+            alt=""
+            style={{ width: '100%', borderRadius: '50%' }}
+          />
         </div>
 
-        {/* Title */}
+        {/* Section Header */}
         <div
-          ref={titleRef}
+          className={styles.titleContainer}
           style={{
-            textAlign: 'center',
-            maxWidth: '600px',
-            margin: '0 auto var(--space-3xl)',
             opacity: titleVisible ? 1 : 0,
             transform: titleVisible ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo)',
           }}
         >
-          <h2
-            className="heading-display"
-            style={{ marginBottom: 'var(--space-md)' }}
-          >
+          <h2 className="heading-display" style={{ marginBottom: 'var(--space-md)' }}>
             MEMORIES
           </h2>
 
-          {/* Lời chào/gửi đích danh khách mời */}
           <p
             style={{
               fontFamily: 'var(--font-script)',
@@ -113,15 +170,18 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
                 : 'Gửi bạn thân yêu,')}
           </p>
 
-          <p className="text-script">
-            Thanh xuân có bạn, thật đẹp.
-          </p>
+          <p className="text-script">Thanh xuân có bạn, thật đẹp.</p>
 
-          {/* Decorative heart line */}
-          <div style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            gap: '12px', marginTop: 'var(--space-lg)', opacity: 0.5,
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px',
+              marginTop: 'var(--space-lg)',
+              opacity: 0.5,
+            }}
+          >
             <div style={{ width: '60px', height: '1px', background: 'var(--pink-primary)' }} />
             <svg viewBox="0 0 20 18" width="16" height="14" fill="var(--pink-primary)">
               <path d="M10 18 C10 18 0 11 0 5.5 C0 2.4 2.4 0 5.5 0 C7.2 0 8.8 0.8 10 2 C11.2 0.8 12.8 0 14.5 0 C17.6 0 20 2.4 20 5.5 C20 11 10 18 10 18Z" />
@@ -130,169 +190,44 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
           </div>
         </div>
 
-        {/* Photo Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
-            gap: 'clamp(1.5rem, 3.5vw, 2.5rem)',
-            maxWidth: '1000px',
-            margin: '0 auto',
-            alignItems: 'start',
-            position: 'relative',
-          }}
-        >
-          {config.memories.map((memory, index) => {
-            const isVisible = visibleItems.has(index);
-            return (
-              <div
-                key={memory.id}
-                className="memory-card"
-                style={{
-                  opacity: isVisible ? 1 : 0,
-                  transform: isVisible
-                    ? `translateY(0) rotate(${memory.rotation || 0}deg)`
-                    : `translateY(50px) rotate(${(memory.rotation || 0) + 5}deg)`,
-                  transition: `opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo)`,
-                  cursor: 'pointer',
-                  position: 'relative',
-                }}
-                onClick={() =>
-                  setLightbox({ src: memory.src, alt: memory.alt, caption: memory.caption })
-                }
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    setLightbox({ src: memory.src, alt: memory.alt, caption: memory.caption });
-                  }
-                }}
-                aria-label={`Xem ảnh: ${memory.caption}`}
-              >
-                {/* Polaroid frame */}
-                <div
-                  className="polaroid-hover"
-                  style={{
-                    background: 'white',
-                    padding: '12px 12px 36px',
-                    borderRadius: '2px',
-                    boxShadow: '0 4px 16px rgba(201, 104, 133, 0.12), 0 1px 3px rgba(0,0,0,0.04)',
-                    transition: 'transform 0.3s var(--ease-out-expo), box-shadow 0.3s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-6px) rotate(0deg)';
-                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(201, 104, 133, 0.2), 0 4px 8px rgba(0,0,0,0.06)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = '';
-                    e.currentTarget.style.boxShadow = '';
-                  }}
-                >
-                  {/* Photo container with responsive natural aspect ratio */}
-                  <div
-                    style={{
-                      width: '100%',
-                      aspectRatio: memory.aspectRatio || '3/4',
-                      background: 'linear-gradient(135deg, var(--pink-light) 0%, var(--pink-soft) 100%)',
-                      borderRadius: '1px',
-                      overflow: 'hidden',
-                      position: 'relative',
-                    }}
-                  >
-                    <img
-                      src={memory.src}
-                      alt={memory.alt}
-                      loading="lazy"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: 'center top',
-                      }}
-                      onError={(e) => {
-                        // Hide broken image, show gradient placeholder
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  </div>
+        {/* Collage Album Grid Container */}
+        <div className={styles.collageWrapper}>
+          {/* Sticker "Mlem mlem!" - Top Left corner */}
+          <img
+            src="/assets/memories/sticker_4.png"
+            alt=""
+            aria-hidden="true"
+            className={styles.stickerTopLeft}
+          />
 
-                  {/* Caption */}
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-script)',
-                      fontSize: 'clamp(0.85rem, 2vw, 1rem)',
-                      color: 'var(--text-secondary)',
-                      textAlign: 'center',
-                      marginTop: '12px',
-                      lineHeight: 1.4,
-                    }}
-                  >
-                    {memory.caption}
-                  </p>
-                </div>
-
-                {/* Paper tape decoration */}
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    top: '-6px',
-                    left: '50%',
-                    transform: 'translateX(-50%) rotate(-2deg)',
-                    width: '50px',
-                    height: '18px',
-                    background: 'rgba(249, 202, 213, 0.6)',
-                    borderRadius: '1px',
-                    zIndex: 2,
-                  }}
-                />
-
-                {/* Sticker "Mlem mlem!" - attached to first photo card */}
-                {index === 0 && (
-                  <img
-                    src="/assets/memories/sticker_4.png"
-                    alt=""
-                    aria-hidden="true"
-                    style={{
-                      position: 'absolute',
-                      top: '-30px',
-                      left: '-25px',
-                      width: 'clamp(100px, 16vw, 140px)',
-                      height: 'auto',
-                      transform: 'rotate(-14deg)',
-                      zIndex: 10,
-                      pointerEvents: 'none',
-                      filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
-                    }}
-                  />
-                )}
-
-                {/* Sticker "Thả tim" - attached to last photo card */}
-                {index === config.memories.length - 1 && (
-                  <img
-                    src="/assets/memories/sticker_2.png"
-                    alt=""
-                    aria-hidden="true"
-                    style={{
-                      position: 'absolute',
-                      bottom: '-25px',
-                      right: '-20px',
-                      width: 'clamp(100px, 16vw, 140px)',
-                      height: 'auto',
-                      transform: 'rotate(10deg)',
-                      zIndex: 10,
-                      pointerEvents: 'none',
-                      filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
-                    }}
-                  />
-                )}
+          {/* Asymmetric Collage Grid */}
+          <div className={styles.collageGrid}>
+            {/* Left Column: Stacked Photos */}
+            {leftPhotos.length > 0 && (
+              <div className={styles.leftColumn}>
+                {leftPhotos.map((photo) => renderCard(photo, false))}
               </div>
-            );
-          })}
+            )}
+
+            {/* Right Column: Featured Tall Photo */}
+            {featuredPhoto && (
+              <div className={styles.rightColumn}>
+                {renderCard(featuredPhoto, true)}
+              </div>
+            )}
+          </div>
+
+          {/* Sticker "Thả tim" - Bottom Right corner */}
+          <img
+            src="/assets/memories/sticker_2.png"
+            alt=""
+            aria-hidden="true"
+            className={styles.stickerBottomRight}
+          />
         </div>
       </section>
 
+      {/* Lightbox Modal */}
       {lightbox && (
         <PhotoLightbox
           src={lightbox.src}
