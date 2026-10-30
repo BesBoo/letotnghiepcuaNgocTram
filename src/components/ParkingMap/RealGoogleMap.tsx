@@ -22,18 +22,18 @@ const WALKING_ROUTES: Record<string, [number, number][]> = {
     [10.77625, 106.6903],
     [10.776199, 106.690247],
   ],
-  // P2: Cao ốc 123 (OCB) along Võ Văn Tần sidewalk to 97
+  // P2: CN TP. Hồ Chí Minh - Ngân hàng OCB (Võ Văn Tần) to 97 Võ Văn Tần
   'parking-2': [
-    [10.777861, 106.688556],
-    [10.777, 106.6894],
+    [10.77582, 106.689798],
+    [10.77605, 106.69005],
     [10.776199, 106.690247],
   ],
   // P3: District 3 Post Office (2 Bà Huyện Thanh Quan) -> up BHTQ -> along Võ Văn Tần to 97
   'parking-3': [
     [10.774944, 106.689639],
-    [10.7764, 106.6891],
-    [10.777861, 106.688556],
-    [10.777, 106.6894],
+    [10.77545, 106.68972],
+    [10.77582, 106.689798],
+    [10.77605, 106.69005],
     [10.776199, 106.690247],
   ],
   // P4: Công viên Tao Đàn (North gate) -> Trương Định -> Võ Văn Tần -> 97
