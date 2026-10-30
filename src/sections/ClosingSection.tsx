@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import config from '../invitation.config';
-import { ArrowUp, MapPin, ExternalLink, Car } from 'lucide-react';
+import { ArrowUp, MapPin, ExternalLink } from 'lucide-react';
+import ParkingMap from '../components/ParkingMap/ParkingMap';
 
 export default function ClosingSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -20,7 +21,7 @@ export default function ClosingSection() {
           obs.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.05 }
     );
     obs.observe(sectionRef.current);
     return () => obs.disconnect();
@@ -111,261 +112,209 @@ export default function ClosingSection() {
         </div>
       ))}
 
-      {/* Main content */}
-      <div style={{ position: 'relative', zIndex: 2, maxWidth: '600px' }}>
-        <h2
-          className="heading-display"
-          style={{
-            marginBottom: 'var(--space-lg)',
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0)' : 'translateY(25px)',
-            transition: 'all 0.8s var(--ease-out-expo) 200ms',
-            color: 'var(--text-primary)',
-          }}
-        >
-          Until We Meet
-        </h2>
+      {/* Main content wrapper */}
+      <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '1080px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {/* Top header & closing letter content */}
+        <div style={{ maxWidth: '620px', width: '100%', margin: '0 auto' }}>
+          <h2
+            className="heading-display"
+            style={{
+              marginBottom: 'var(--space-lg)',
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(25px)',
+              transition: 'all 0.8s var(--ease-out-expo) 200ms',
+              color: 'var(--text-primary)',
+            }}
+          >
+            Until We Meet
+          </h2>
 
-        <p
-          className="text-script"
-          style={{
-            fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
-            marginBottom: 'var(--space-xl)',
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'all 0.8s var(--ease-out-expo) 500ms',
-          }}
-        >
-          Hẹn gặp bạn ở một cột mốc thật đặc biệt nhé!
-        </p>
-
-        <p
-          className="text-body"
-          style={{
-            marginBottom: 'var(--space-2xl)',
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
-            transition: 'all 0.8s var(--ease-out-expo) 800ms',
-            maxWidth: '480px',
-            margin: '0 auto var(--space-2xl)',
-          }}
-        >
-          {config.closingMessage}
-        </p>
-
-        {/* Sign off */}
-        <p
-          style={{
-            fontFamily: 'var(--font-script)',
-            fontSize: 'clamp(1.2rem, 3vw, 1.6rem)',
-            color: 'var(--pink-deep)',
-            marginBottom: 'var(--space-2xl)',
-            opacity: isVisible ? 1 : 0,
-            transition: 'opacity 0.8s 1.1s',
-          }}
-        >
-          {config.signOff}
-        </p>
-
-        <p
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
-            fontWeight: 600,
-            color: 'var(--text-primary)',
-            opacity: isVisible ? 1 : 0,
-            transition: 'opacity 0.8s 1.3s',
-            marginBottom: 'var(--space-2xl)',
-          }}
-        >
-          — {config.senderName}
-        </p>
-
-        {/* Map & Parking Information Card */}
-        <div
-          style={{
-            margin: '0 auto calc(var(--space-2xl) + 20px)',
-            padding: 'clamp(1.2rem, 3.5vw, 1.8rem)',
-            background: 'rgba(255, 255, 255, 0.88)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: 'var(--radius-lg)',
-            boxShadow: '0 8px 30px rgba(201, 104, 133, 0.16)',
-            border: '1px solid rgba(255, 255, 255, 0.95)',
-            textAlign: 'left',
-            position: 'relative',
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
-            transition: 'all 0.8s var(--ease-out-expo) 1.2s',
-          }}
-        >
-          {/* Section Header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-            <MapPin size={20} color="var(--pink-deep)" />
-            <h3
-              style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: '1.15rem',
-                fontWeight: 600,
-                color: 'var(--text-primary)',
-                margin: 0,
-              }}
-            >
-              Địa điểm & Bản đồ
-            </h3>
-          </div>
-
-          <p style={{ margin: '0 0 4px', fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>
-            {config.event.venue}
-          </p>
-          <p style={{ margin: '0 0 14px', color: 'var(--text-secondary)', fontSize: '0.88rem' }}>
-            {config.event.address}
+          <p
+            className="text-script"
+            style={{
+              fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
+              marginBottom: 'var(--space-xl)',
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.8s var(--ease-out-expo) 500ms',
+            }}
+          >
+            Hẹn gặp bạn ở một cột mốc thật đặc biệt nhé!
           </p>
 
-          {/* Interactive Google Map iframe */}
+          <p
+            className="text-body"
+            style={{
+              marginBottom: 'var(--space-2xl)',
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
+              transition: 'all 0.8s var(--ease-out-expo) 800ms',
+              maxWidth: '480px',
+              margin: '0 auto var(--space-2xl)',
+            }}
+          >
+            {config.closingMessage}
+          </p>
+
+          {/* Sign off */}
+          <p
+            style={{
+              fontFamily: 'var(--font-script)',
+              fontSize: 'clamp(1.2rem, 3vw, 1.6rem)',
+              color: 'var(--pink-deep)',
+              marginBottom: 'var(--space-2xl)',
+              opacity: isVisible ? 1 : 0,
+              transition: 'opacity 0.8s 1.1s',
+            }}
+          >
+            {config.signOff}
+          </p>
+
+          <p
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
+              fontWeight: 600,
+              color: 'var(--text-primary)',
+              opacity: isVisible ? 1 : 0,
+              transition: 'opacity 0.8s 1.3s',
+              marginBottom: 'var(--space-2xl)',
+            }}
+          >
+            — {config.senderName}
+          </p>
+
+          {/* Event Venue Card (Trường ĐH Mở TP.HCM - 97 Võ Văn Tần) */}
           <div
             style={{
+              margin: '0 auto calc(var(--space-xl) + 10px)',
+              padding: 'clamp(1.2rem, 3.5vw, 1.8rem)',
+              background: 'rgba(255, 255, 255, 0.88)',
+              backdropFilter: 'blur(12px)',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: '0 8px 30px rgba(201, 104, 133, 0.16)',
+              border: '1px solid rgba(255, 255, 255, 0.95)',
+              textAlign: 'left',
               position: 'relative',
-              width: '100%',
-              height: '240px',
-              borderRadius: 'var(--radius-md)',
-              overflow: 'hidden',
-              boxShadow: 'inset 0 0 0 1px rgba(0, 0, 0, 0.08)',
-              marginBottom: '14px',
+              opacity: isVisible ? 1 : 0,
+              transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
+              transition: 'all 0.8s var(--ease-out-expo) 1.2s',
             }}
           >
-            <iframe
-              src="https://maps.google.com/maps?q=HCMC+Open+University+-+Campus+1,+97+V%C3%B5+V%C4%83n+T%E1%BA%A7n,+Xu%C3%A2n+H%C3%B2a,+H%E1%BB%93+Ch%C3%AD+Minh&t=&z=17&ie=UTF8&iwloc=&output=embed"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen={false}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Bản đồ HCMC Open University - Campus 1"
-            />
-          </div>
-
-          {/* Direct link button */}
-          <div style={{ textAlign: 'center', marginBottom: 'var(--space-lg)' }}>
-            <a
-              href={config.event.mapLink || "https://www.google.com/maps/search/?api=1&query=HCMC+Open+University+-+Campus+1,+97+V%C3%B5+V%C4%83n+T%E1%BA%A7n"}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '8px 18px',
-                fontSize: '0.85rem',
-                fontWeight: 500,
-                color: 'var(--white)',
-                background: 'var(--pink-deep)',
-                borderRadius: 'var(--radius-xl)',
-                textDecoration: 'none',
-                boxShadow: '0 4px 12px rgba(201, 104, 133, 0.3)',
-                transition: 'all 0.2s',
-              }}
-            >
-              <ExternalLink size={14} />
-              Mở chỉ đường trên Google Maps
-            </a>
-          </div>
-
-          {/* Parking Information */}
-          <div
-            style={{
-              borderTop: '1px dashed rgba(201, 104, 133, 0.3)',
-              paddingTop: '14px',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <Car size={18} color="var(--pink-deep)" />
-              <h4
+            {/* Section Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+              <MapPin size={20} color="var(--pink-deep)" />
+              <h3
                 style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: '1rem',
+                  fontSize: '1.15rem',
                   fontWeight: 600,
                   color: 'var(--text-primary)',
                   margin: 0,
                 }}
               >
-                Những địa điểm có thể gửi xe:
-              </h4>
+                Địa điểm tổ chức lễ tốt nghiệp
+              </h3>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <div
-                style={{
-                  padding: '9px 12px',
-                  background: 'rgba(255, 240, 244, 0.75)',
-                  borderRadius: 'var(--radius-sm)',
-                  borderLeft: '3px solid var(--pink-deep)',
-                }}
-              >
-                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                  • Tòa nhà Báo Người Lao động
-                </span>
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginLeft: '6px' }}>
-                  (số 123 Võ Văn Tần)
-                </span>
-              </div>
+            <p style={{ margin: '0 0 4px', fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>
+              {config.event.venue}
+            </p>
+            <p style={{ margin: '0 0 14px', color: 'var(--text-secondary)', fontSize: '0.88rem' }}>
+              {config.event.address}
+            </p>
 
-              <div
-                style={{
-                  padding: '9px 12px',
-                  background: 'rgba(255, 240, 244, 0.75)',
-                  borderRadius: 'var(--radius-sm)',
-                  borderLeft: '3px solid var(--pink-deep)',
-                }}
-              >
-                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                  • Du Lịch Hoà Bình
-                </span>
-                <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginLeft: '6px' }}>
-                  (số 60 Võ Văn Tần)
-                </span>
-              </div>
-
-              <div
-                style={{
-                  padding: '9px 12px',
-                  background: 'rgba(255, 240, 244, 0.75)',
-                  borderRadius: 'var(--radius-sm)',
-                  borderLeft: '3px solid var(--pink-deep)',
-                }}
-              >
-                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                  • Công viên Tao Đàn.
-                </span>
-              </div>
+            {/* Interactive Google Map iframe */}
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '220px',
+                borderRadius: 'var(--radius-md)',
+                overflow: 'hidden',
+                boxShadow: 'inset 0 0 0 1px rgba(0, 0, 0, 0.08)',
+                marginBottom: '14px',
+              }}
+            >
+              <iframe
+                src="https://maps.google.com/maps?q=HCMC+Open+University+-+Campus+1,+97+V%C3%B5+V%C4%83n+T%E1%BA%A7n,+Xu%C3%A2n+H%C3%B2a,+H%E1%BB%93+Ch%C3%AD+Minh&t=&z=17&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={false}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Bản đồ HCMC Open University - Campus 1"
+              />
             </div>
+
+            {/* Direct link button */}
+            <div style={{ textAlign: 'center' }}>
+              <a
+                href={config.event.mapLink || "https://www.google.com/maps/search/?api=1&query=HCMC+Open+University+-+Campus+1,+97+V%C3%B5+V%C4%83n+T%E1%BA%A7n"}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '8px 18px',
+                  fontSize: '0.85rem',
+                  fontWeight: 500,
+                  color: 'var(--white)',
+                  background: 'var(--pink-deep)',
+                  borderRadius: 'var(--radius-xl)',
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 12px rgba(201, 104, 133, 0.3)',
+                  transition: 'all 0.2s',
+                }}
+              >
+                <ExternalLink size={14} />
+                Mở chỉ đường trên Google Maps
+              </a>
+            </div>
+
+            {/* Sticker "Cảm ơn!" - bottom right of venue card */}
+            <img
+              src="/assets/memories/sticker_3.png"
+              alt="Cảm ơn!"
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                bottom: '-28px',
+                right: '-18px',
+                width: 'clamp(110px, 16vw, 145px)',
+                height: 'auto',
+                transform: 'rotate(8deg)',
+                zIndex: 10,
+                pointerEvents: 'none',
+                filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
+                opacity: isVisible ? 1 : 0,
+                transition: 'opacity 0.6s var(--ease-out-expo) 1.4s, transform 0.6s var(--ease-out-expo) 1.4s',
+              }}
+            />
           </div>
+        </div>
 
-          {/* Sticker "Cảm ơn!" - bottom right of map & parking card */}
-          <img
-            src="/assets/memories/sticker_3.png"
-            alt="Cảm ơn!"
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              bottom: '-30px',
-              right: '-20px',
-              width: 'clamp(115px, 18vw, 155px)',
-              height: 'auto',
-              transform: 'rotate(8deg)',
-              zIndex: 10,
-              pointerEvents: 'none',
-              filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
-              opacity: isVisible ? 1 : 0,
-              transition: 'opacity 0.6s var(--ease-out-expo) 1.4s, transform 0.6s var(--ease-out-expo) 1.4s',
-            }}
-          />
+        {/* =========================================================
+            SƠ ĐỒ BÃI ĐỖ XE (PARKING MAP & INTERACTIVE BUTTONS)
+            Replaces old static text with modern Transparent Glassmorphism UI
+            ========================================================= */}
+        <div
+          style={{
+            width: '100%',
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 0.9s var(--ease-out-expo) 1.3s',
+          }}
+        >
+          <ParkingMap />
         </div>
 
         {/* Decorative heart divider */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: '12px', marginBottom: 'var(--space-2xl)',
+          gap: '12px', marginTop: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: 'var(--space-2xl)',
           opacity: isVisible ? 0.4 : 0,
           transition: 'opacity 1s 1.5s',
         }}>

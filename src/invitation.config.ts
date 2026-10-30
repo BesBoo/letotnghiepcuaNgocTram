@@ -6,6 +6,8 @@
  * đều được quản lý tại đây.
  */
 
+import { PARKING_LOCATIONS, type ParkingLocation } from './data/parkingLocations';
+
 export interface Memory {
   id: string;
   src: string;
@@ -41,10 +43,7 @@ export interface InvitationConfig {
   };
 
   // === ĐỊA ĐIỂM GỬI XE ===
-  parking?: {
-    name: string;
-    address: string;
-  }[];
+  parking?: ParkingLocation[];
 
   // === ẢNH KỶ NIỆM ===
   memories: Memory[];
@@ -99,11 +98,7 @@ const config: InvitationConfig = {
   },
 
   // === ĐỊA ĐIỂM GỬI XE ===
-  parking: [
-    { name: "Tòa nhà Báo Người Lao động", address: "số 123 Võ Văn Tần" },
-    { name: "Du Lịch Hoà Bình", address: "số 60 Võ Văn Tần" },
-    { name: "Công viên Tao Đàn", address: "Cách trường khoảng vài phút đi bộ" },
-  ],
+  parking: PARKING_LOCATIONS,
 
   // === ẢNH KỶ NIỆM (Section: Our Memories) ===
   // Hiển thị 4 tấm ảnh kỷ niệm (3 ảnh bên trái và 1 ảnh lớn bên phải)

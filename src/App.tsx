@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useGuest } from './hooks/useGuest';
 import EnvelopeScene from './components/EnvelopeScene/EnvelopeScene';
 import PetalField from './components/PetalField/PetalField';
@@ -12,13 +12,25 @@ import config from './invitation.config';
 
 export default function App() {
   const { guest, markOpened, submitRSVP } = useGuest();
-  const [envelopeOpened, setEnvelopeOpened] = useState(false);
+  const [envelopeOpened, setEnvelopeOpened] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('opened') === '1' || params.get('preview') === 'all';
+    }
+    return false;
+  });
 
   const handleEnvelopeOpen = useCallback(() => {
     setEnvelopeOpened(true);
     document.body.classList.remove('scroll-locked');
     markOpened();
   }, [markOpened]);
+
+  useEffect(() => {
+    if (envelopeOpened) {
+      document.body.classList.remove('scroll-locked');
+    }
+  }, [envelopeOpened]);
 
   return (
     <>
@@ -38,11 +50,13 @@ export default function App() {
       <PetalField count={12} active={true} />
 
       {/* Scene 1 & 2: Envelope */}
-      <EnvelopeScene
-        onOpen={handleEnvelopeOpen}
-        guest={guest}
-        onMarkOpened={markOpened}
-      />
+      {!envelopeOpened && (
+        <EnvelopeScene
+          onOpen={handleEnvelopeOpen}
+          guest={guest}
+          onMarkOpened={markOpened}
+        />
+      )}
 
       {/* Main content - revealed after envelope opens */}
       <main
