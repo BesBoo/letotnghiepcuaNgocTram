@@ -28,12 +28,10 @@ const WALKING_ROUTES: Record<string, [number, number][]> = {
     [10.77605, 106.69005],
     [10.776199, 106.690247],
   ],
-  // P3: District 3 Post Office (2 Bà Huyện Thanh Quan) -> up BHTQ -> along Võ Văn Tần to 97
+  // P3: District 3 Post Office (2 Bà Huyện Thanh Quan) to 97 Võ Văn Tần
   'parking-3': [
-    [10.774944, 106.689639],
-    [10.77545, 106.68972],
-    [10.77582, 106.689798],
-    [10.77605, 106.69005],
+    [10.77529, 106.69031],
+    [10.7758, 106.69028],
     [10.776199, 106.690247],
   ],
   // P4: Công viên Tao Đàn (North gate) -> Trương Định -> Võ Văn Tần -> 97
