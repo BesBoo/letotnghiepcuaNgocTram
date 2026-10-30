@@ -1,14 +1,14 @@
 /* =========================================================
    SƠ ĐỒ BÃI ĐỖ XE (PARKING MAP & LOCATIONS)
-   Design: Transparent Glassmorphism + 3D Floating Map Card – Perspective Tilt
+   Design: Transparent Glassmorphism (Flat / Upright - No 3D Tilt)
    Strict Rule: Background of the section wrapper MUST remain 100% transparent
    ========================================================= */
 
 .parkingSectionWrapper {
   width: 100%;
   max-width: 1120px;
-  margin: clamp(2rem, 5vw, 3.5rem) auto 0;
-  padding: 0 clamp(8px, 2vw, 16px);
+  margin: clamp(1.8rem, 4vw, 3.2rem) auto 0;
+  padding: 0 clamp(4px, 1.5vw, 16px);
   background: transparent !important;
   position: relative;
   box-sizing: border-box;
@@ -17,18 +17,18 @@
 /* 1. MAIN TITLE - SƠ ĐỒ BÃI ĐỖ XE */
 .titleHeader {
   text-align: center;
-  margin-bottom: clamp(1.4rem, 3.5vw, 2.2rem);
+  margin-bottom: clamp(1.2rem, 3vw, 2rem);
   position: relative;
 }
 
 .mainTitle {
   font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 4.2vw, 2.6rem);
+  font-size: clamp(1.7rem, 4vw, 2.5rem);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #FFFFFF;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   text-shadow: 
     0 2px 14px rgba(180, 70, 100, 0.45),
     0 2px 6px rgba(0, 0, 0, 0.25);
@@ -37,7 +37,7 @@
 
 .mainSubtitle {
   font-family: var(--font-sans);
-  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-size: clamp(0.82rem, 1.8vw, 0.96rem);
   color: #FFFFFF;
   margin: 0;
   font-weight: 500;
@@ -49,16 +49,18 @@
 .layoutGrid {
   display: grid;
   grid-template-columns: 42% 58%;
-  gap: clamp(16px, 2.5vw, 28px);
+  gap: clamp(14px, 2vw, 24px);
   align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 3. LEFT COLUMN: GLASSMORPHIC CONTAINER */
 .leftContainer {
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.88);
   border-radius: 24px;
   padding: clamp(14px, 2vw, 20px);
   box-shadow: 
@@ -70,6 +72,8 @@
   justify-content: space-between;
   box-sizing: border-box;
   position: relative;
+  width: 100%;
+  min-width: 0;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -89,7 +93,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(201, 104, 133, 0.25);
   padding: 3px 10px;
   border-radius: 9999px;
@@ -140,6 +144,7 @@
   flex-direction: column;
   gap: 8px;
   margin-bottom: 12px;
+  width: 100%;
 }
 
 .parkingButton {
@@ -148,7 +153,7 @@
   gap: 10px;
   width: 100%;
   padding: 9px 12px;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1.5px solid rgba(255, 255, 255, 0.95);
@@ -163,11 +168,13 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   position: relative;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .parkingButton:hover,
 .parkingButton.hovered {
-  transform: translateX(5px) translateY(-1px);
+  transform: translateX(4px);
   background: #FFFFFF;
   border-color: #C96885;
   box-shadow: 
@@ -178,7 +185,7 @@
 .parkingButton.active {
   background: #FFFFFF;
   border-color: #EA4335;
-  transform: translateX(5px) translateY(-1px);
+  transform: translateX(4px);
   box-shadow: 
     0 10px 24px rgba(234, 67, 53, 0.26),
     0 0 14px rgba(255, 107, 129, 0.32),
@@ -228,6 +235,7 @@
 .buttonTextContent {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
 }
 
 .locationName {
@@ -259,6 +267,8 @@
   gap: 6px;
   font-size: 0.7rem;
   color: #785764;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .distancePill {
@@ -303,94 +313,107 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.75);
   border-radius: 12px;
   font-size: 0.76rem;
   color: #6D4C58;
   border: 1px dashed rgba(201, 104, 133, 0.35);
   line-height: 1.35;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 /* =========================================================
-   5. RIGHT COLUMN: 3D FLOATING MAP CARD – PERSPECTIVE TILT
+   5. RIGHT COLUMN: FLAT GLASSMORPHIC MAP CARD (NO 3D TILT)
    ========================================================= */
 
 .rightPerspectiveWrapper {
-  perspective: 1600px;
   display: flex;
   align-items: stretch;
   justify-content: center;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .browserWindow {
   width: 100%;
-  background: #FFFFFF;
+  min-width: 0;
+  /* Translucent frosted glass */
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-radius: 24px;
   border: 1.5px solid rgba(255, 255, 255, 0.88);
-  /* 3D Floating UI Perspective Tilt */
-  transform: perspective(1500px) rotateX(6deg) rotateY(-2deg);
-  transform-style: preserve-3d;
+  /* Completely flat - NO 3D perspective tilt */
+  transform: none !important;
   box-shadow: 
-    0 30px 60px rgba(80, 35, 55, 0.16),
-    0 12px 24px rgba(80, 35, 55, 0.10),
-    0 3px 8px rgba(255, 255, 255, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    0 20px 48px rgba(201, 104, 133, 0.16),
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
   transition: 
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 .browserWindow:hover {
-  /* Subtle interactive elevation on hover */
-  transform: perspective(1500px) rotateX(2.5deg) rotateY(-0.8deg) translateY(-4px);
+  /* Subtle lift on hover, NO tilt */
+  transform: translateY(-3px) !important;
   box-shadow: 
-    0 38px 76px rgba(80, 35, 55, 0.22),
-    0 16px 32px rgba(80, 35, 55, 0.14),
+    0 26px 56px rgba(201, 104, 133, 0.22),
+    0 8px 22px rgba(0, 0, 0, 0.06),
     inset 0 1px 0 #FFFFFF;
 }
 
-/* Browser Title Bar / Header */
+/* Browser Title Bar / Header - Translucent */
 .browserHeader {
   height: 42px;
-  background: linear-gradient(180deg, #F8F9FA 0%, #E9ECEF 100%);
-  border-bottom: 1px solid #DEE2E6;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(243, 161, 181, 0.35);
   display: flex;
   align-items: center;
   padding: 0 14px;
-  gap: 12px;
+  gap: 10px;
   user-select: none;
   flex-shrink: 0;
   z-index: 5;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .trafficDots {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 .dotRed {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #FF5F56;
   border: 1px solid #E0443E;
 }
 
 .dotYellow {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #FFBD2E;
   border: 1px solid #DEA123;
 }
 
 .dotGreen {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #27C93F;
   border: 1px solid #1AAB29;
@@ -398,10 +421,11 @@
 
 .browserUrlBar {
   flex: 1;
+  min-width: 0;
   max-width: 320px;
   height: 26px;
-  background: #FFFFFF;
-  border: 1px solid #D0D5DD;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(201, 104, 133, 0.25);
   border-radius: 9999px;
   display: flex;
   align-items: center;
@@ -410,13 +434,15 @@
   font-family: var(--font-sans);
   font-size: 0.72rem;
   color: #475467;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
 }
 
 .urlText {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .browserControls {
@@ -424,6 +450,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 .browserControlBtn {
@@ -431,7 +458,7 @@
   align-items: center;
   gap: 4px;
   background: rgba(255, 255, 255, 0.85);
-  border: 1px solid #D0D5DD;
+  border: 1px solid rgba(201, 104, 133, 0.25);
   border-radius: 6px;
   padding: 3px 8px;
   font-size: 0.7rem;
@@ -440,6 +467,7 @@
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .browserControlBtn:hover {
@@ -456,55 +484,62 @@
 .mapFrameArea {
   position: relative;
   width: 100%;
+  min-width: 0;
   flex: 1;
   min-height: 440px;
   display: flex;
+  box-sizing: border-box;
 }
 
 /* =========================================================
-   RESPONSIVE DESIGN BREAKPOINTS
+   RESPONSIVE DESIGN BREAKPOINTS (MOBILE & TABLET FIXES)
    ========================================================= */
 
-@media (max-width: 960px) {
+@media (max-width: 900px) {
   .layoutGrid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
 
   .leftContainer {
     border-radius: 20px;
-    padding: 16px;
+    padding: 14px 12px;
   }
 
-  /* Remove 3D skew on mobile & tablets to allow effortless touch pan/zoom */
   .browserWindow {
-    transform: none !important;
-    border-radius: 18px;
+    border-radius: 20px;
   }
 
-  .rightPerspectiveWrapper {
-    perspective: none;
+  .mapFrameArea {
+    min-height: 380px;
+    height: 52vh;
+    max-height: 440px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .parkingSectionWrapper {
-    padding: 0 4px;
-    margin-top: 1.8rem;
+    padding: 0;
+    margin-top: 1.4rem;
   }
 
   .mainTitle {
-    font-size: 1.55rem;
-    letter-spacing: 0.05em;
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
   }
 
   .leftContainer {
-    padding: 14px 12px;
+    padding: 12px 10px;
     border-radius: 16px;
   }
 
   .subSectionTitle {
-    font-size: 1.05rem;
+    font-size: 1rem;
+  }
+
+  .leftDescription {
+    font-size: 0.76rem;
+    margin-bottom: 8px;
   }
 
   .parkingButton {
@@ -514,34 +549,54 @@
   }
 
   .pinIconWrapper {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
   }
 
   .locationName {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
   }
 
   .locationAddress {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
+  }
+
+  .locationMetaRow {
+    font-size: 0.66rem;
   }
 
   .browserHeader {
     height: 36px;
-    padding: 0 10px;
+    padding: 0 8px;
+    gap: 6px;
+  }
+
+  .trafficDots {
+    gap: 4px;
+  }
+
+  .dotRed, .dotYellow, .dotGreen {
+    width: 8px;
+    height: 8px;
   }
 
   .browserUrlBar {
-    max-width: 180px;
-    font-size: 0.65rem;
     height: 22px;
+    padding: 0 6px;
+    font-size: 0.64rem;
   }
 
   .controlLabel {
     display: none;
   }
 
+  .browserControlBtn {
+    padding: 2px 5px;
+  }
+
   .mapFrameArea {
-    min-height: 360px;
+    min-height: 340px;
+    height: 48vh;
+    max-height: 390px;
   }
 }

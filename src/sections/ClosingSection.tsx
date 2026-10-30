@@ -37,7 +37,7 @@ export default function ClosingSection() {
       id="closing"
       style={{
         minHeight: '100vh',
-        padding: 'clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 3rem)',
+        padding: 'clamp(2.5rem, 6vw, 5rem) clamp(0.5rem, 3vw, 2.5rem)',
         background: 'linear-gradient(180deg, var(--pink-light) 0%, var(--pink-soft) 40%, #f7c5d4 100%)',
         display: 'flex',
         flexDirection: 'column',
@@ -46,6 +46,7 @@ export default function ClosingSection() {
         position: 'relative',
         overflow: 'hidden',
         textAlign: 'center',
+        boxSizing: 'border-box',
       }}
     >
       {/* Paper plane SVG animation */}

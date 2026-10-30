@@ -155,7 +155,13 @@ export default function RealGoogleMap({
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         </a>
       </div>
-    `);
+    `, {
+      offset: [0, -42],
+      maxWidth: 240,
+      autoPan: true,
+      autoPanPadding: L.point(16, 16),
+      keepInView: true,
+    });
 
     // 4. Add 5 Parking Markers
     PARKING_LOCATIONS.forEach((loc) => {
@@ -186,7 +192,11 @@ export default function RealGoogleMap({
         </div>
       `, {
         offset: [0, -22],
-        maxWidth: 270,
+        maxWidth: 240,
+        minWidth: 180,
+        autoPan: true,
+        autoPanPadding: L.point(16, 16),
+        keepInView: true,
       });
 
       marker.on('click', () => {
@@ -317,9 +327,9 @@ export default function RealGoogleMap({
     if (targetLoc) {
       mapInstanceRef.current.flyTo(
         [targetLoc.latitude, targetLoc.longitude],
-        17.2,
+        16.8,
         {
-          duration: 1.0,
+          duration: 0.8,
           easeLinearity: 0.25,
         }
       );
