@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import type { Guest } from '../lib/supabase';
 import config, { type Memory } from '../invitation.config';
-import PhotoLightbox from '../components/PhotoLightbox/PhotoLightbox';
 import styles from './MemoriesSection.module.css';
 
 interface MemoriesSectionProps {
@@ -13,7 +12,6 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
   const [titleVisible, setTitleVisible] = useState(false);
-  const [lightbox, setLightbox] = useState<{ src: string; alt: string; caption: string } | null>(null);
   const reducedMotion = useReducedMotion();
 
   // Partition memories into Left column (stacked smaller photos) and Right column (featured tall photo)
@@ -94,18 +92,6 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
           transform: isVisible ? 'translateY(0)' : 'translateY(36px)',
           transition: 'opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo)',
         }}
-        onClick={() =>
-          setLightbox({ src: memory.src, alt: memory.alt, caption: memory.caption })
-        }
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setLightbox({ src: memory.src, alt: memory.alt, caption: memory.caption });
-          }
-        }}
-        aria-label={`Xem ảnh: ${memory.caption}`}
       >
         {/* Washi tape on left cards for scrapbooking aesthetic */}
         {!isFeatured && <div className={styles.washiTape} aria-hidden="true" />}
@@ -226,16 +212,6 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
           />
         </div>
       </section>
-
-      {/* Lightbox Modal */}
-      {lightbox && (
-        <PhotoLightbox
-          src={lightbox.src}
-          alt={lightbox.alt}
-          caption={lightbox.caption}
-          onClose={() => setLightbox(null)}
-        />
-      )}
     </>
   );
 }

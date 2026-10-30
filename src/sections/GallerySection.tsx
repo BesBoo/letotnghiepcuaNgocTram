@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import config from '../invitation.config';
-import PhotoLightbox from '../components/PhotoLightbox/PhotoLightbox';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './GallerySection.module.css';
 
@@ -9,7 +8,6 @@ export default function GallerySection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [titleVisible, setTitleVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [lightbox, setLightbox] = useState<{ src: string; alt: string; caption: string } | null>(null);
   const isAnimatingRef = useRef(false);
   const reducedMotion = useReducedMotion();
 
@@ -197,33 +195,24 @@ export default function GallerySection() {
                   key={photo.id}
                   className={`${styles.polaroidCard} ${getCardStyleClass(index)}`}
                   onClick={() => {
-                    if (isActive) {
-                      setLightbox({
-                        src: photo.src,
-                        alt: photo.alt,
-                        caption: photo.caption,
-                      });
-                    } else if (isPrev) {
+                    if (isPrev) {
                       prevSlide();
                     } else if (isNext) {
                       nextSlide();
                     }
                   }}
-                  role="button"
-                  tabIndex={isActive ? 0 : -1}
+                  role={isActive ? undefined : 'button'}
+                  tabIndex={isActive ? -1 : 0}
                   aria-label={
                     isActive
-                      ? `Ảnh đang xem: ${photo.caption}. Bấm để phóng to.`
+                      ? `Ảnh đang xem: ${photo.caption}`
                       : `Chuyển đến ảnh: ${photo.caption}`
                   }
                   onKeyDown={(e) => {
-                    if (isActive && (e.key === 'Enter' || e.key === ' ')) {
+                    if (!isActive && (e.key === 'Enter' || e.key === ' ')) {
                       e.preventDefault();
-                      setLightbox({
-                        src: photo.src,
-                        alt: photo.alt,
-                        caption: photo.caption,
-                      });
+                      if (isPrev) prevSlide();
+                      if (isNext) nextSlide();
                     }
                   }}
                 >
@@ -312,7 +301,7 @@ export default function GallerySection() {
             ))}
           </div>
 
-          <span className={styles.tapNotice}>Chạm vào ảnh để phóng to toàn màn hình ✨</span>
+          <span className={styles.tapNotice}>Dùng phím mũi tên hoặc lướt chạm để xem ảnh ✨</span>
         </div>
 
         {/* Decorative doodle hearts */}
@@ -346,16 +335,6 @@ export default function GallerySection() {
           <img src="/assets/decorations/doodle-heart.svg" alt="" />
         </div>
       </section>
-
-      {/* Lightbox Modal */}
-      {lightbox && (
-        <PhotoLightbox
-          src={lightbox.src}
-          alt={lightbox.alt}
-          caption={lightbox.caption}
-          onClose={() => setLightbox(null)}
-        />
-      )}
     </>
   );
 }

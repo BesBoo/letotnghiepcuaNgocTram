@@ -60,7 +60,7 @@ export default function ParkingMap() {
               </p>
             </div>
 
-            {/* 3 Interactive Buttons */}
+            {/* 5 Interactive Buttons */}
             <div className={styles.buttonList}>
               {PARKING_LOCATIONS.map((loc) => {
                 const isSelected = currentSelectedId === loc.id;
@@ -76,7 +76,7 @@ export default function ParkingMap() {
                   >
                     {/* Pin Icon with Number */}
                     <div className={styles.pinIconWrapper}>
-                      <MapPin size={18} strokeWidth={2.4} />
+                      <MapPin size={17} strokeWidth={2.4} />
                       <span className={styles.pinBadgeNumber}>{loc.number}</span>
                     </div>
 
@@ -96,7 +96,7 @@ export default function ParkingMap() {
 
                     {/* Action Icon */}
                     <div className={styles.buttonActionIcon}>
-                      <ExternalLink size={15} />
+                      <ExternalLink size={14} />
                     </div>
                   </button>
                 );
@@ -405,19 +405,19 @@ export default function ParkingMap() {
                 </text>
 
                 {/* 4. WALKING PATHS (Connecting Parking Spots to 97 Võ Văn Tần) */}
-                {/* Path 1: 123 VVT -> 97 VVT */}
+                {/* Path 1: 97 VVT (Within campus) */}
                 <path
-                  d="M 215,188 L 405,201"
+                  d="M 425,200 L 425,195"
                   stroke={currentSelectedId === 'parking-1' ? '#E84118' : '#94A3B8'}
                   strokeWidth={currentSelectedId === 'parking-1' ? '4' : '2.5'}
-                  strokeDasharray="6 6"
+                  strokeDasharray="4 4"
                   fill="none"
-                  opacity={currentSelectedId === 'parking-1' ? '1' : '0.4'}
+                  opacity={currentSelectedId === 'parking-1' ? '1' : '0.3'}
                 />
 
-                {/* Path 2: 60 VVT -> 97 VVT */}
+                {/* Path 2: 123-127 VVT (OCB) -> 97 VVT along Võ Văn Tần */}
                 <path
-                  d="M 610,217 L 445,204"
+                  d="M 205,178 L 415,195"
                   stroke={currentSelectedId === 'parking-2' ? '#E84118' : '#94A3B8'}
                   strokeWidth={currentSelectedId === 'parking-2' ? '4' : '2.5'}
                   strokeDasharray="6 6"
@@ -425,14 +425,34 @@ export default function ParkingMap() {
                   opacity={currentSelectedId === 'parking-2' ? '1' : '0.4'}
                 />
 
-                {/* Path 3: Tao Dan -> 97 VVT via Trương Định */}
+                {/* Path 3: District 3 Post Office -> VVT -> 97 VVT */}
                 <path
-                  d="M 390,370 L 418,215"
+                  d="M 182,330 L 195,182 L 415,195"
                   stroke={currentSelectedId === 'parking-3' ? '#E84118' : '#94A3B8'}
                   strokeWidth={currentSelectedId === 'parking-3' ? '4' : '2.5'}
                   strokeDasharray="6 6"
                   fill="none"
                   opacity={currentSelectedId === 'parking-3' ? '1' : '0.4'}
+                />
+
+                {/* Path 4: Tao Dan -> 97 VVT via Trương Định */}
+                <path
+                  d="M 385,410 L 415,210 L 425,200"
+                  stroke={currentSelectedId === 'parking-4' ? '#E84118' : '#94A3B8'}
+                  strokeWidth={currentSelectedId === 'parking-4' ? '4' : '2.5'}
+                  strokeDasharray="6 6"
+                  fill="none"
+                  opacity={currentSelectedId === 'parking-4' ? '1' : '0.4'}
+                />
+
+                {/* Path 5: Cultural Palace for Labors -> NTMK -> Trương Định -> VVT */}
+                <path
+                  d="M 535,350 L 410,340 L 420,205"
+                  stroke={currentSelectedId === 'parking-5' ? '#E84118' : '#94A3B8'}
+                  strokeWidth={currentSelectedId === 'parking-5' ? '4' : '2.5'}
+                  strokeDasharray="6 6"
+                  fill="none"
+                  opacity={currentSelectedId === 'parking-5' ? '1' : '0.4'}
                 />
 
                 {/* 5. VENUE: ĐẠI HỌC MỞ TP.HCM (97 Võ Văn Tần) */}
@@ -573,10 +593,14 @@ export default function ParkingMap() {
                             textAnchor="middle"
                           >
                             {loc.number === 1
-                              ? 'Báo NLĐ (123)'
+                              ? 'ĐH Mở (97)'
                               : loc.number === 2
-                              ? 'Hoà Bình (60)'
-                              : 'CV Tao Đàn'}
+                              ? 'OCB (123)'
+                              : loc.number === 3
+                              ? 'Bưu điện Q.3'
+                              : loc.number === 4
+                              ? 'CV Tao Đàn'
+                              : 'Cung VH LĐ'}
                           </text>
                         </g>
                       </g>
