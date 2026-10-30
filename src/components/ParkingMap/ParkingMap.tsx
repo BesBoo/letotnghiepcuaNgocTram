@@ -29,7 +29,7 @@ export default function ParkingMap() {
 
   const handleMarkerClick = (loc: ParkingLocation, e: React.MouseEvent) => {
     e.stopPropagation();
-    setActiveId(loc.id);
+    setActiveId((prev) => (prev === loc.id ? null : loc.id));
   };
 
   return (
@@ -494,12 +494,15 @@ export default function ParkingMap() {
                   return (
                     <g
                       key={loc.id}
-                      className={styles.markerGroup}
+                      className={`${styles.markerGroup} ${isSelected ? styles.selected : ''}`}
                       transform={`translate(${loc.mapX}, ${loc.mapY})`}
                       onClick={(e) => handleMarkerClick(loc, e)}
                       onMouseEnter={() => setHoveredId(loc.id)}
                       onMouseLeave={() => setHoveredId(null)}
                     >
+                      {/* Stable hit-area: large invisible circle that never shifts */}
+                      <circle cx="0" cy="-6" r="26" fill="transparent" pointerEvents="all" />
+
                       {/* Pulse wave ring when selected */}
                       {isSelected && (
                         <circle
@@ -513,66 +516,69 @@ export default function ParkingMap() {
                         />
                       )}
 
-                      {/* Drop shadow pin base */}
-                      <ellipse
-                        cx="0"
-                        cy="6"
-                        rx="8"
-                        ry="3.5"
-                        fill="rgba(0,0,0,0.22)"
-                      />
+                      {/* Visual Pin Elements */}
+                      <g className={styles.pinVisual}>
+                        {/* Drop shadow pin base */}
+                        <ellipse
+                          cx="0"
+                          cy="6"
+                          rx="8"
+                          ry="3.5"
+                          fill="rgba(0,0,0,0.22)"
+                        />
 
-                      {/* Map Pin Vector Shape */}
-                      <path
-                        d="M 0,-26 C -12,-26 -16,-16 -16,-8 C -16,4 0,8 0,8 C 0,8 16,4 16,-8 C 16,-16 12,-26 0,-26 Z"
-                        fill={isSelected ? '#D92D20' : '#EA4335'}
-                        stroke="#FFFFFF"
-                        strokeWidth="2"
-                        filter="url(#badgeShadow)"
-                      />
-
-                      {/* Inner White Badge with "P" and number */}
-                      <circle cx="0" cy="-11" r="7.5" fill="#FFFFFF" />
-                      <text
-                        x="0"
-                        y="-7.5"
-                        fill="#D93025"
-                        fontFamily="system-ui, sans-serif"
-                        fontSize="9.5"
-                        fontWeight="900"
-                        textAnchor="middle"
-                      >
-                        P{loc.number}
-                      </text>
-
-                      {/* Permanent Mini Name Pill beneath pin */}
-                      <g transform="translate(0, 16)">
-                        <rect
-                          x="-44"
-                          y="0"
-                          width="88"
-                          height="18"
-                          rx="4"
-                          fill="#FFFFFF"
-                          stroke={isSelected ? '#E84118' : '#CBD5E1'}
-                          strokeWidth={isSelected ? '1.8' : '1.2'}
+                        {/* Map Pin Vector Shape */}
+                        <path
+                          d="M 0,-26 C -12,-26 -16,-16 -16,-8 C -16,4 0,8 0,8 C 0,8 16,4 16,-8 C 16,-16 12,-26 0,-26 Z"
+                          fill={isSelected ? '#D92D20' : '#EA4335'}
+                          stroke="#FFFFFF"
+                          strokeWidth="2"
                           filter="url(#badgeShadow)"
                         />
+
+                        {/* Inner White Badge with "P" and number */}
+                        <circle cx="0" cy="-11" r="7.5" fill="#FFFFFF" />
                         <text
                           x="0"
-                          y="12.5"
-                          fill={isSelected ? '#D92D20' : '#1E293B'}
+                          y="-7.5"
+                          fill="#D93025"
                           fontFamily="system-ui, sans-serif"
-                          fontSize="8.2"
-                          fontWeight="800"
+                          fontSize="9.5"
+                          fontWeight="900"
                           textAnchor="middle"
                         >
-                          {loc.number === 1
-                            ? 'Báo NLĐ (123)'
-                            : loc.number === 2
-                            ? 'Hoà Bình (60)'
-                            : 'CV Tao Đàn'}
+                          P{loc.number}
                         </text>
+
+                        {/* Permanent Mini Name Pill beneath pin */}
+                        <g transform="translate(0, 16)">
+                          <rect
+                            x="-44"
+                            y="0"
+                            width="88"
+                            height="18"
+                            rx="4"
+                            fill="#FFFFFF"
+                            stroke={isSelected ? '#E84118' : '#CBD5E1'}
+                            strokeWidth={isSelected ? '1.8' : '1.2'}
+                            filter="url(#badgeShadow)"
+                          />
+                          <text
+                            x="0"
+                            y="12.5"
+                            fill={isSelected ? '#D92D20' : '#1E293B'}
+                            fontFamily="system-ui, sans-serif"
+                            fontSize="8.2"
+                            fontWeight="800"
+                            textAnchor="middle"
+                          >
+                            {loc.number === 1
+                              ? 'Báo NLĐ (123)'
+                              : loc.number === 2
+                              ? 'Hoà Bình (60)'
+                              : 'CV Tao Đàn'}
+                          </text>
+                        </g>
                       </g>
                     </g>
                   );
@@ -659,8 +665,10 @@ export default function ParkingMap() {
                   className={styles.mapTooltipBox}
                   style={{
                     left: `${(currentSelected.mapX / 800) * 100}%`,
-                    top: `${(currentSelected.mapY / 520) * 100 - 3}%`,
+                    top: `${(currentSelected.mapY / 520) * 100}%`,
                   }}
+                  onMouseEnter={() => setHoveredId(currentSelected.id)}
+                  onMouseLeave={() => setHoveredId(null)}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className={styles.tooltipArrow} />

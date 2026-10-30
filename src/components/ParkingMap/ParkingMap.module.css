@@ -323,16 +323,15 @@
     0 26px 54px -10px rgba(50, 20, 35, 0.24),
     0 12px 24px -6px rgba(201, 104, 133, 0.18),
     0 0 0 1px rgba(0, 0, 0, 0.05);
-  transform: rotateY(-3deg) rotateX(2deg);
+  transform: rotateY(-2.5deg) rotateX(1.8deg);
   transform-style: preserve-3d;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  transition: box-shadow 0.3s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .browserWindow:hover {
-  transform: rotateY(-1deg) rotateX(1deg) translateY(-4px);
   box-shadow: 
     0 32px 64px -10px rgba(50, 20, 35, 0.28),
     0 16px 30px -6px rgba(201, 104, 133, 0.22);
@@ -427,14 +426,18 @@
   aspect-ratio: 800 / 520;
 }
 
-/* Marker interactive pulse & hover */
+/* Marker interactive pulse & visual hover */
 .markerGroup {
   cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.markerGroup:hover {
-  transform: translateY(-4px) scale(1.08);
+.pinVisual {
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+
+.markerGroup:hover .pinVisual,
+.markerGroup.selected .pinVisual {
+  filter: drop-shadow(0 0 10px rgba(232, 65, 24, 0.75));
 }
 
 .markerPulse {
@@ -464,21 +467,20 @@
   border-radius: 14px;
   padding: 10px 14px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(201, 104, 133, 0.25);
-  transform: translate(-50%, -105%);
+  transform: translate(-50%, -100%);
+  margin-top: -18px;
   pointer-events: auto;
   min-width: 190px;
   max-width: 240px;
-  animation: tooltipFadeIn 0.25s var(--ease-out-expo) forwards;
+  animation: tooltipFadeIn 0.2s var(--ease-out-expo) forwards;
 }
 
 @keyframes tooltipFadeIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -90%) scale(0.92);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -105%) scale(1);
   }
 }
 
