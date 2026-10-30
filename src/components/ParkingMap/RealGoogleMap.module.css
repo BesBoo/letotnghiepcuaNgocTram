@@ -308,6 +308,23 @@
   line-height: 1.35;
 }
 
+.popupPlusCode {
+  font-size: 10px;
+  color: #047857;
+  background: rgba(16, 185, 129, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 1px 0;
+  word-break: break-word;
+}
+
+.popupCoords {
+  font-size: 9.5px;
+  color: #6B7280;
+  font-family: monospace;
+  margin: 0;
+}
+
 .popupNote {
   font-size: 10.5px;
   color: #6B7280;
@@ -415,3 +432,4 @@
     min-height: 360px;
   }
 }
+

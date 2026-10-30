@@ -24,18 +24,16 @@ const WALKING_ROUTES: Record<string, [number, number][]> = {
   ],
   // P2: Cao ốc 123 (OCB) along Võ Văn Tần sidewalk to 97
   'parking-2': [
-    [10.77785, 106.68855],
-    [10.7771, 106.6893],
-    [10.77645, 106.68995],
+    [10.777861, 106.688556],
+    [10.777, 106.6894],
     [10.776199, 106.690247],
   ],
   // P3: District 3 Post Office (2 Bà Huyện Thanh Quan) -> up BHTQ -> along Võ Văn Tần to 97
   'parking-3': [
-    [10.77495, 106.68965],
-    [10.7758, 106.6889],
-    [10.7772, 106.6876],
-    [10.77785, 106.68855],
-    [10.7771, 106.6893],
+    [10.774944, 106.689639],
+    [10.7764, 106.6891],
+    [10.777861, 106.688556],
+    [10.777, 106.6894],
     [10.776199, 106.690247],
   ],
   // P4: Công viên Tao Đàn (North gate) -> Trương Định -> Võ Văn Tần -> 97
@@ -180,6 +178,8 @@ export default function RealGoogleMap({
           </div>
           <h4 class="${styles.popupTitle}">${loc.name}</h4>
           <p class="${styles.popupAddress}">${loc.address}</p>
+          ${loc.plusCode ? `<div class="${styles.popupPlusCode}">📍 <strong>Plus Code:</strong> ${loc.plusCode}</div>` : ''}
+          ${loc.coordinatesDms ? `<div class="${styles.popupCoords}">🧭 ${loc.coordinatesDms}</div>` : ''}
           ${loc.note ? `<p class="${styles.popupNote}">${loc.note}</p>` : ''}
           <a href="${loc.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="${styles.popupCta}">
             <span>Chỉ đường trên Google Maps</span>
@@ -188,7 +188,7 @@ export default function RealGoogleMap({
         </div>
       `, {
         offset: [0, -22],
-        maxWidth: 260,
+        maxWidth: 270,
       });
 
       marker.on('click', () => {
