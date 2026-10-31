@@ -76,7 +76,7 @@ export default function App() {
         {/* 3. THE CHAPTER BEFORE THE NEXT */}
         <GallerySection />
 
-        {/* 4. UNTIL WE MEET */}
+        {/* 4. ĐỊA ĐIỂM & SƠ ĐỒ BÃI ĐỖ XE */}
         <ClosingSection />
       </main>
     </>

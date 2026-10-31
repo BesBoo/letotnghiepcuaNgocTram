@@ -115,77 +115,8 @@ export default function ClosingSection() {
 
       {/* Main content wrapper */}
       <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '1080px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {/* Top header & closing letter content */}
+        {/* Event Venue Card (Trường ĐH Mở TP.HCM - 97 Võ Văn Tần) */}
         <div style={{ maxWidth: '620px', width: '100%', margin: '0 auto' }}>
-          <h2
-            className="heading-display"
-            style={{
-              marginBottom: 'var(--space-lg)',
-              opacity: isVisible ? 1 : 0,
-              transform: isVisible ? 'translateY(0)' : 'translateY(25px)',
-              transition: 'all 0.8s var(--ease-out-expo) 200ms',
-              color: 'var(--text-primary)',
-            }}
-          >
-            Until We Meet
-          </h2>
-
-          <p
-            className="text-script"
-            style={{
-              fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
-              marginBottom: 'var(--space-xl)',
-              opacity: isVisible ? 1 : 0,
-              transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-              transition: 'all 0.8s var(--ease-out-expo) 500ms',
-            }}
-          >
-            Hẹn gặp bạn ở một cột mốc thật đặc biệt nhé!
-          </p>
-
-          <p
-            className="text-body"
-            style={{
-              marginBottom: 'var(--space-2xl)',
-              opacity: isVisible ? 1 : 0,
-              transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
-              transition: 'all 0.8s var(--ease-out-expo) 800ms',
-              maxWidth: '480px',
-              margin: '0 auto var(--space-2xl)',
-            }}
-          >
-            {config.closingMessage}
-          </p>
-
-          {/* Sign off */}
-          <p
-            style={{
-              fontFamily: 'var(--font-script)',
-              fontSize: 'clamp(1.2rem, 3vw, 1.6rem)',
-              color: 'var(--pink-deep)',
-              marginBottom: 'var(--space-2xl)',
-              opacity: isVisible ? 1 : 0,
-              transition: 'opacity 0.8s 1.1s',
-            }}
-          >
-            {config.signOff}
-          </p>
-
-          <p
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
-              fontWeight: 600,
-              color: 'var(--text-primary)',
-              opacity: isVisible ? 1 : 0,
-              transition: 'opacity 0.8s 1.3s',
-              marginBottom: 'var(--space-2xl)',
-            }}
-          >
-            — {config.senderName}
-          </p>
-
-          {/* Event Venue Card (Trường ĐH Mở TP.HCM - 97 Võ Văn Tần) */}
           <div
             style={{
               margin: '0 auto calc(var(--space-xl) + 10px)',
@@ -199,7 +130,7 @@ export default function ClosingSection() {
               position: 'relative',
               opacity: isVisible ? 1 : 0,
               transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
-              transition: 'all 0.8s var(--ease-out-expo) 1.2s',
+              transition: 'all 0.8s var(--ease-out-expo) 200ms',
             }}
           >
             {/* Section Header */}
@@ -306,18 +237,53 @@ export default function ClosingSection() {
             width: '100%',
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-            transition: 'all 0.9s var(--ease-out-expo) 1.3s',
+            transition: 'all 0.9s var(--ease-out-expo) 400ms',
           }}
         >
           <ParkingMap />
         </div>
 
+        {/* Sign off */}
+        <div
+          style={{
+            textAlign: 'center',
+            marginTop: 'clamp(2.5rem, 5vw, 3.8rem)',
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(15px)',
+            transition: 'all 0.8s var(--ease-out-expo) 600ms',
+          }}
+        >
+          {config.signOff && (
+            <p
+              style={{
+                fontFamily: 'var(--font-script)',
+                fontSize: 'clamp(1.2rem, 3vw, 1.6rem)',
+                color: 'var(--pink-deep)',
+                marginBottom: 'var(--space-xs)',
+              }}
+            >
+              {config.signOff}
+            </p>
+          )}
+
+          <p
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
+              fontWeight: 600,
+              color: 'var(--text-primary)',
+            }}
+          >
+            — {config.senderName}
+          </p>
+        </div>
+
         {/* Decorative heart divider */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: '12px', marginTop: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: 'var(--space-2xl)',
+          gap: '12px', marginTop: 'var(--space-xl)', marginBottom: 'var(--space-2xl)',
           opacity: isVisible ? 0.4 : 0,
-          transition: 'opacity 1s 1.5s',
+          transition: 'opacity 1s 800ms',
         }}>
           <div style={{ width: '40px', height: '1px', background: 'var(--pink-deep)' }} />
           <svg viewBox="0 0 20 18" width="14" height="12" fill="var(--pink-deep)">

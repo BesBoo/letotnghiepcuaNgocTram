@@ -179,8 +179,7 @@ const config: InvitationConfig = {
   ],
 
   // === LỜI NHẮN ===
-  closingMessage:
-    "Cảm ơn vì đã luôn là một phần trong thanh xuân của mình. Hẹn gặp bạn ở một cột mốc thật đặc biệt nhé!",
+  closingMessage: "",
   signOff: "Với tất cả yêu thương 💕",
 
   // === RSVP ===
