@@ -301,7 +301,8 @@
   font-family: var(--font-script);
   font-size: clamp(0.85rem, 2.2vw, 1.05rem);
   color: var(--pink-deep);
-  margin-top: 1px;
+  line-height: 1.15;
+  margin: 1px 0 0 0;
 }
 
 .cardDivider {
@@ -311,7 +312,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin: 0;
+  margin: 3px auto 0;
+  line-height: 1;
 }
 
 .cardDivider::before,
@@ -324,7 +326,9 @@
 
 .cardDiamond {
   font-size: 0.65rem;
+  line-height: 1;
   color: var(--rose-gold);
+  display: inline-block;
 }
 
 .cardBody {
@@ -720,12 +724,20 @@
   }
 
   .invitationCard {
-    height: clamp(185px, 84%, 220px);
+    height: clamp(175px, 82%, 205px);
     padding: 10px 10px 10px 10px;
   }
 
   .cardContent {
     gap: 4px;
+  }
+
+  .cardScript {
+    line-height: 1.1;
+  }
+
+  .cardDivider {
+    margin-top: 2px;
   }
 
   .cardTitle {

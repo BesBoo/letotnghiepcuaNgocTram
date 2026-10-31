@@ -361,10 +361,9 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
               <div className={styles.cardHeader}>
                 <h2 className={styles.cardTitle}>{config.title}</h2>
                 <p className={styles.cardScript}>{config.subtitle}</p>
-              </div>
-
-              <div className={styles.cardDivider}>
-                <span className={styles.cardDiamond}>✦</span>
+                <div className={styles.cardDivider}>
+                  <span className={styles.cardDiamond}>✦</span>
+                </div>
               </div>
 
               <div className={styles.cardBody}>
