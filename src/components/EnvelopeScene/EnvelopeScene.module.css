@@ -258,6 +258,18 @@
   pointer-events: none;
 }
 
+/* Card inner text content wrapper */
+.cardContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: clamp(4px, 1.2vw, 8px);
+}
+
 /* Card typography & content */
 .cardHeader {
   position: relative;
@@ -299,7 +311,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin: 2px 0;
+  margin: 0;
 }
 
 .cardDivider::before,
@@ -708,8 +720,12 @@
   }
 
   .invitationCard {
-    height: clamp(190px, 86%, 225px);
-    padding: 8px 10px 10px 10px;
+    height: clamp(185px, 84%, 220px);
+    padding: 10px 10px 10px 10px;
+  }
+
+  .cardContent {
+    gap: 4px;
   }
 
   .cardTitle {

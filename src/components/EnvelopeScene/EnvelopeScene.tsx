@@ -357,22 +357,24 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
               }
             }}
           >
-            <div className={styles.cardHeader}>
-              <h2 className={styles.cardTitle}>{config.title}</h2>
-              <p className={styles.cardScript}>{config.subtitle}</p>
-            </div>
+            <div className={styles.cardContent}>
+              <div className={styles.cardHeader}>
+                <h2 className={styles.cardTitle}>{config.title}</h2>
+                <p className={styles.cardScript}>{config.subtitle}</p>
+              </div>
 
-            <div className={styles.cardDivider}>
-              <span className={styles.cardDiamond}>✦</span>
-            </div>
+              <div className={styles.cardDivider}>
+                <span className={styles.cardDiamond}>✦</span>
+              </div>
 
-            <div className={styles.cardBody}>
-              <p className={styles.cardGreeting}>{guest?.greeting || config.senderGreeting}</p>
-              <p className={styles.cardMessage}>
-                {guest?.custom_message ||
-                  config.invitationText[0] ||
-                  'Một chặng đường thanh xuân khép lại, mở ra những hành trình mới rực rỡ...'}
-              </p>
+              <div className={styles.cardBody}>
+                <p className={styles.cardGreeting}>{guest?.greeting || config.senderGreeting}</p>
+                <p className={styles.cardMessage}>
+                  {guest?.custom_message ||
+                    config.invitationText[0] ||
+                    'Một chặng đường thanh xuân khép lại, mở ra những hành trình mới rực rỡ...'}
+                </p>
+              </div>
             </div>
 
             <div className={styles.cardFooter}>
