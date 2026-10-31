@@ -582,25 +582,7 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
           </div>
         </div>
 
-        {/* Sticker "Thả tim" - top left of invitation card */}
-        <img
-          src="/assets/memories/sticker_2.png"
-          alt=""
-          aria-hidden="true"
-          style={{
-            position: 'absolute',
-            top: '-30px',
-            left: '-25px',
-            width: 'clamp(105px, 17vw, 145px)',
-            height: 'auto',
-            transform: 'rotate(-12deg)',
-            zIndex: 10,
-            pointerEvents: 'none',
-            filter: 'drop-shadow(0 6px 16px rgba(201, 104, 133, 0.28))',
-            opacity: isVisible ? 1 : 0,
-            transition: 'opacity 0.6s var(--ease-out-expo) 1.2s, transform 0.6s var(--ease-out-expo) 1.2s',
-          }}
-        />
+
 
         {/* Sticker "Yêu quá!" - bottom right of invitation card */}
         <img
