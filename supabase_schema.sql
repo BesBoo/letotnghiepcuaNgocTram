@@ -73,21 +73,82 @@ ON guests FOR UPDATE
 USING (true);
 
 -- ==========================================================
--- 5. DỮ LIỆU MẪU (Thay đổi danh sách bạn bè của bạn tại đây)
+-- 5. DỮ LIỆU KHÁCH MỜI
 -- ==========================================================
-INSERT INTO guests (slug, name, greeting, custom_message, start_time, end_time)
+INSERT INTO guests (slug, name, greeting, custom_message)
 VALUES 
-    ('1', 'Nguyễn Văn Tuấn', 'Gửi anh Tuấn thân yêu,', 'Cảm ơn anh vì đã luôn đồng hành cùng em suốt những năm tháng đại học!', '08:00', '10:00'),
-    ('2', 'Trần Thị Lan', 'Gửi chị Lan yêu quý,', 'Rất mong được gặp chị trong ngày lễ tốt nghiệp đặc biệt này 💕', '09:30', '11:30'),
-    ('linh-dan', 'Khánh Linh', 'Gửi cô bạn thân Khánh Linh,', 'Thanh xuân này thật tuyệt vì có cậu bên cạnh!', '14:00', '16:30')
+    (
+        'yen-nhi',
+        'Yến Nhi',
+        'Gửi Nhi xinh iu',
+        'Một chặng đường khép lại, một hành trình mới mở ra.
+Tui rất vui khi được chia sẻ với bà tin vui tốt nghiệp và cùng lưu giữ một cột mốc đáng nhớ trên hành trình trưởng thành của mình.
+Mong bà sẽ có mặt để cùng tui lưu lại những khoảnh khắc thật đẹp này nha! 💗'
+    ),
+    (
+        'bich-phuong',
+        'Bích Phượng',
+        'Gửi Phượng',
+        NULL
+    ),
+    (
+        'diem-my',
+        'Diễm My',
+        'Gửi My',
+        NULL
+    ),
+    (
+        'phuc-kiet',
+        'Phúc Kiệt',
+        'Gửi VPK',
+        'Vậy là sắp tốt nghiệp ròi 🎓
+Mời anh đến chụp hình với tui vào ngày tốt nghiệp, coi như lưu lại một chút kỷ niệm cho những năm tháng đại học của tụi mình nè.'
+    ),
+    (
+        'ng-tram',
+        'Ngọc Trâm',
+        'Gửi Châm',
+        'Vậy là sắp tốt nghiệp ròi 🎓
+Mời 2 đến chụp hình với tui vào ngày tốt nghiệp, coi như lưu lại một chút kỷ niệm cho những năm tháng đại học của tụi mình nè. 💗'
+    ),
+    (
+        'thuan',
+        'Thuận',
+        'Gửi Thuận',
+        'Trân trọng kính mời bạn đến chung vui và lưu giữ những khoảnh khắc đáng nhớ cùng mình trong ngày tốt nghiệp.'
+    ),
+    (
+        'dien',
+        'Anh Điền',
+        'Gửi anh Điền',
+        'Trân trọng kính mời anh đến chung vui và lưu giữ những khoảnh khắc đáng nhớ cùng em trong ngày tốt nghiệp.'
+    ),
+    (
+        'chị-han',
+        'Chị Hân',
+        'Gửi chị',
+        'Sau những năm tháng học tập và nỗ lực, em đã sắp hoàn thành một chặng đường đáng nhớ của mình.
+Em muốn chia sẻ niềm vui này cùng chị và lưu lại những khoảnh khắc đẹp trong ngày tốt nghiệp. 💗'
+    ),
+    (
+        'duc',
+        'Em Đức',
+        'Hellu em',
+        'Vậy là chị sắp hoàn thành một chặng đường thanh xuân rồi!
+Mời em đến chụp hình và cùng chị lưu lại những khoảnh khắc đáng nhớ trong ngày tốt nghiệp này.'
+    ),
+    (
+        'bo-thui',
+        'Bô Thúi',
+        'Gửi thúi bô',
+        'Bi sắp tốt nghiệp ròi đó (bô cũng biết mà kaka). Bi hong biết nói gì với bô đâu, nma bi cảm ơn bô rất nhiều vì đã hỗ trợ, phụ bi quá tròi lun. Tốt nghiệp bi mà bô giúp nhiều hơn bi làm nữa hehe, nên là ún trà xanh sữa hong bi bao.'
+    )
 ON CONFLICT (slug) DO UPDATE 
 SET 
     name = EXCLUDED.name,
     greeting = EXCLUDED.greeting,
-    custom_message = EXCLUDED.custom_message,
-    start_time = EXCLUDED.start_time,
-    end_time = EXCLUDED.end_time;
+    custom_message = EXCLUDED.custom_message;
 
--- Kiểm tra lại danh sách
-SELECT id, slug, name, greeting, start_time, end_time, url, has_opened, rsvp_status FROM guests;
+-- Kiểm tra lại danh sách khách mời và link đã tự động sinh
+SELECT id, slug, name, greeting, url, custom_message, has_opened, rsvp_status FROM guests ORDER BY id ASC;
 
