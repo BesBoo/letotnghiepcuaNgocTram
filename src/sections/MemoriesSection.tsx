@@ -108,11 +108,6 @@ export default function MemoriesSection({ guest }: MemoriesSectionProps) {
             }}
           />
         </div>
-
-        {/* Caption */}
-        <div className={styles.captionBar}>
-          <p className={styles.captionText}>{memory.caption}</p>
-        </div>
       </div>
     );
   };

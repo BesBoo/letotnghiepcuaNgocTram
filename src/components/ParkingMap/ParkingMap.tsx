@@ -46,9 +46,6 @@ export default function ParkingMap() {
       {/* 1. MAIN TITLE - SƠ ĐỒ BÃI ĐỖ XE */}
       <div className={styles.titleHeader}>
         <h3 className={styles.mainTitle}>SƠ ĐỒ BÃI ĐỖ XE</h3>
-        <p className={styles.mainSubtitle}>
-          Bản đồ vị trí thực tế & hướng dẫn các điểm gửi xe gần trường Đại học Mở TP.HCM
-        </p>
       </div>
 
       {/* 2. TWO-COLUMN LAYOUT */}
@@ -65,7 +62,7 @@ export default function ParkingMap() {
                 NHỮNG ĐỊA ĐIỂM CÓ THỂ GỬI XE
               </h4>
               <p className={styles.leftDescription}>
-                Chọn một địa điểm để định vị chính xác trên bản đồ 3D và mở chỉ đường Google Maps.
+                Chọn một địa điểm để định vị chính xác trên bản đồ và mở chỉ đường Google Maps.
               </p>
             </div>
 
@@ -126,7 +123,7 @@ export default function ParkingMap() {
           <div className={styles.leftFooterNote}>
             <Car size={16} color="#8B2648" />
             <span>
-              Khu vực trung tâm Quận 3 — bạn nên ưu tiên gửi xe sớm để thuận tiện di chuyển vào hội trường nhé!
+              Khu vực trung tâm Quận 3 — bạn nên ưu tiên gửi xe sớm để thuận tiện di chuyển nhé!
             </span>
           </div>
         </div>

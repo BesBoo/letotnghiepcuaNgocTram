@@ -173,7 +173,7 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
 
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          {/* You're Invited */}
+          {/* Thiệp mời header badge */}
           <div
             style={{
               opacity: isVisible ? 1 : 0,
@@ -181,18 +181,25 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
               transition: `all 0.6s var(--ease-out-expo) ${transitionDelay(1)}`,
             }}
           >
-            <p
+            <div
               style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'var(--rose-gold)',
-                marginBottom: 'var(--space-sm)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 'var(--space-xs)',
               }}
             >
-              You're Invited
-            </p>
+              <img
+                src="/assets/invitation/thiep-moi.png"
+                alt="Thiệp mời tốt nghiệp"
+                style={{
+                  width: 'clamp(110px, 22vw, 150px)',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+              />
+            </div>
             <h2 className="heading-display" style={{ marginBottom: 'var(--space-md)' }}>
               {config.title}
             </h2>
@@ -287,7 +294,7 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '10px',
-                marginBottom: 'var(--space-md)',
+                marginBottom: 'var(--space-sm)',
               }}
             >
               <Calendar size={18} color="var(--pink-deep)" />
@@ -301,6 +308,27 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
               >
                 {config.event.date}
               </span>
+            </div>
+
+            {/* Logo Trường ĐH Mở TP.HCM */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: '0 auto var(--space-md)',
+              }}
+            >
+              <img
+                src="/assets/invitation/logo-ou.png"
+                alt="Logo Trường Đại học Mở TP.HCM"
+                style={{
+                  width: 'clamp(110px, 22vw, 150px)',
+                  height: 'auto',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+              />
             </div>
 
             {/* Time */}

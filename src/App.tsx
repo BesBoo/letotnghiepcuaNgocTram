@@ -73,7 +73,7 @@ export default function App() {
         {/* 2. MEMORIES */}
         <MemoriesSection guest={guest} />
 
-        {/* 3. A Few Moments to Keep */}
+        {/* 3. THE CHAPTER BEFORE THE NEXT */}
         <GallerySection />
 
         {/* 4. UNTIL WE MEET */}

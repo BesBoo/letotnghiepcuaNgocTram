@@ -153,7 +153,7 @@ export default function GallerySection() {
           }}
         >
           <h2 className="heading-display" style={{ marginBottom: 'var(--space-md)' }}>
-            A Few Moments to Keep
+            THE CHAPTER BEFORE THE NEXT
           </h2>
           <p className="text-script">Cảm ơn vì đã là một phần trong thanh xuân của nhau.</p>
         </div>
