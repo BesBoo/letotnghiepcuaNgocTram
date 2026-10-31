@@ -91,7 +91,7 @@ const config: InvitationConfig = {
     time: "[Giờ bắt đầu]",
     endTime: "[Giờ kết thúc]",
     venue: "Đại học mở TPHCM",
-    address: "97 Võ Văn Tần, Xuân Hòa, Hồ Chí Minh 700000, Vietnam",
+    address: "97 Võ Văn Tần, Xuân Hòa, Hồ Chí Minh",
     contactPhone: "0901638309",
     mapLink: "https://www.google.com/maps/search/?api=1&query=HCMC+Open+University+-+Campus+1,+97+V%C3%B5+V%C4%83n+T%E1%BA%A7n,+Xu%C3%A2n+H%C3%B2a,+H%E1%BB%93+Ch%C3%AD+Minh",
     note: "Mình sẽ rất vui nếu được gặp bạn!",
