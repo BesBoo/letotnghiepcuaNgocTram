@@ -13,7 +13,7 @@ interface InvitationSectionProps {
 export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [rsvpChoice, setRsvpChoice] = useState<'9:00–11:00' | '11:00–13:00' | 'Mình bận rồi' | null>(null);
+  const [rsvpChoice, setRsvpChoice] = useState<'12:00 - 12:50' | '16:50 - 17:20' | 'Mình bận rồi' | null>(null);
   const [message, setMessage] = useState(guest?.rsvp_note || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -40,7 +40,7 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
     return () => obs.disconnect();
   }, [reducedMotion]);
 
-  const handleSelectChoice = (choice: '9:00–11:00' | '11:00–13:00' | 'Mình bận rồi') => {
+  const handleSelectChoice = (choice: '12:00 - 12:50' | '16:50 - 17:20' | 'Mình bận rồi') => {
     setRsvpChoice(choice);
     setValidationError(null);
     setErrorMessage(null);
@@ -493,25 +493,25 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                     <button
                       type="button"
                       role="radio"
-                      aria-checked={rsvpChoice === '9:00–11:00'}
+                      aria-checked={rsvpChoice === '12:00 - 12:50'}
                       className={`${styles.choiceButton} ${
-                        rsvpChoice === '9:00–11:00' ? styles.choiceActive : ''
+                        rsvpChoice === '12:00 - 12:50' ? styles.choiceActive : ''
                       }`}
-                      onClick={() => handleSelectChoice('9:00–11:00')}
+                      onClick={() => handleSelectChoice('12:00 - 12:50')}
                     >
-                      9:00–11:00
+                      12:00 - 12:50
                     </button>
 
                     <button
                       type="button"
                       role="radio"
-                      aria-checked={rsvpChoice === '11:00–13:00'}
+                      aria-checked={rsvpChoice === '16:50 - 17:20'}
                       className={`${styles.choiceButton} ${
-                        rsvpChoice === '11:00–13:00' ? styles.choiceActive : ''
+                        rsvpChoice === '16:50 - 17:20' ? styles.choiceActive : ''
                       }`}
-                      onClick={() => handleSelectChoice('11:00–13:00')}
+                      onClick={() => handleSelectChoice('16:50 - 17:20')}
                     >
-                      11:00–13:00
+                      16:50 - 17:20
                     </button>
 
                     <button
