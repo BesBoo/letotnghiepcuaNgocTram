@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import type { Guest } from '../lib/supabase';
 import config from '../invitation.config';
-import { MapPin, Clock, Calendar, Copy, Check, ExternalLink, Send, Phone, AlertCircle } from 'lucide-react';
+import { MapPin, Calendar, Check, ExternalLink, Send, Phone, AlertCircle } from 'lucide-react';
 import styles from './InvitationSection.module.css';
 
 interface InvitationSectionProps {
@@ -13,7 +13,6 @@ interface InvitationSectionProps {
 export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [rsvpChoice, setRsvpChoice] = useState<'9:00–11:00' | '11:00–13:00' | 'Mình bận rồi' | null>(null);
   const [message, setMessage] = useState(guest?.rsvp_note || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,24 +39,6 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
     obs.observe(sectionRef.current);
     return () => obs.disconnect();
   }, [reducedMotion]);
-
-  const copyAddress = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(config.event.address);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Fallback
-      const ta = document.createElement('textarea');
-      ta.value = config.event.address;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  }, []);
 
   const handleSelectChoice = (choice: '9:00–11:00' | '11:00–13:00' | 'Mình bận rồi') => {
     setRsvpChoice(choice);
@@ -331,34 +312,6 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
               />
             </div>
 
-            {/* Time */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                marginBottom: 'var(--space-md)',
-              }}
-            >
-              <Clock size={18} color="var(--pink-deep)" />
-              <span
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '1rem',
-                  color: 'var(--text-secondary)',
-                }}
-              >
-                {guest?.start_time
-                  ? guest.end_time
-                    ? `${guest.start_time} — ${guest.end_time}`
-                    : guest.start_time
-                  : config.event.endTime
-                    ? `${config.event.time} — ${config.event.endTime}`
-                    : config.event.time}
-              </span>
-            </div>
-
             {/* Venue */}
             <div
               style={{
@@ -395,45 +348,16 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
             </p>
 
             {/* Address actions */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                flexWrap: 'wrap',
-              }}
-            >
-              <button
-                onClick={copyAddress}
+            {config.event.mapLink && (
+              <div
                 style={{
-                  display: 'inline-flex',
+                  display: 'flex',
                   alignItems: 'center',
-                  gap: '6px',
-                  padding: '8px 16px',
-                  fontSize: '0.85rem',
-                  color: 'var(--pink-deep)',
-                  background: 'var(--white)',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--pink-soft)',
-                  transition: 'all 0.2s',
-                  cursor: 'pointer',
+                  justifyContent: 'center',
+                  gap: '12px',
+                  flexWrap: 'wrap',
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--pink-soft)';
-                  e.currentTarget.style.color = 'var(--text-primary)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'var(--white)';
-                  e.currentTarget.style.color = 'var(--pink-deep)';
-                }}
-                aria-label="Sao chép địa chỉ"
               >
-                {copied ? <Check size={14} /> : <Copy size={14} />}
-                {copied ? 'Đã sao chép!' : 'Sao chép địa chỉ'}
-              </button>
-
-              {config.event.mapLink && (
                 <a
                   href={config.event.mapLink}
                   target="_blank"
@@ -460,8 +384,8 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                   <ExternalLink size={14} />
                   Mở bản đồ
                 </a>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* Contact Phone or Dress Code */}
             {config.event.contactPhone ? (
