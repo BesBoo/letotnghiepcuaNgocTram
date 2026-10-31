@@ -126,13 +126,14 @@
 }
 
 .polaroidChinTag {
+  display: inline-block;
   font-family: var(--font-sans);
-  font-size: clamp(0.68rem, 1.4vw, 0.78rem);
-  letter-spacing: 0.08em;
+  font-size: clamp(0.72rem, 1.5vw, 0.84rem);
+  letter-spacing: 0.1em;
   color: var(--rose-gold);
   text-transform: uppercase;
   font-weight: 600;
-  margin-top: 2px;
+  margin: 0;
 }
 
 /* =========================================================

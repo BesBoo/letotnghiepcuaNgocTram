@@ -253,7 +253,6 @@ export default function GallerySection() {
 
                   {/* Polaroid Chin / Caption */}
                   <div className={styles.polaroidChin}>
-                    <p className={styles.polaroidCaption}>{photo.caption}</p>
                     <span className={styles.polaroidChinTag}>A memory to keep ♡</span>
                   </div>
 
@@ -285,7 +284,7 @@ export default function GallerySection() {
           </button>
         </div>
 
-        {/* Footer Controls: Dots & Tap Hint */}
+        {/* Footer Controls: Dots */}
         <div className={styles.footerControls}>
           <div className={styles.dotsContainer} role="tablist" aria-label="Danh sách ảnh scrapbook">
             {photos.map((photo, idx) => (
@@ -300,8 +299,6 @@ export default function GallerySection() {
               />
             ))}
           </div>
-
-          <span className={styles.tapNotice}>Dùng phím mũi tên hoặc lướt chạm để xem ảnh ✨</span>
         </div>
 
         {/* Decorative doodle hearts */}

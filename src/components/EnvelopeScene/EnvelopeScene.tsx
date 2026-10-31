@@ -358,7 +358,6 @@ export default function EnvelopeScene({ onOpen, guest, onMarkOpened }: EnvelopeS
             }}
           >
             <div className={styles.cardHeader}>
-              <span className={styles.cardBadge}>You're Invited</span>
               <h2 className={styles.cardTitle}>{config.title}</h2>
               <p className={styles.cardScript}>{config.subtitle}</p>
             </div>
