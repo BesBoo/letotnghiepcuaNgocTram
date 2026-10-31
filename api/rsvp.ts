@@ -6,9 +6,11 @@ const RECIPIENTS = ['tranduyduc9679@gmail.com', 'truongtram2k4@gmail.com'];
 const VALID_CHOICES = [
   '12:00 - 12:50',
   '12:00–12:50',
+  '16:30 - 17:15',
+  '16:30–17:15',
+  'Mình bận rồi',
   '16:50 - 17:20',
   '16:50–17:20',
-  'Mình bận rồi',
   '9:00–11:00',
   '11:00–13:00',
 ];
@@ -42,7 +44,7 @@ export default async function handler(req: any, res: any) {
     if (!choice || !VALID_CHOICES.includes(choice)) {
       return res.status(400).json({
         success: false,
-        error: 'Vui lòng chọn 1 trong 3 phương án: 12:00 - 12:50, 16:50 - 17:20 hoặc Mình bận rồi',
+        error: 'Vui lòng chọn 1 trong 3 phương án: 12:00 - 12:50, 16:30 - 17:15 hoặc Mình bận rồi',
       });
     }
 

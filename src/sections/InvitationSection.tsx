@@ -13,7 +13,7 @@ interface InvitationSectionProps {
 export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [rsvpChoice, setRsvpChoice] = useState<'12:00 - 12:50' | '16:50 - 17:20' | 'Mình bận rồi' | null>(null);
+  const [rsvpChoice, setRsvpChoice] = useState<'12:00 - 12:50' | '16:30 - 17:15' | 'Mình bận rồi' | null>(null);
   const [message, setMessage] = useState(guest?.rsvp_note || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -40,7 +40,7 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
     return () => obs.disconnect();
   }, [reducedMotion]);
 
-  const handleSelectChoice = (choice: '12:00 - 12:50' | '16:50 - 17:20' | 'Mình bận rồi') => {
+  const handleSelectChoice = (choice: '12:00 - 12:50' | '16:30 - 17:15' | 'Mình bận rồi') => {
     setRsvpChoice(choice);
     setValidationError(null);
     setErrorMessage(null);
@@ -505,13 +505,13 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                     <button
                       type="button"
                       role="radio"
-                      aria-checked={rsvpChoice === '16:50 - 17:20'}
+                      aria-checked={rsvpChoice === '16:30 - 17:15'}
                       className={`${styles.choiceButton} ${
-                        rsvpChoice === '16:50 - 17:20' ? styles.choiceActive : ''
+                        rsvpChoice === '16:30 - 17:15' ? styles.choiceActive : ''
                       }`}
-                      onClick={() => handleSelectChoice('16:50 - 17:20')}
+                      onClick={() => handleSelectChoice('16:30 - 17:15')}
                     >
-                      16:50 - 17:20
+                      16:30 - 17:15
                     </button>
 
                     <button
