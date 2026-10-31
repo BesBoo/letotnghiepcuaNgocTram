@@ -274,15 +274,15 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '10px',
+                gap: '12px',
                 marginBottom: 'var(--space-sm)',
               }}
             >
-              <Calendar size={18} color="var(--pink-deep)" />
+              <Calendar size={24} color="var(--pink-deep)" />
               <span
                 style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
+                  fontSize: 'clamp(1.5rem, 3.75vw, 1.8rem)',
                   fontWeight: 600,
                   color: 'var(--text-primary)',
                 }}
@@ -396,7 +396,7 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                   background: 'rgba(255,255,255,0.6)',
                   borderRadius: 'var(--radius-sm)',
                   fontFamily: 'var(--font-sans)',
-                  fontSize: '0.85rem',
+                  fontSize: '0.9rem',
                   color: 'var(--text-secondary)',
                   display: 'flex',
                   alignItems: 'center',
@@ -404,10 +404,10 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                   gap: '8px',
                 }}
               >
-                <Phone size={15} color="var(--pink-deep)" />
-                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>SDT liên hệ: </span>
+                <Phone size={16} color="var(--pink-deep)" />
                 <a
                   href={`tel:${config.event.contactPhone.replace(/\s+/g, '')}`}
+                  aria-label={`Số điện thoại liên hệ: ${config.event.contactPhone}`}
                   style={{
                     color: 'var(--pink-deep)',
                     fontWeight: 600,
