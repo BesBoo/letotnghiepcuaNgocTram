@@ -533,13 +533,9 @@ export default function InvitationSection({ guest, onSubmitRSVP }: InvitationSec
                       className={styles.textareaField}
                       placeholder="Để lại lời nhắn cho chúng mình nhé..."
                       value={message}
-                      maxLength={500}
                       onChange={(e) => setMessage(e.target.value)}
                       aria-label="Lời nhắn cho người gửi"
                     />
-                    <div className={styles.counterRow}>
-                      <span className={styles.counterText}>{message.length} / 500</span>
-                    </div>
                   </div>
 
                   {/* Validation Error Notice */}

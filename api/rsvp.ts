@@ -48,7 +48,7 @@ export default async function handler(req: any, res: any) {
       });
     }
 
-    const cleanMessage = typeof message === 'string' ? message.slice(0, 500).trim() : '';
+    const cleanMessage = typeof message === 'string' ? message.trim() : '';
     const cleanGuestName = typeof guestName === 'string' && guestName.trim() ? guestName.trim() : 'Khách mời thân thương';
     const cleanSlug = typeof slug === 'string' ? slug.trim() : '';
     const timestamp = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
@@ -74,7 +74,7 @@ export default async function handler(req: any, res: any) {
           .field { margin-bottom: 16px; }
           .field-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #8C6D75; font-weight: 600; margin-bottom: 4px; }
           .field-value { font-size: 16px; color: #2B2124; font-weight: 500; }
-          .message-box { background: #FFF9FA; border-left: 4px solid #E27396; padding: 14px 16px; border-radius: 4px; margin-top: 6px; font-style: italic; color: #4A3E3D; }
+          .message-box { background: #FFF9FA; border-left: 4px solid #E27396; padding: 14px 16px; border-radius: 4px; margin-top: 6px; font-style: italic; color: #4A3E3D; word-break: break-word; }
           .footer { padding: 18px 24px; background: #FFF0F4; text-align: center; font-size: 12px; color: #8C6D75; border-top: 1px dashed #FAD2DE; }
         </style>
       </head>
